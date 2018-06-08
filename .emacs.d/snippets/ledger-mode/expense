@@ -2,5 +2,5 @@
 # name: expense
 # key: expense
 # --
-Accounts Receivable:PiA Expenses             ${1:0.00} TL
-Income:Reimbursements:PiA                   -$1 TL
+Accounts Receivable:Lidyum Expenses             ${1:0.00} TL
+Income:Reimbursements:Lidyum                   -$1 TL
