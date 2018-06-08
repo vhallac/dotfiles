@@ -1,0 +1,18 @@
+escape ^ll
+defescape ^ll
+multiuser on
+startup_message off
+defscrollback 1000
+
+# These are a little emacs-ish, but good clipboard integration commands:
+# C-l y v: paste
+# C-l y c: buffer -> clipboard
+# C-l y y: clipboard -> buffer
+# The C-v, C-c an C-y variants operate on the primary selection instead
+bind y command -c clip
+bind -c clip v exec .!. xsel -ob
+bind -c clip ^V exec .!. xsel -o
+bind -c clip y eval "exec /usr/bin/xsel -ob >/tmp/screen-exchange" "readbuf"
+bind -c clip ^Y eval "exec /usr/bin/xsel -o >/tmp/screen-exchange" "readbuf"
+bind -c clip c eval writebuf "exec /bin/sh -c '/usr/bin/xsel -ib </tmp/screen-exchange'"
+bind -c clip ^C eval writebuf "exec /bin/sh -c '/usr/bin/xsel -i </tmp/screen-exchange'"

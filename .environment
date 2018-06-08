@@ -1,0 +1,6 @@
+export EDITOR='emacsclient -nw'
+export VISUAL='vi'
+
+#program options
+export LESS='-iMRX'
+export MINICOM='--color=on'

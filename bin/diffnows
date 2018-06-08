@@ -1,0 +1,2 @@
+#!/bin/sh
+diff --ignore-all-space <(tr -d '\r' $1) <(tr -d '\r' $2) 

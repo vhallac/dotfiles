@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Minitest Require
+# key: mtr
+# --
+require 'minitest/autorun'

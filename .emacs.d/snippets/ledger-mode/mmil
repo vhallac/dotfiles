@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: mmil
+# key: mmil
+# --
+(Assets:CC:Miles)                               $1 Miles
+(Income:Garanti:Miles)                         -$1 Miles

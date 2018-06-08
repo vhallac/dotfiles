@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: money
+# key: money
+# --
+Assets:Migros:Money                           ${1:2.00} TL
+Income:Migros:Money                          -$1 TL

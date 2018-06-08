@@ -1,0 +1,3 @@
+[submodule "elisp/thirdparty/flycheck-java"]
+	path = elisp/thirdparty/flycheck-java
+	url = git://github.com/vhallac/flycheck-java.git

@@ -1,0 +1,19 @@
+<locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+  <transformURI fromPattern="*.xml" toPattern="*.rnc"/>
+  <documentElement localName="locatingRules" uri="locate.rnc"/>
+
+  <documentElement prefix="" localName="Ui" typeId="wowui"/>
+
+  <namespace ns="http://maven.apache.org/POM/4.0.0" uri="maven-v4_0_0.rnc"/>
+
+  <typeId id="wowui" uri="wowui.rnc"/>
+  <typeId id="html5" uri="html5.rnc"/>
+  <typeId id="xhtml5" uri="xhtml5.rnc"/>
+  <typeId id="spring-beans" uri="spring-beans.rnc"/>
+  <typeId id="struts" uri="struts-config_1.2.rnc"/>
+  <!-- These looks like a bit of a hack, but it should do for now -->
+  <uri pattern="*.html.erb" typeId="xhtml5" />
+  <uri pattern="build*.xml" uri="ant.rnc"/>
+  <typeId id="domain" uri="libvirt/domain.rnc"/>
+
+</locatingRules>

@@ -1,0 +1,49 @@
+[user]
+	name = Vedat Hallac
+	email = vedat@hallac.net
+[core]
+	autocrlf = input
+	safecrlf = true
+[push]
+	default = simple
+	followTags = true
+[color]
+	ui = auto
+[color "grep"]
+	filename = magenta
+	linenumber = green
+	function = yellow
+[alias]
+	co = checkout
+	stat = status
+	mstat = status --porcelain
+	prr = pull --rebase
+	pff = pull --ff-only
+	force-push = push --force-with-lease
+	cmerge = merge --no-ff
+	glog = log --oneline --decorate --color --graph
+	lg = log --graph --pretty=format:'%C(auto)%h%d%C(reset) %s %C(green)(%cd) %C(blue)<%an> %C(reset)' --date=relative
+	lgd = log --graph --pretty=format:'%C(auto)%h%d%C(reset) %s %C(green)(%cd) %C(blue)(%ad) <%an> %C(reset)' --date=relative
+	lga = log --graph --all --pretty=format:'%C(auto)%h%d%C(reset) %s %C(green)(%cd) %C(blue)<%an> %C(reset)' --date=relative
+	lgad = log --graph --all --pretty=format:'%C(auto)%h%d%C(reset) %s %C(green)(%cd) %C(blue)(%ad) <%an> %C(reset)' --date=relative
+	status-all = status --untracked-files=all --ignored
+	clean-all = clean -dx
+	ls-untracked = ls-files -o --exclude-standard
+	compress = gc --aggressive --prune=now
+[sendemail]
+	smtpencryption = tls
+	smtpserver = smtp.gmail.com
+	smtpuser = aibok42@gmail.com
+	smtpserverport = 587
+[gui]
+	gcwarning = false
+	fontui = -family \"Noto Sans\" -size 14 -weight normal -slant roman -underline 0 -overstrike 0
+	fontdiff = -family \"DejaVu Sans Mono\" -size 14 -weight normal -slant roman -underline 0 -overstrike 0
+	diffopts = -w
+[diff]
+	guitool = meld
+	tool = diffnows
+[difftool "meld"]
+	path = /usr/bin/meld
+[difftool "diffnows"]
+	path = /home/vedat/bin/diffnows

@@ -1,0 +1,72 @@
+Xcursor.size:               16
+XTerm*altIsNotMeta:         true
+XTerm*eightBitInput:        false
+XTerm*eightBitOutput:       true
+XTerm*altSendsEscape:       true
+XTerm*on2Clicks:            regex [^/@ `\047\n]+
+XTerm*on3Clicks:            regex [^ `\047\n]+
+XTerm*on4Clicks:            regex [^#$]+
+XTerm*on5Clicks:            line
+XTerm*faceName:             "Inconsolata"
+XTerm*faceSize:             15.0
+XTerm*renderFont:           true
+XTerm*scrollBar:            false
+
+UXTerm*altIsNotMeta:        true
+UXTerm*eightBitInput:       false
+UXTerm*eightBitOutput:      true
+UXTerm*altSendsEscape:      true
+UXTerm*on2Clicks:           regex [^/@ `\047\n]+
+UXTerm*on3Clicks:           regex [^ `\047\n]+
+UXTerm*on4Clicks:           regex [^#$]+
+UXTerm*on5Clicks:           line
+UXTerm*faceName:            "xft:Droid Sans Mono"
+UXTerm*faceSize:            13.5
+UXTerm*renderFont:          true
+UXTerm*scrollBar:           false
+UXTerm*visualBell:          true
+
+URxvt.selection.pattern-0:  ([[:word:]]+)
+URxvt.selection.pattern-1:  ([[:word:].]+)
+URxvt.color4:               #0000BB
+
+Xft.hinting:                true
+Xft.hintstyle:              hintslight
+Xft.antialias:              rgba
+Xft.rgba:                   rgb
+Xft.embolden:               false
+Xft.dpi:                    128
+
+! This one is to satisfy KDE
+st-256color*background:           lemon chiffon
+st-256color*foreground:           black
+xterm*background:           lemon chiffon
+!xterm*background:           pale goldenrod
+!xterm*background:           antique white
+!xterm*background:           lavender
+xterm*foreground:           black
+
+!black
+UXTerm*color0: #000000
+UXTerm*color8: #272727
+!red
+UXTerm*color1: #ce5c00
+UXTerm*color9: #f57900
+!green
+UXTerm*color2: #668800
+UXTerm*color10: #88aa22
+!brown/yellow
+UXTerm*color3: #B88B10
+UXTerm*color11: #FFC135
+!blue
+UXTerm*color4: #5485a4
+UXTerm*color12: #85A8C0
+!magenta
+UXTerm*color5: #85608b
+UXTerm*color13: #ad7fa8
+!cyan
+UXTerm*color6: #807855
+UXTerm*color14: #99916A
+!white
+UXTerm*color7: #b7b7b7
+UXTerm*color15: #ffffff
