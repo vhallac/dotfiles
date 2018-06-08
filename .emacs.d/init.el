@@ -812,6 +812,7 @@ into real text."
       ad-do-it)))
 
 (use-package tls
+  :requires smtp-openssl
   :defer
   :config
   (custom-set-variables '(tls-program `(,(concat
@@ -820,6 +821,9 @@ into real text."
                                             "openssl")
                                           " s_client -connect %h:%p -no_ssl2 -ign_eof"))))
   (require 'smtp-openssl))
+
+(use-package smtp-openssl
+  :ensure t)
 
 (use-package bbdb
   :ensure t
@@ -859,7 +863,7 @@ into real text."
   :ensure t
   :after projectile
   :config
-  (counsel-projectile-on))
+  (counsel-projectile-mode))
 
 (let* ((flycheck-java-dir "~/.emacs.d/elisp/thirdparty/flycheck-java")
        (bin-dir "~/.emacs.d/bin")
