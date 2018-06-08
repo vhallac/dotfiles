@@ -58,10 +58,9 @@ bindkey '^[OM' accept-line
 bindkey '^H' backward-delete-char
 bindkey '^?' backward-delete-char
 
-
-#prompt
-export PS1C='%B%F{black}%D{%H:%M:%S}%f%b %? %B%F{red}%n%f%b@%B%F{green}%m%f%b:%B%F{blue}%~%f%b%# '
-export PS1NC='%D{%H:%M:%S} %? %n@%m:%~%# '
+# Fancy prompt
+export  PS1C=$'\n┌┬───\[%F{red}%D{%H:%M:%S}%f\]──\[%?\]—\[%F{green}%n@%m%f\]—\[%F{blue}%~%f\]\n└┴%# '
+export PS1NC=$'\n┌┬───\[%D{%H:%M:%S}\]──\[%?\]—\[%n@%m\]—\[%~\]\n└┴%# '
 export PS1=$PS1C
 
 #path
@@ -72,5 +71,7 @@ path=(~/bin ~/.local/bin $path)
 [[ -r ~/.environment ]] && . ~/.environment
 [[ -r ~/.aliases ]] && . ~/.aliases
 
+autoload -U select-word-style
+select-word-style bash
 ## Startup ##
 #fortune -a | cowsay -n -TUU
