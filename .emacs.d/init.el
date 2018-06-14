@@ -549,7 +549,7 @@ into real text."
 
 (use-package notmuch
   :ensure t
-  :commands vh/notmuch-show-delete-thread
+  :commands (vh/notmuch-show-delete-thread notmuch-mua-new-mail)
   :bind (("C-c n" . vh/hydra-notmuch-global/body)
          :map notmuch-show-mode-map
          ("K" . vh/notmuch-show-delete-thread))
