@@ -43,6 +43,7 @@
 [diff]
 	guitool = meld
 	tool = diffnows
+	wsErrorHighlight = old,new
 [difftool "meld"]
 	path = /usr/bin/meld
 [difftool "diffnows"]
