@@ -528,14 +528,14 @@
    #+BEGIN_SRC emacs-lisp
      (custom-set-variables '(compilation-scroll-output t))
    #+END_SRC
-** escreen
+** escreen [Disabled - using elscreen now]
 
    This is one of my favorites: emacs window session manager. It provides
    something similar to a window manager virtual desktops.
 
-   #+BEGIN_SRC emacs-lisp :noweb yes
+   #+BEGIN_SRC emacs-lisp :noweb yes :tangle no
      (use-package escreen
-       :ensure t
+       :disabled
        :demand
        :bind (:map escreen-map
                    ("l"  . escreen-display-screens)
@@ -580,7 +580,17 @@
                          " ")))
          (message "escreen: %s" screen-msg)))
    #+END_SRC
+** elscreen
+   Emacs window session manager - sort of a pager for emacs
 
+   #+BEGIN_SRC emacs-lisp :noweb yes
+     (use-package elscreen
+       :ensure t
+       :demand
+       :config
+       (elscreen-start)
+       (custom-set-variables '(elscreen-display-tab nil)))
+   #+END_SRC
 ** browse-kill-ring
 
    Displays the contents of the kill ring, and allows you to select an

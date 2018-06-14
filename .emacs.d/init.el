@@ -302,44 +302,12 @@ into real text."
 
 (custom-set-variables '(compilation-scroll-output t))
 
-(use-package escreen
+(use-package elscreen
   :ensure t
   :demand
-  :bind (:map escreen-map
-              ("l"  . escreen-display-screens)
-              ("\\" . toggle-input-method))
-
   :config
-  (defun vh-find-escreen-data-by-number (number)
-    (car (delq nil
-               (mapcar (lambda (x) (and (= (car x) number) x))
-                       (escreen-configuration-alist)))))
-  
-  (defun vh-escreen-buffer-name (number)
-    "Extract the buffer name for the given screen number"
-    (let* ((screen-data (vh-find-escreen-data-by-number number))
-           (data-map (escreen-configuration-data-map screen-data)))
-      (escreen-configuration-data-map-critical-buffer-name
-       (escreen-configuration-data-map-critical (car data-map)))))
-  
-  
-  (defun escreen-display-screens ()
-    "Display list of defined screens with an emphasis on the active one."
-    (interactive)
-    (let ((escreens (escreen-get-active-screen-numbers))
-          (screen-msg ""))
-  
-      (dolist (s escreens)
-        (setq screen-msg
-              (concat screen-msg
-                      (let ((display-str (concat (number-to-string s) ":" (vh-escreen-buffer-name s))))
-                        (if (= (escreen-current-screen-number) s)
-                            (propertize display-str 'face 'bold-italic)
-                          display-str))
-                      " ")))
-      (message "escreen: %s" screen-msg)))
-  (escreen-install)
-  (add-hook 'escreen-goto-screen-hook #'escreen-display-screens))
+  (elscreen-start)
+  (custom-set-variables '(elscreen-display-tab nil)))
 
 (use-package browse-kill-ring
   :ensure t
