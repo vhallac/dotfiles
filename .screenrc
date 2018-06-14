@@ -41,13 +41,4 @@ bind -c clip ^Y eval "exec /usr/bin/xsel -o >/tmp/screen-exchange" "readbuf"
 bind -c clip c eval writebuf "exec /bin/sh -c '/usr/bin/xsel -ib </tmp/screen-exchange'"
 bind -c clip ^C eval writebuf "exec /bin/sh -c '/usr/bin/xsel -i </tmp/screen-exchange'"
 
-screen -t root 0 //group
-at 0 screen -t shell 1 //group
-at 0 screen -t ssh 2 //group
-at 0 screen -t bg 90 //group
-# VH: I don't want emacs daemon
-# at 0 screen -Tscreen-256color -t emacs 9 /usr/bin/emacsclient --alternate-editor="" -nw
-# Keep this as the last entry to make the shell the default screen
-at 1 screen -t sh 3 /bin/bash
-
 shelltitle sh
