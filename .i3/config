@@ -170,6 +170,9 @@ mode "power" {
 bindsym $mod+p mode "power"
 
 mode "user" {
+    # primary -> clipboard
+    bindsym c exec "xsel | xsel -i -b"; mode "default"
+    bindsym Shift+c exec "xsel -b | xsel -i"; mode "default"
     bindsym $mod+Shift+p exec "keepass2 --auto-type"; mode "default";
     bindsym $mod+Shift+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '; mode "default";
     bindsym $mod+m exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Focus: '; mode "default";
