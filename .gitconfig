@@ -3,7 +3,7 @@
 	email = vedat@hallac.net
 [core]
 	autocrlf = input
-	safecrlf = true
+	safecrlf = false
 [push]
 	default = simple
 	followTags = true
