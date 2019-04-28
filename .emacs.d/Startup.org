@@ -2450,4 +2450,12 @@
      (use-package dockerfile-mode
        :ensure t)
    #+end_src
+** PDF reading and annotating
+   ~pdf-tools~ allow better interaction with PDF documents
+   #+begin_src emacs-lisp
+
+   (use-package pdf-tools
+       :ensure t
+       )
+   #+end_src
 * Final tweaks
