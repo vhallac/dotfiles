@@ -159,8 +159,9 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 mode "power" {
-	bindsym $mod+r exec "/bin/systemctl reboot"; mode "default";
-	bindsym $mod+o exec "/bin/systemctl poweroff"; mode "default";
+	bindsym $mod+s exec "/usr/bin/loginctl suspend && /usr/bin/i3lock"; mode "default";
+	bindsym $mod+r exec "/usr/bin/loginctl reboot"; mode "default";
+	bindsym $mod+o exec "/usr/bin/loginctl poweroff"; mode "default";
 	bindsym $mod+l exec "/usr/bin/i3lock"; mode "default";
     bindsym Return mode "default"
     bindsym Escape mode "default"
