@@ -226,3 +226,5 @@ for_window [class="Google-Apps"] mark "mail"
 for_window [class="Conkeror"] mark "browser"
 for_window [instance="xterm"] mark "terminal"
 for_window [class="Eclipse"] mark "eclipse"
+
+exec "lxsession -s i3wm -e i3wm"
