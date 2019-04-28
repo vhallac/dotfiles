@@ -3,8 +3,6 @@
 (defvar vh--calendar-config-paths '(("gcal.pers" . "/home/vedat/.cache/gcalcli.pers")
                                     ("gcal.work" . "/home/vedat/.cache/gcalcli.work")))
 
-(defvar vh--use-am-pm nil)
-
 (defvar  vh--gcalcli-cache-invalidate-seconds (* 60  60))
 
 (defvar vh--gcalcli-agenda-cache nil)
@@ -76,9 +74,8 @@
   (let* ((date-start (apply 'format "%d/%d/%d" (calendar-gregorian-from-absolute date)))
          (date-end (concat date-start " 12pm"))
          (gcalcli-params (concat (when config-path
-                                   (concat " --configFolder=" config-path))
+                                   (concat " --config-folder=" config-path))
                                  " --nocolor "
-                                 (if vh--use-am-pm "--nomilitary" "--military")
                                  " agenda"
                                  " '" date-start "' '" date-end "'"
                                  " | grep -vi 'no events found'"
