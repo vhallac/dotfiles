@@ -591,6 +591,19 @@
        (elscreen-start)
        (custom-set-variables '(elscreen-display-tab nil)))
    #+end_src
+** eyebrowse
+
+   Emacs session manager
+
+   #+begin_src emacs-lisp :noweb yes
+     (use-package eyebrowse
+       :ensure t
+       :demand
+       :init
+       (eyebrowse-mode)
+       :config
+       (custom-set-variables '(eyebrowse-keymap-prefix (kbd "C-z"))))
+   #+end_src
 ** browse-kill-ring
 
    Displays the contents of the kill ring, and allows you to select an
