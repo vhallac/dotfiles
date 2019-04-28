@@ -177,6 +177,20 @@ mode "user" {
     bindsym $mod+Shift+p exec "keepass2 --auto-type"; mode "default";
     bindsym $mod+Shift+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '; mode "default";
     bindsym $mod+m exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Focus: '; mode "default";
+    bindsym a exec "xdotool mousemove_relative -- -10 0"
+    bindsym s exec "xdotool mousemove_relative 0 10"
+    bindsym d exec "xdotool mousemove_relative 10 0"
+    bindsym w exec "xdotool mousemove_relative 0 -10"
+    bindsym Shift+a exec "xdotool mousemove_relative -- -100 0"
+    bindsym Shift+s exec "xdotool mousemove_relative 0 100"
+    bindsym Shift+d exec "xdotool mousemove_relative 100 0"
+    bindsym Shift+w exec "xdotool mousemove_relative 0 -100"
+    bindsym Ctrl+a exec "xdotool mousemove_relative -- -1 0"
+    bindsym Ctrl+s exec "xdotool mousemove_relative 0 1"
+    bindsym Ctrl+d exec "xdotool mousemove_relative 1 0"
+    bindsym Ctrl+w exec "xdotool mousemove_relative 0 -1"
+    bindsym q exec "xdotool mousedown 1 sleep 0.1 mouseup 1"
+    bindsym e exec "xdotool mousedown 3 sleep 0.1 mouseup 3"
     bindsym Return mode "default"
     bindsym Escape mode "default"
 	bindsym $mod+c mode "default"
