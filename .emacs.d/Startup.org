@@ -20,7 +20,7 @@
   All the code I have in this file is free software. This also goes for the
   generated =init.el= file.
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     ;; Copyright 2017, Ahmet Vedat Hallac
     ;;
     ;; This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@
     ;;
     ;; You should have received a copy of the GNU General Public License
     ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  #+END_SRC
+  #+end_src
 
 * How to Use this file
 
@@ -56,12 +56,12 @@
   to avoid overwriting my customizations every time ~init.el~ is generated, I
   will relocate them to ~customizations.el~.
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (setq custom-file "~/.emacs.d/customizations.el")
     ;; I don't want any customizations to linger. Anything interesting in this file
     ;; should be moved to the appropriate section in startup.
     ;; (load-file custom-file)
-  #+END_SRC
+  #+end_src
 
 
 ** Generating ~init.el~
@@ -76,37 +76,37 @@
 
 *** Prepare The Package Subsystem
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (package-initialize)
        ;;; (setq package-enable-at-startup nil)
-     #+END_SRC
+     #+end_src
 
 *** Construct load path
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (add-to-list 'load-path "~/.emacs.d/elisp/thirdparty")
        (add-to-list 'load-path "~/.emacs.d/elisp/mine")
-     #+END_SRC
+     #+end_src
 
 *** Set up my information before anything is loaded
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq user-full-name "Vedat Hallac"
              user-mail-address "vedathallac@gmail.com")
-     #+END_SRC
+     #+end_src
 
 *** Set up backup strategy
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (setq make-backup-files nil
             auto-save-default nil)
-    #+END_SRC
+    #+end_src
 
 ** Utility functions
 
 *** List Directory Contents Recursively
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (defun recursive-directory-list (path)
         (let* ((toplevel (directory-files path t))
                (dirs '()))
@@ -120,14 +120,14 @@
                                        (recursive-directory-list file)))))
               (setq toplevel (cdr toplevel))))
           (setq dirs (append dirs (list path)))))
-    #+END_SRC
+    #+end_src
 ** Packaging
 
    Set up my favorite package sources. Usually [[https://melpa.org/][MELPA]] is enough on its own, but I
    like having a few more sources. If this is the first time emacs is started, I
    refresh the package contents.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (add-to-list 'package-archives '("melpa"  . "http://melpa.milkbox.net/packages/") t)
      (add-to-list 'package-archives '("tromey" . "http://tromey.com/elpa/") t)
      (add-to-list 'package-archives '("elpa"   . "http://elpa.gnu.org/packages/") t)
@@ -136,28 +136,28 @@
      (unless (> (length package-archive-contents) 0 )
        (package-refresh-contents))
 
-   #+END_SRC
+   #+end_src
 
    All my package configuration is done using =use-package=. I will preinstall and configure this.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (unless (package-installed-p 'use-package)
        (package-install 'use-package)
        (package-activate 'use-package))
      (require 'use-package)
      ;; (custom-set-variables '(use-package-verbose t)
      ;;                       '(use-package-always-ensure t))
-   #+END_SRC
+   #+end_src
 
 ** Paths
    There are some paths required by different components. I will set those up in
    this section.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (custom-set-variables '(erc-dcc-get-default-directory "~/erc_dcc"))
 
 
-   #+END_SRC
+   #+end_src
 ** Terminal Setup
 
    I usually have problems with terminals of various systems. It feels like
@@ -168,7 +168,7 @@
 
    In addition, I load xterm, and initialize it to use 256 color, if possible.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (load "term/xterm")
 
      (defun terminal-init-screen ()
@@ -209,12 +209,12 @@
      (define-key key-translation-map (kbd "M-[ 4 ~") (kbd "<end>"))
      (define-key key-translation-map (kbd "M-[ 4 ^") (kbd "C-<end>"))
      (define-key key-translation-map (kbd "M-[ 1 ; 5 F") (kbd "C-<end>"))
-   #+END_SRC
+   #+end_src
 ** Keyboard
 
    I define the misc shortcuts in this section.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (defun match-parenthesis (arg)
        "Match the current character according to the syntax table.
 
@@ -247,42 +247,42 @@
 
      (define-key global-map (kbd "M-]") 'match-parenthesis)
      (define-key global-map (kbd "<f5>") 'revert-buffer)
-   #+END_SRC
+   #+end_src
 ** Misc tweaks
 
    Tiny tweaks that don't seem to fit anywhere:
 
    - Reduce amount of typing when answering y/n questions;
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (fset 'yes-or-no-p 'y-or-n-p)
-     #+END_SRC
+     #+end_src
 
    - Avoid the startup screen:
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq inhibit-startup-message t)
-     #+END_SRC
+     #+end_src
 
    - Highlight matching parenthesis in all modes:
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (show-paren-mode 1)
-     #+END_SRC
+     #+end_src
 
    - Tidy up before save:
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (add-hook 'before-save-hook
                  'delete-trailing-whitespace)
-     #+END_SRC
+     #+end_src
 
    - Allow narrowing to region:
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (put 'narrow-to-region 'disabled nil)
-     #+END_SRC
+     #+end_src
 
    - Editing environment:
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq kill-do-not-save-duplicates t
              next-line-add-newlines nil
              require-final-newline t
@@ -294,53 +294,53 @@
                      fill-column 80
                      indent-tabs-mode nil
                      case-fold-search nil)
-     #+END_SRC
+     #+end_src
 
    - Enable syntax highlighting:
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (global-font-lock-mode 1)
-     #+END_SRC
+     #+end_src
 
    - Create new window for =display-buffer=:
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (custom-set-variables '(pop-up-windows t))
-     #+END_SRC
+     #+end_src
 
    - Generate unique buffer names:
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package uniquify
          :config
          (custom-set-variables '(uniquify-buffer-name-style 'post-forward)
                                '(uniquify-separator ":")))
-     #+END_SRC
+     #+end_src
 ** Status Bar Setup
 
    Display line and column number in staus bar.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      ;; There are no scrollbars. I want to see location.
      (setq line-number-mode t
            column-number-mode t)
-   #+END_SRC
+   #+end_src
 
 ** L10N & I18N
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (set-language-environment 'utf-8)
-   #+END_SRC
+   #+end_src
 
    I used to use use my weird input method for Turkish character input. Now I rely on xkb, so ~:tangle no~.
-   #+BEGIN_SRC emacs-lisp :tangle no
+   #+begin_src emacs-lisp :tangle no
      (require 'turkish-doubles)
      (set-language-environment "Turkish")
-   #+END_SRC
+   #+end_src
 * Appearance
 
   I will set up how my emacs looks in GUI mode. There is some level of terminal
   mode setup, but it is fairly limited.
 
 ** GUI components
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (add-hook 'after-make-frame-functions (lambda (frame)
                                              (when (window-system frame)
                                                (scroll-bar-mode -1)
@@ -357,7 +357,7 @@
          (add-hook 'after-init-hook (lambda ()
                                       (run-hook-with-args 'after-make-frame-functions
                                                           (selected-frame)))))
-   #+END_SRC
+   #+end_src
 
 * GPG setup
 
@@ -366,28 +366,28 @@
    When running as daemon, the environment variables reflect the daemon
    environment. We need to refresh them according to the client that we start.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (defun wg/kludge-gpg-agent ()
        (if (display-graphic-p)
            (setenv "DISPLAY" (terminal-name))
          (setenv "GPG_TTY" (terminal-name))))
 
      (add-hook 'window-configuration-change-hook 'wg/kludge-gpg-agent)
-   #+END_SRC
+   #+end_src
 * Tramp remote path
   Allow remote ~.profile~ file to update tramp's ~PATH~ environment variable.
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (use-package tramp-sh
       :config
       (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
-  #+END_SRC
+  #+end_src
 
 * Misc Functions
 
 ** Eshell
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package eshell
        :bind ("C-c s" . eshell)
        :config
@@ -408,13 +408,13 @@
                    (add-to-list 'eshell-output-filter-functions
                                 'zakame/eshell-nuke-ansi-escapes t))
                  ))
-   #+END_SRC
+   #+end_src
 * Overlays to text
   Sometimes I want to copy the output of my org column view. The script below
   will allow you to turn the overlays into plain text, allowing you to save or
   copy it as you want.
 
-  #+BEGIN_SRC emacs-lisp
+  #+begin_src emacs-lisp
     (defun overlays-to-text ()
       "Create a new buffer called *text* containing the visible text
     of the current buffer, ie. it converts overlays containing text
@@ -447,7 +447,7 @@
           (with-current-buffer tb
             (insert x)))
         (pop-to-buffer tb)))
-  #+END_SRC
+  #+end_src
 * Packages
 
 ** Buffers
@@ -456,7 +456,7 @@
     I like to keep open buffers to a minimum. Midnight mode allows me to
     automatically close buffers after a timout period.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package midnight
         :config
         ;; run clean-buffer-list every 2 hours
@@ -478,20 +478,20 @@
                                                                             "^\\*Article "
                                                                             "^\\*Summary "
                                                                             ".*\\.org"))))
-    #+END_SRC
+    #+end_src
 
 ** Text Editing
 *** Undo
     I like the control undo-tree povides.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package undo-tree
         :ensure t
         :init
         (global-undo-tree-mode))
-    #+END_SRC
+    #+end_src
 *** Marking
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package expand-region
         :after hydra
         :ensure t
@@ -504,7 +504,7 @@
           ("C-v" (er/expand-region 0) "Reset" :color blue)
           ("t" er/mark-nxml-tag "Tag")
           ("e" er/mark-nxml-element "Element")))
-    #+END_SRC
+    #+end_src
 *** Key bindings
 **** Hydra
 
@@ -513,27 +513,27 @@
      lot that normal key binding doesn't do, but provides quite a bit of
      convenience.
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package hydra
          :ensure t)
-     #+END_SRC
+     #+end_src
 ** Dired
    Not a lot of customizations here... yet.
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (put 'dired-find-alternate-file 'disabled nil)
-   #+END_SRC
+   #+end_src
 
 ** Compile
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (custom-set-variables '(compilation-scroll-output t))
-   #+END_SRC
+   #+end_src
 ** escreen [Disabled - using elscreen now]
 
    This is one of my favorites: emacs window session manager. It provides
    something similar to a window manager virtual desktops.
 
-   #+BEGIN_SRC emacs-lisp :noweb yes :tangle no
+   #+begin_src emacs-lisp :noweb yes :tangle no
      (use-package escreen
        :disabled
        :demand
@@ -545,12 +545,12 @@
        <<vh-escreen>>
        (escreen-install)
        (add-hook 'escreen-goto-screen-hook #'escreen-display-screens))
-   #+END_SRC
+   #+end_src
 
    And some helper files
 
    #+name: vh-escreen
-   #+BEGIN_SRC emacs-lisp :tangle no
+   #+begin_src emacs-lisp :tangle no
      (defun vh-find-escreen-data-by-number (number)
        (car (delq nil
                   (mapcar (lambda (x) (and (= (car x) number) x))
@@ -579,18 +579,18 @@
                              display-str))
                          " ")))
          (message "escreen: %s" screen-msg)))
-   #+END_SRC
-** elscreen
+   #+end_src
+** elscreen [Disabled
    Emacs window session manager - sort of a pager for emacs
 
-   #+BEGIN_SRC emacs-lisp :noweb yes
+   #+begin_src emacs-lisp :noweb yes :tangle no
      (use-package elscreen
        :ensure t
        :demand
        :config
        (elscreen-start)
        (custom-set-variables '(elscreen-display-tab nil)))
-   #+END_SRC
+   #+end_src
 ** browse-kill-ring
 
    Displays the contents of the kill ring, and allows you to select an
@@ -601,43 +601,43 @@
    Navigate using cursor up/down, select by pressing =<Enter>= and abort by
    pressing =q=.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package browse-kill-ring
        :ensure t
        :config (browse-kill-ring-default-keybindings))
-   #+END_SRC
+   #+end_src
 
 ** paredit
 
    Get your parenthesis under control. Visit [[http://danmidwood.com/content/2014/11/21/animated-paredit.html][the animated guide to paredit]] for
    a visual explanation of the mode.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package paredit
        :ensure t
        :init
        (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
        (add-hook 'lisp-mode-hook #'enable-paredit-mode)
        (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode))
-   #+END_SRC
+   #+end_src
 
 ** ace-window
 
    Easy travel between windows.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package ace-window
        :ensure t
        :bind (( "C-x o" . ace-window))
        :config
        (custom-set-variables '(aw-scope 'visible)))
-   #+END_SRC
+   #+end_src
 
 ** avy
 
    Jump around in the buffer quickly.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package avy
        :ensure t
        :bind (("M-g j" . avy-goto-char-timer)
@@ -648,26 +648,26 @@
               ("C-c K l" . avy-kill-ring-save-whole-line)
               ("C-c K r" . avy-kill-ring-save-region)))
 
-   #+END_SRC
+   #+end_src
 
 ** ace-jump-buffer
 
    Jump between buffers using the avy quick select method. Function lists
    buffers, and allows you to select one using the buffer's assigned letter.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package ace-jump-buffer
        :ensure t
        :bind (("C-c b b"   . ace-jump-buffer)
               ("C-c b 4 b" . ace-jump-buffer-other-window)
               ("C-c b p"   . ace-jump-projectile-buffers)))
-   #+END_SRC
+   #+end_src
 ** Transparent encryption
 
    /EasyPG/ is a library to interface with /gpg/. It can be configured to
    transparently decrypt files ending with =.gpg= extension.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package epg
        :ensure t
        :config
@@ -681,10 +681,10 @@
        (when  epg-gpg-program
          (add-to-list 'auth-sources
                       '(:source "~/.emacs.d/.secrets/authinfo.gpg" :host t :protocol t))))
-   #+END_SRC
+   #+end_src
 ** Dired
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package dired
        :defer
        :config
@@ -693,11 +693,11 @@
                  (lambda ()
                    (make-local-variable 'coding-system-for-read)
                    (setq coding-system-for-read 'utf-8))))
-   #+END_SRC
+   #+end_src
 ** ERC
    IRC is still alive. :)
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package erc
        :commands erc
        :config
@@ -709,14 +709,14 @@
        ;; If the DCC download directory is missing, create it.
        (if (not (file-exists-p erc-dcc-get-default-directory))
            (make-directory erc-dcc-get-default-directory t)))
-   #+END_SRC
+   #+end_src
 ** Mini buffer input and completion
 
 *** Ivy and friends
     Abo abo has created a really useful module for completing input that
     strikes a good balance between size and functionality.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package ivy
         :ensure t
         :pin melpa
@@ -752,12 +752,12 @@
 
         ;; Patch counsel-ag only for now. Will extend as more problems show up
         (advice-add #'counsel-ag :around #'vh/coding-system--counsel-cmd))
-    #+END_SRC
+    #+end_src
 *** DISABLED IDO mode
 
     My first minibuffer helper. I am using ivy these days.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package ido-vertical-mode
         :disabled)
 
@@ -769,20 +769,20 @@
         :config
         (ido-vertical-mode)
         (flx-ido-mode))
-    #+END_SRC
+    #+end_src
 *** DISABLED Helm
 
     For a short period, I've switched from /ido/ to /helm/. /Ivy/ is better for me.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package helm
         :disabled
         :bind ( ("C-x C-f" . helm-find-files)
                 ("C-x b" . helm-buffers-list)
                 ("M-x"  . helm-M-x)))
-    #+END_SRC
+    #+end_src
 ** Multiple Cursors
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package multiple-cursors
        :ensure t
        :bind ( ("C-c m l" . mc/edit-lines)
@@ -795,44 +795,44 @@
                ("C-c m s" . mc/mark-all-symbols-like-this-in-defun)
                ("C-c m S" . mc/mark-all-symbols-like-this)
                ("C-c m w" . mc/mark-all-symbols-like-this-in-defun)))
-   #+END_SRC
+   #+end_src
 ** Magit
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package magit
        :ensure t
        :bind (("C-c g" . magit-status))
        :init
        (use-package git-commit
          :ensure t))
-   #+END_SRC
+   #+end_src
 ** TODO Auto complete
 
    I need to work on this, and maybe enable it globally.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package auto-complete
        :ensure t
        :config
        (setq-default ac-sources (push 'ac-source-yasnippet ac-sources)))
-   #+END_SRC
+   #+end_src
 ** TODO Yasnippet
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package yasnippet
        :ensure t
        :commands (yas-minor-mode yas-global-mode yas-reload-all))
-   #+END_SRC
+   #+end_src
 ** Which-key
    Show keyboard shotrtcuts following the keys already pressed.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package which-key
        :ensure t
        :config
        (which-key-mode))
-   #+END_SRC
+   #+end_src
 ** E-mail
 *** Reading: GNUS
-    #+BEGIN_SRC emacs-lisp :noweb yes
+    #+begin_src emacs-lisp :noweb yes
       (use-package w3m
         :defer t
         :ensure t)
@@ -900,10 +900,10 @@
                               '(mm-w3m-safe-url-regexp nil)
                               '(mm-inline-large-images t)
                               '(mm-coding-system-priorities '(utf-8))))
-    #+END_SRC
+    #+end_src
 **** Configuration support functions
      #+name: gnus-config-support
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+begin_src emacs-lisp :tangle no
        (defun mk-gnus-select-method (alias addr &optional port ignore-regexp)
          "Construct an entry for `gnus-secondary-select-methods' variable.
 
@@ -919,7 +919,7 @@
                   (gnus-check-new-newsgroups nil)
                   (gnus-ignored-newsgroups ,(or ignore-regexp
                                                 "^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\”]\”[#’()]"))))
-     #+END_SRC
+     #+end_src
 *** Reading: notmuch
 
     Apply the first tag to all mesages in notmuch-show view:
@@ -928,7 +928,7 @@
     - Calculate tag differences. Not sure how. There may be a function. If not, use variation of the above. Then apply tag delta. find function.
 
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package notmuch
         :ensure t
         :commands (vh/notmuch-show-delete-thread notmuch-mua-new-mail)
@@ -1006,10 +1006,10 @@
                                                  orig))))
 
         (setq notmuch-address-selection-function #'vh/notmuch-address-selection-function))
-    #+END_SRC
+    #+end_src
 *** Composing messages
 
-    #+BEGIN_SRC emacs-lisp :noweb yes
+    #+begin_src emacs-lisp :noweb yes
       (use-package message
         :bind (:map message-mode-map
                     ("C-c o" . vh/message-edit-body-as-org)
@@ -1037,7 +1037,7 @@
 
           (setq bbdb-mua-pop-up nil
                 bbdb-complete-mail-allow-cycling t)))
-    #+END_SRC
+    #+end_src
 **** HTML Mail support
      :PROPERTIES:
      :header-args: :tangle no
@@ -1047,7 +1047,7 @@
      the org body to an HTML mime attachment.
 
      #+name: mail-compose-functions
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (defun vh/message-edit-body-as-org ()
          "Edit the body of the message in org-mode.
 
@@ -1089,12 +1089,12 @@
              (yank)
              (mml-insert-part "text/html")
              (insert (concat text "\n")))))
-     #+END_SRC
+     #+end_src
 
      This function allows me to insert my PiA signature to HTML mails.
 
      #+name: mail-compose-functions
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
               (defconst vh/pia-html-sig
                 (base64-decode-string
                   ;; Abusing base64 to avoid escaping the quotes.
@@ -1115,9 +1115,9 @@
               (defun vh/insert-pia-html-sig ()
                 (interactive)
                 (insert-string vh/pia-html-sig))
-     #+END_SRC
+     #+end_src
 *** Sending mail
-    #+BEGIN_SRC emacs-lisp :noweb yes
+    #+begin_src emacs-lisp :noweb yes
       (use-package smtpmail
         :defer
         :config
@@ -1145,7 +1145,7 @@
 
       (use-package smtp-openssl
         :ensure t)
-    #+END_SRC
+    #+end_src
 **** Multiple SMTP servers support
      :PROPERTIES:
      :header-args: :tangle no
@@ -1155,7 +1155,7 @@
      sender address.
 
      #+name: smtp-switch-helper
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package gnutls
          :config
          (custom-set-variables '(gnutls-min-prime-bits 1024)))
@@ -1209,9 +1209,9 @@
            (with-current-buffer smtpmail-text-buffer
              (change-smtp))
            ad-do-it))
-     #+END_SRC
+     #+end_src
 *** Contacts
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package bbdb
         :ensure t
         :defer
@@ -1228,9 +1228,9 @@
         (setq bbdb/gnus-score-default 10))
 
 
-    #+END_SRC
+    #+end_src
 ** Projectile
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package projectile
        :ensure t
        :config
@@ -1255,7 +1255,7 @@
        :after projectile
        :config
        (counsel-projectile-mode))
-   #+END_SRC
+   #+end_src
 ** Programming Languages
 *** C
     :PROPERTIES:
@@ -1263,25 +1263,25 @@
     :END:
 
     #+name: c-setup
-    #+BEGIN_SRC emacs-lisp :noweb yes
+    #+begin_src emacs-lisp :noweb yes
       <<c-helper-functions>>
       <<c-styles>>
       (add-hook 'c-mode-hook (lambda ()
                                (c-set-style "tda")))
-    #+END_SRC
+    #+end_src
 
 **** Key bindings
      #+name: c-bindings
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        :bind (:map c-mode-map
                    ("C-c C-f" . c-helper-find-file)
                    ("C-c C-v" . c-helper-find-include-file))
 
-     #+END_SRC
+     #+end_src
 **** C Mode Styles
 
      #+name: c-styles
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (c-add-style "tda" '((c-basic-offset . 4)
                             (c-comment-only-line-offset . 0)
                             (c-block-comment-prefix . "*")
@@ -1421,10 +1421,10 @@
                              (eq (char-after) ?\=)))
                  0
                default-lineup))))
-     #+END_SRC
+     #+end_src
 **** Helper functions
      #+name: c-helper-functions
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (require 'etags)
 
        (defvar c-helper-find-file-history nil)
@@ -1547,7 +1547,7 @@
       			   (c-helper-find-file file-name)
       			 (error "No file specified in the #include statement")))
       	   (error "Not on a line with a #include statement"))))
-     #+END_SRC
+     #+end_src
 *** Java
     :PROPERTIES:
     :header-args: :tangle no
@@ -1556,16 +1556,16 @@
     Java mode configuration.
 
     #+name: java-setup
-    #+BEGIN_SRC emacs-lisp :noweb yes
+    #+begin_src emacs-lisp :noweb yes
       <<java-styles>>
       (add-hook 'java-mode-hook (lambda ()
                                   (c-set-style "java-custom")))
-    #+END_SRC
+    #+end_src
 
 
 **** Java mode styles
      #+NAME: java-styles
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (c-add-style "java-custom"
                     '("java"
                       (c-offsets-alist . ((substatement-open . 0)
@@ -1582,14 +1582,14 @@
                                                  (block-close . c-snug-do-while)))))
 
 
-     #+END_SRC
+     #+end_src
 **** DISABLED Eclim
 
      Eclipse in emacs. This package uses a plugin to communicate with eclipse, and get it to do the heavy lifting.
 
      I had limited success with it.
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package eclim
          :disabled
          :commands (eclim-manage-projects global-eclim-mode)
@@ -1613,7 +1613,7 @@
                        eclimd-default-workspace "~/work"))
 
 
-     #+END_SRC
+     #+end_src
 **** Extra Java Packages
      :PROPERTIES:
      :header-args: :tangle init.el
@@ -1626,7 +1626,7 @@
       available (I will not commit a binary to git). If both conditions are
       satisfied, I will initialize the module.
 
-      #+BEGIN_SRC emacs-lisp
+      #+begin_src emacs-lisp
         (let* ((flycheck-java-dir "~/.emacs.d/elisp/thirdparty/flycheck-java")
                (bin-dir "~/.emacs.d/bin")
                (ecj-jar-file (when (file-directory-p bin-dir)
@@ -1637,12 +1637,12 @@
             (use-package flycheck-java
               :config
               (setq flycheck-java-ecj-jar-path ecj-jar-file))))
-      #+END_SRC
+      #+end_src
 *** C# Mode
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package csharp-mode
         :ensure t)
-    #+END_SRC
+    #+end_src
 *** Maven
     Build your java applications easily.
 
@@ -1654,7 +1654,7 @@
     I also add two mvn-test extensions to speed up the test cycle here. The
     functions I use were adapted from [[https://gist.github.com/bahmanm/c11c94d2158eb1113879][this github gist]].
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package mvn
         :ensure t
         :after cc-mode
@@ -1708,18 +1708,18 @@
                  (mvn-cmd (concat "cd " root " && "
                                   "mvn -Dtest=" class-name "#" test-case " test ")))
             (mvn-test (concat class-name (when test-case (concat "#" test-case)))))))
-    #+END_SRC
+    #+end_src
 *** Groovy
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package groovy-mode
         :ensure t
         :commands groovy-mode
         :mode ("\\.gradle$" . groovy-mode))
-    #+END_SRC
+    #+end_src
 *** Ruby
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package ruby-mode
         :commands ruby-mode
         :after auto-complete
@@ -1788,10 +1788,10 @@
 
       (use-package bundler
         :ensure t)
-    #+END_SRC
+    #+end_src
 
 **** DISABLED On Rails
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package rspec-mode
          :disabled
          :commands rspec-mode
@@ -1812,10 +1812,10 @@
          :disabled
          :commands rhtml-mode
          :mode ("\\.html\\.erb\\'" . rhtml-mode))
-     #+END_SRC
+     #+end_src
 *** Lisp
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package lisp-mode
         :after paredit
         :config
@@ -1825,17 +1825,17 @@
 
       (use-package elisp-helper
         :bind (("C-c e" . vh-eval-and-replace)))
-    #+END_SRC
+    #+end_src
 **** Scheme
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package scheme
          :commands scheme-mode
          :mode ("\\.s\\(s\\|c[mh]\\)$" . scheme-mode))
-     #+END_SRC
+     #+end_src
 **** Slime (Common Lisp)
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package slime
          :disabled
          :config
@@ -1853,9 +1853,9 @@
          )
 
 
-     #+END_SRC
+     #+end_src
 *** Python
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package python
         :commands python-mode
         :requires auto-complete
@@ -1878,16 +1878,16 @@
 
       (use-package pymacs
         :commands pymacs-load)
-    #+END_SRC
+    #+end_src
 **** Virtual Environments
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package virtualenv
          :ensure t
          :commands virtualenv-activate
          :config (defvar virtualenv-use-ipython nil))
-     #+END_SRC
+     #+end_src
 *** Javascript
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package js2-mode
         :ensure t
         :requires yasnippet
@@ -1898,9 +1898,9 @@
         (custom-set-variables '(js2-indent-switch-body t))
         ;; This is for jasmine output. But it needs more work
         (add-to-list 'compilation-error-regexp-alist '("^\\W+at\\(.*\\)\\ (\\([^:]+\\):\\([0-9]+\\):\\([0-9]+\\)" 2 3 4)))
-    #+END_SRC
+    #+end_src
 *** Lua
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package lua-mode
         :ensure t
         :commands lua-mode
@@ -1911,7 +1911,7 @@
                                     ;; (choose-indent-type)
                                     (auto-fill-mode 1)
                                     (subword-mode 1))))
-    #+END_SRC
+    #+end_src
 *** C-Like languages (/cc-mode/)
 
     Emacs programming languages that look like C are usually defined in
@@ -1923,7 +1923,7 @@
     language modes are defined in their respective headings. When tangling the
     init file, we pull in the individual setups.
 
-    #+BEGIN_SRC emacs-lisp :noweb yes
+    #+begin_src emacs-lisp :noweb yes
       (use-package cc-mode
         <<c-bindings>>
         <<java-bindigs>>
@@ -1938,10 +1938,10 @@
                                         (auto-complete-mode)))
         <<c-setup>>
         <<java-setup>>)
-    #+END_SRC
+    #+end_src
 *** Flycheck
 
-    #+BEGIN_SRC emacs-lisp :noweb yes
+    #+begin_src emacs-lisp :noweb yes
       (use-package flycheck
         :ensure t
         :init
@@ -1949,42 +1949,42 @@
         :config
         <<flycheck-module-config>>
         (custom-set-variables '(flycheck-temp-prefix "#flycheck")))
-    #+END_SRC
+    #+end_src
 **** Javascript
      I use =eslint= instead of =jshint= in flycheck.
 
      #+name: flycheck-module-config
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+begin_src emacs-lisp :tangle no
        (add-hook 'js2-mode-hook (lambda nil
                                   (add-to-list 'flycheck-disabled-checkers 'javascript-jshint)))
        ;;; Use "sudo npm install -g eslint"
        (custom-set-variables '(flycheck-javascript-eslint-executable "/usr/local/bin/eslint"))
-     #+END_SRC
+     #+end_src
 **** elisp
      #+name: flycheck-module-config
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (custom-set-variables '(flycheck-emacs-lisp-load-path 'inherit))
        (add-hook 'emacs-lisp-mode-hook (lambda nil
                                          (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)))
-     #+END_SRC
+     #+end_src
 *** Navigation
 
     Packages in here allow fast navigation in programming languages.
 
     Dumb-jump is an almost zero-config pacakge that finds the definition of keyword under cursor.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package dumb-jump
         :ensure t
         :bind (("M-g d" . dumb-jump-go)
                ("M-g D" . dumb-jump-go-other-window)
                ("M-g b" . dumb-jump-back)))
-    #+END_SRC
+    #+end_src
 ** YAML
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package yaml-mode
        :ensure t)
-   #+END_SRC
+   #+end_src
 ** XML editing
 
    NXML is a good way to edit XML files in emacs. Its biggest drawback is that
@@ -1994,7 +1994,7 @@
    I use the external tool =xmlindent= to indent entire XML file. You can
    install this utility by running ~sudo apt install xmlindent~.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package nxml-mode
        :commands nxml-mode
        :bind (:map nxml-mode-map
@@ -2018,14 +2018,14 @@
                                  "~/.emacs.d/nxml-schemas/schemas.xml")
                     (add-to-list 'rng-schema-locating-files
                                  "~/.emacs.d/nxml-schemas/libvirt/schemas.xml"))))
-   #+END_SRC
+   #+end_src
 ** Org mode
 
    I can't even get my configuration to work without org mode. So yes, I will install it.
 
    I explicitly pull in the org-plus-contrib package available from the org-mode archive.
 
-   #+BEGIN_SRC emacs-lisp :noweb yes
+   #+begin_src emacs-lisp :noweb yes
      (use-package org
        :ensure org-plus-contrib
        :bind (("C-c b o"   . org-switchb)
@@ -2364,34 +2364,34 @@
        :config (setq org-mobile-directory "~/outgoing/mobileorg"))
 
 
-   #+END_SRC
+   #+end_src
 *** DISABLED Quantified self
     I've abandoned planning, but I will come back to it with a different
     workflow that works for me. I don't want to lose my previous work in the
     meantime.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package quantified
         :disabled
         :commands (quantified-text quantified-track quantified-share-org-subtree quantified-summarize-time)
         :config
         ;; Load my passwords so that I can login to quantified awesome
         (require 'secrets))
-    #+END_SRC
+    #+end_src
 ** Diary
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package diary-lib
        :defer
        :config
        (add-hook 'diary-list-entries-hook 'diary-sort-entries t)
        (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
        (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files))
-   #+END_SRC
+   #+end_src
 ** Ledger mode
 
    Accounting from within emacs.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package ledger-mode
        :ensure t
        :commands ledger-mode
@@ -2406,7 +2406,7 @@
          "Clip the ever-growing \n series at end of file"
          (when (looking-at "\n\n\n")
            (delete-char 2))))
-   #+END_SRC
+   #+end_src
 ** Dictionary
 
    It is good to have a dictionary handy. I've installed the package =sdcv=
@@ -2416,18 +2416,18 @@
    You can download the 1913 version from [[https://s3.amazonaws.com/jsomers/dictionary.zip][this archive from S3]]. Installatoin instructions
    (including the S3 archive location), and an interesting blog post is [[http://jsomers.net/blog/dictionary][here]].
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package sdcv-mode
        :defer
        :bind ( ("C-c d" . sdcv-search)))
-   #+END_SRC
+   #+end_src
 ** Edit grep/occur buffers
    It is useful for mass editing.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package wgrep
        :ensure t)
-   #+END_SRC
+   #+end_src
 ** Per machine setup
 
    I may need to tweak some variables on individual machines, or leave some
@@ -2437,15 +2437,15 @@
    It has to be the last thing we do before we are finished, so that the
    per-machine script can override everything.
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (let ((local-config-file "~/.emacs-local-config.el"))
        (when (file-exists-p local-config-file)
          (load-file local-config-file)))
-   #+END_SRC
+   #+end_src
 ** Docker
 
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
      (use-package dockerfile-mode
        :ensure t)
-   #+END_SRC
+   #+end_src
 * Final tweaks
