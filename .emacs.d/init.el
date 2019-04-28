@@ -302,12 +302,13 @@ into real text."
 
 (custom-set-variables '(compilation-scroll-output t))
 
-(use-package elscreen
+(use-package eyebrowse
   :ensure t
   :demand
+  :init
+  (eyebrowse-mode)
   :config
-  (elscreen-start)
-  (custom-set-variables '(elscreen-display-tab nil)))
+  (custom-set-variables '(eyebrowse-keymap-prefix (kbd "C-z"))))
 
 (use-package browse-kill-ring
   :ensure t
@@ -578,11 +579,12 @@ into real text."
                             (:name "flagged-tree" :search-type tree :query "tag:flagged" :key "F")
                             (:name "sent" :query "tag:sent" :key "t")
                             (:name "drafts" :query "tag:draft" :key "dr")
-                            (:name "today" :query "date:today" :key "dt")
+                            (:name "today" :query "dag:unread and date:today" :key "dt")
                             (:name "last week" :query "date:\"this week\"" :key "dw")
                             (:name "last week" :query "date:\"this month\"" :key "dm")
                             (:name "all mail" :query "*" :key "a")
-                            (:name "info" :query "tag:info" "i"))))
+                            (:name "info" :query "tag:info" "i")
+                            (:name "recent" :query "tag:unread and (date:yesterday or date:today)" :key "ur" :search-type tree))))
                         '(notmuch-archive-tags '("-inbox" "+archived"))
                         '(notmuch-always-prompt-for-sender t)
                         '(notmuch-identities (quote
@@ -684,26 +686,6 @@ into real text."
         (yank)
         (mml-insert-part "text/html")
         (insert (concat text "\n")))))
-  (defconst vh/pia-html-sig
-    (base64-decode-string
-      ;; Abusing base64 to avoid escaping the quotes.
-      (concat "PGRpdiBzdHlsZT0icGFkZGluZy10b3A6N3B4O2ZvbnQtZmFtaWx5OidWZXJkYW5hJywnc2Fucy1z"
-              "ZXJpZic7Zm9udC1zaXplOjhwdCI+PGEgaHJlZj0iaHR0cDovL3d3dy5waWEtdGVhbS5jb20vIiB0"
-              "YXJnZXQ9Il9ibGFuayI+PGltZyBzcmM9Imh0dHA6Ly93d3cucGlhLXRlYW0uY29tL2ltYWdlcy9s"
-              "b2dvLWJsYWNrLnBuZyIgaGVpZ2h0PSI3MiIgd2lkdGg9IjE2MCIvPjwvYT48aHIgd2lkdGg9IjE2"
-              "MCIgYWxpZ249ImxlZnQiLz48cCBhbGlnbj0ibGVmdCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTo5"
-              "cHQiIGxhbmc9IkVOLVVTIj48Yj5BaG1ldCBWZWRhdCBIYWxsYSYjMjMxOzwvYj48L3NwYW4+PGJy"
-              "Lz5IZWFkIG9mIERldmVsb3BtZW50IERlcGFydG1lbnQ8YnIvPjxici8+TTogKzkwIDU0MSA4MzMg"
-              "MjggODI8YnIvPjxzcGFuIHN0eWxlPSJjb2xvcjojMDA2OGNmOyI+PGEgaHJlZj0ibWFpbHRvOnZl"
-              "ZGF0LmhhbGxhY0BwaWEtdGVhbS5jb20iPjx1PnZlZGF0LmhhbGxhY0BwaWEtdGVhbS5jb208L3U+"
-              "PC9hPjwvc3Bhbj48YnIvPjxiPlRla25vcGFyayAmIzMwNDtzdGFuYnVsIFNhbmF5aSBNYWguPC9i"
-              "Pjxici8+VGVrbm9wYXJrIEJ1bHZhciYjMzA1OyAxLzFDIDE2MDEtMTYwMjxici8+MzQ5MDYgS3Vy"
-              "dGsmIzI0Njt5IC8gJiMzMDQ7c3RhbmJ1bDxici8+VGVsL0ZheDogKzkwIDIxNiAyOTAgMzUgNTY8"
-              "L3A+PC9kaXY+Cg==")))
-  
-  (defun vh/insert-pia-html-sig ()
-    (interactive)
-    (insert-string vh/pia-html-sig))
 
   (require 'smtpmail)
   (when (require 'bbdb nil t)
@@ -825,6 +807,7 @@ into real text."
                                                                     projectile-root-bottom-up
                                                                     projectile-root-top-down-recurring))
                         '(projectile-enable-caching t))
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-global-mode))
 
 (use-package counsel-projectile
@@ -1382,9 +1365,6 @@ into real text."
                              (add-to-list 'flycheck-disabled-checkers 'javascript-jshint)))
   ;;; Use "sudo npm install -g eslint"
   (custom-set-variables '(flycheck-javascript-eslint-executable "/usr/local/bin/eslint"))
-  (custom-set-variables '(flycheck-emacs-lisp-load-path 'inherit))
-  (add-hook 'emacs-lisp-mode-hook (lambda nil
-                                    (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)))
   (custom-set-variables '(flycheck-temp-prefix "#flycheck")))
 
 (custom-set-variables '(flycheck-emacs-lisp-load-path 'inherit))
@@ -1803,3 +1783,7 @@ immediately after current heading."
 
 (use-package dockerfile-mode
   :ensure t)
+
+(use-package pdf-tools
+    :ensure t
+    )
