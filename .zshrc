@@ -24,14 +24,17 @@ DIRSTACKSIZE=16
 setopt extendedglob
 
 setopt autopushd
+setopt nohup
 unsetopt autocd
 unsetopt beep
 unsetopt notify
 
 ## History ##
 HISTFILE=~/.histfile
+HISTORY_IGNORE='ls *'
 HISTSIZE=32768
 SAVEHIST=32768
+HIST_IGNORE_ALL_DUPS=y
 
 setopt extendedhistory
 setopt histignoredups
@@ -44,8 +47,8 @@ setopt sharehistory
 bindkey -e # emacs mode
 
 #history search
-bindkey '^R' history-beginning-search-backward
-bindkey '^F' history-beginning-search-forward
+#bindkey '^R' history-beginning-search-backward
+#bindkey '^F' history-beginning-search-forward
 
 #emacs bindings
 bindkey '^A' beginning-of-line
