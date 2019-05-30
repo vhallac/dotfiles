@@ -96,9 +96,11 @@ fi
 #export CDPATH
 
 # Pull in custom completion scripts
-for i in $HOME/.bash-completion/*; do
-	. $i
-done
+if [ -d "$HOME/.bash-completion" ]; then
+    for i in $HOME/.bash-completion/*; do
+        . $i
+    done
+fi
 
 ec() {
 	emacsclient -nw $*
