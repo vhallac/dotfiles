@@ -66,3 +66,6 @@ alias l='ls -CF'
 alias sqlplus="rlwrap -i -f ~/.cache/sqlplus-history -H ~/.cache/sqlplus-history -s 30000 /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin/sqlplus"
 
 alias rubydev='PATH="~/.rbenv/bin:$PATH";eval "$(rbenv init -)"'
+
+alias ec='emacsclient -nw'
+alias ecw='emacsclient -n -c'
