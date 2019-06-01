@@ -67,5 +67,7 @@ alias sqlplus="rlwrap -i -f ~/.cache/sqlplus-history -H ~/.cache/sqlplus-history
 
 alias rubydev='PATH="~/.rbenv/bin:$PATH";eval "$(rbenv init -)"'
 
+alias ed='ed -p$\ '
+
 alias ec='emacsclient -nw'
 alias ecw='emacsclient -n -c'
