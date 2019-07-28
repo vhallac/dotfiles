@@ -1677,6 +1677,7 @@ immediately after current heading."
         org-babel-results-keyword "results")
 
   (org-babel-do-load-languages 'org-babel-load-languages '((ledger . t)
+                                                           (dot . t)
                                                            (shell . t))))
 
 (use-package org-capture
