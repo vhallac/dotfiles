@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: tip
+# key: tip
+# --
+Expenses:Tip  $1 TL
+Expenses:Cash  -$1 TL

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: ccen
+# key: ccen
+# --
+  $1 TL
+Liabilities:CC:enpara                         -$1 TL
