@@ -569,12 +569,11 @@ into real text."
   (setq notmuch-command (expand-file-name "~/bin/remote-notmuch.sh"))
   (custom-set-variables '(notmuch-saved-searches
                           (quote
-                           ((:name "inbox.personal" :query "tag:inbox and tag:personal" :key "ip")
-                            (:name "inbox.work" :query "tag:inbox and tag:pia" :key "iw")
-                            (:name "unread.personal" :query "tag:unread and tag:personal" :key "up")
-                            (:name "unread.work.pia" :query "tag:unread and tag:pia" :key "uw")
-                            (:name "unread.work.lidyum" :query "tag:unread and tag:lidyum and not subject:[JIRA]" :key "ul")
-                            (:name "unread.work.lidyum.misc" :query "tag:unread and tag:lidyum and subject:[JIRA]" :key "uL")
+                           ((:name "inbox.personal" :query "tag:inbox and tag:personal" :key "im")
+                            (:name "inbox.work" :query "tag:inbox and tag:pia" :key "ip")
+                            (:name "unread.personal" :query "tag:unread and tag:personal" :key "um")
+                            (:name "unread.work.pia" :query "tag:unread and tag:pia" :key "up")
+                            (:name "unread.work.qubit" :query "tag:unread and tag:qubit" :key "uq")
                             (:name "flagged" :query "tag:flagged" :key "f")
                             (:name "flagged-tree" :search-type tree :query "tag:flagged" :key "F")
                             (:name "sent" :query "tag:sent" :key "t")
@@ -589,12 +588,12 @@ into real text."
                         '(notmuch-always-prompt-for-sender t)
                         '(notmuch-identities (quote
                                               ("Vedat Hallaç <vedat.hallac@pia-team.com>"
+                                               "Vedat Hallaç <vedath@7island.com>"
                                                "Vedat Hallaç <vedat@hallac.net>"
                                                "Ahmet Vedat Hallaç <vedathallac@lidyum.com.tr>"))))
                         ;; Mark deleted messages unread for fast delete
                         (setcar (cdr (assoc "d" notmuch-tagging-keys)) '("+deleted" "-inbox" "-unread"))
   (push '("lf" ("+financial" "-inbox") "Financial") notmuch-tagging-keys)
-  (push '("llf" ("+lidyumfinans" "-inbox") "Financial") notmuch-tagging-keys)
   (push '("lp" ("+project" "-inbox") "Project") notmuch-tagging-keys)
   (push '("lP" ("+prospect" "-inbox") "Project") notmuch-tagging-keys)
   (push '("li" ("+info" "-inbox") "info") notmuch-tagging-keys)
@@ -642,6 +641,7 @@ into real text."
                                                                    "vedat@oyun.cuyuz.biz"
                                                                    "vedathallac@yandex.com"
                                                                    "vedat@hallac.net"
+                                                                   "vedath@7island.com"
                                                                    "vedat.hallac@pia-team.com"
                                                                    "vedathallac@lidyum.com.tr")))
                         '(send-mail-function 'smtpmail-send-it))
@@ -707,7 +707,8 @@ into real text."
                          (ssl "vedat@android.ciyiz.biz" "gmail-android" "smtp.googlemail.com" 587)
                          (ssl "vedat.hallac@pia-team.com" "gmail-pia" "smtp.googlemail.com" 587)
                          (ssl "vedat@hallac.net" "hallac-net" "smtp.yandex.com" 587)
-                         (ssl "vedathallac@lidyum.com.tr" "ms-lidyum" "smtp.office365.com" 587)))
+                         (ssl "vedathallac@lidyum.com.tr" "ms-lidyum" "smtp.office365.com" 587)
+                         (ssl "vedath@7island.com" "gmail-qubit" "smtp.googlemail.com" 587)))
   (use-package gnutls
     :config
     (custom-set-variables '(gnutls-min-prime-bits 1024)))
