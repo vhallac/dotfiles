@@ -1929,6 +1929,11 @@
                                     (auto-fill-mode 1)
                                     (subword-mode 1))))
     #+end_src
+*** Golang
+    #+begin_src emacs-lisp
+      (use-package go-mode
+        :ensure t)
+    #+end_src
 *** C-Like languages (/cc-mode/)
 
     Emacs programming languages that look like C are usually defined in

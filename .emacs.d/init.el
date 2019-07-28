@@ -1061,6 +1061,9 @@ into real text."
                               (auto-fill-mode 1)
                               (subword-mode 1))))
 
+(use-package go-mode
+  :ensure t)
+
 (use-package cc-mode
   :bind (:map c-mode-map
               ("C-c C-f" . c-helper-find-file)
