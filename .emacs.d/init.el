@@ -135,6 +135,8 @@
 (define-key global-map (kbd "M-]") 'match-parenthesis)
 (define-key global-map (kbd "<f5>") 'revert-buffer)
 
+(define-key global-map (kbd "C-x C-b") 'ibuffer)
+
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (setq inhibit-startup-message t)
