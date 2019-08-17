@@ -161,10 +161,11 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 mode "power" {
-	bindsym $mod+s exec "/usr/bin/loginctl suspend && /usr/bin/i3lock"; mode "default";
+	bindsym $mod+s exec "/usr/bin/loginctl suspend"; mode "default";
 	bindsym $mod+r exec "/usr/bin/loginctl reboot"; mode "default";
 	bindsym $mod+o exec "/usr/bin/loginctl poweroff"; mode "default";
-	bindsym $mod+l exec "/usr/bin/i3lock"; mode "default";
+	bindsym $mod+l exec "/usr/bin/loginctl lock-session"; mode "default";
+	#bindsym $mod+l exec "/usr/bin/i3lock"; mode "default";
     bindsym Return mode "default"
     bindsym Escape mode "default"
 	bindsym $mod+p mode "default"
@@ -179,20 +180,21 @@ mode "user" {
     bindsym $mod+Shift+p exec "keepass --auto-type"; mode "default";
     bindsym $mod+Shift+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '; mode "default";
     bindsym $mod+m exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Focus: '; mode "default";
-    bindsym a exec "xdotool mousemove_relative -- -10 0"
-    bindsym s exec "xdotool mousemove_relative 0 10"
-    bindsym d exec "xdotool mousemove_relative 10 0"
-    bindsym w exec "xdotool mousemove_relative 0 -10"
-    bindsym Shift+a exec "xdotool mousemove_relative -- -100 0"
-    bindsym Shift+s exec "xdotool mousemove_relative 0 100"
-    bindsym Shift+d exec "xdotool mousemove_relative 100 0"
-    bindsym Shift+w exec "xdotool mousemove_relative 0 -100"
-    bindsym Ctrl+a exec "xdotool mousemove_relative -- -1 0"
-    bindsym Ctrl+s exec "xdotool mousemove_relative 0 1"
-    bindsym Ctrl+d exec "xdotool mousemove_relative 1 0"
-    bindsym Ctrl+w exec "xdotool mousemove_relative 0 -1"
-    bindsym q exec "xdotool mousedown 1 sleep 0.1 mouseup 1"
-    bindsym e exec "xdotool mousedown 3 sleep 0.1 mouseup 3"
+    # Enable if/when touchpad breaks again
+    #bindsym a exec "xdotool mousemove_relative -- -10 0"
+    #bindsym s exec "xdotool mousemove_relative 0 10"
+    #bindsym d exec "xdotool mousemove_relative 10 0"
+    #bindsym w exec "xdotool mousemove_relative 0 -10"
+    #bindsym Shift+a exec "xdotool mousemove_relative -- -100 0"
+    #bindsym Shift+s exec "xdotool mousemove_relative 0 100"
+    #bindsym Shift+d exec "xdotool mousemove_relative 100 0"
+    #bindsym Shift+w exec "xdotool mousemove_relative 0 -100"
+    #bindsym Ctrl+a exec "xdotool mousemove_relative -- -1 0"
+    #bindsym Ctrl+s exec "xdotool mousemove_relative 0 1"
+    #bindsym Ctrl+d exec "xdotool mousemove_relative 1 0"
+    #bindsym Ctrl+w exec "xdotool mousemove_relative 0 -1"
+    #bindsym q exec "xdotool mousedown 1 sleep 0.1 mouseup 1"
+    #bindsym e exec "xdotool mousedown 3 sleep 0.1 mouseup 3"
     bindsym Return mode "default"
     bindsym Escape mode "default"
 	bindsym $mod+c mode "default"
@@ -227,4 +229,15 @@ for_window [class="Conkeror"] mark "browser"
 for_window [instance="xterm"] mark "terminal"
 for_window [class="Eclipse"] mark "eclipse"
 
-exec "lxsession -s i3wm -e i3wm"
+exec --no-startup-id "lxsession -s i3wm -e i3wm"
+
+# Screen locking
+exec --no-startup-id "xset s 600" # 10 minutes to screen lock
+exec --no-startup-id "xss-lock --transfer-sleep-lock -- i3lock -n"
+
+bindsym XF86MonBrightnessUp exec light -A 5
+bindsym XF86MonBrightnessDown exec light -U 5
+bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle
+bindsym XF86AudioMicMute exec pactl set-source-mute 1 toggle
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5%
