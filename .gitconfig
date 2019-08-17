@@ -4,6 +4,7 @@
 [core]
 	autocrlf = input
 	safecrlf = false
+	excludesfile = ~/.gitignore
 [push]
 	default = simple
 	followTags = true
