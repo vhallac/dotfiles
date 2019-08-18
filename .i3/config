@@ -136,12 +136,6 @@ bindsym --whole-window button9 exec "sleep 0.5; xdotool mousedown 1"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
         bindsym j resize shrink width 10 px or 10 ppt
         bindsym k resize grow height 10 px or 10 ppt
         bindsym l resize shrink height 10 px or 10 ppt
@@ -165,7 +159,6 @@ mode "power" {
 	bindsym $mod+r exec "/usr/bin/loginctl reboot"; mode "default";
 	bindsym $mod+o exec "/usr/bin/loginctl poweroff"; mode "default";
 	bindsym $mod+l exec "/usr/bin/loginctl lock-session"; mode "default";
-	#bindsym $mod+l exec "/usr/bin/i3lock"; mode "default";
     bindsym Return mode "default"
     bindsym Escape mode "default"
 	bindsym $mod+p mode "default"
@@ -174,27 +167,12 @@ mode "power" {
 bindsym $mod+p mode "power"
 
 mode "user" {
-    # primary -> clipboard
+    # primary -> clipboard and back
     bindsym c exec "xsel | xsel -i -b"; mode "default"
     bindsym Shift+c exec "xsel -b | xsel -i"; mode "default"
     bindsym $mod+Shift+p exec "keepass --auto-type"; mode "default";
     bindsym $mod+Shift+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '; mode "default";
     bindsym $mod+m exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Focus: '; mode "default";
-    # Enable if/when touchpad breaks again
-    #bindsym a exec "xdotool mousemove_relative -- -10 0"
-    #bindsym s exec "xdotool mousemove_relative 0 10"
-    #bindsym d exec "xdotool mousemove_relative 10 0"
-    #bindsym w exec "xdotool mousemove_relative 0 -10"
-    #bindsym Shift+a exec "xdotool mousemove_relative -- -100 0"
-    #bindsym Shift+s exec "xdotool mousemove_relative 0 100"
-    #bindsym Shift+d exec "xdotool mousemove_relative 100 0"
-    #bindsym Shift+w exec "xdotool mousemove_relative 0 -100"
-    #bindsym Ctrl+a exec "xdotool mousemove_relative -- -1 0"
-    #bindsym Ctrl+s exec "xdotool mousemove_relative 0 1"
-    #bindsym Ctrl+d exec "xdotool mousemove_relative 1 0"
-    #bindsym Ctrl+w exec "xdotool mousemove_relative 0 -1"
-    #bindsym q exec "xdotool mousedown 1 sleep 0.1 mouseup 1"
-    #bindsym e exec "xdotool mousedown 3 sleep 0.1 mouseup 3"
     bindsym Return mode "default"
     bindsym Escape mode "default"
 	bindsym $mod+c mode "default"
@@ -223,10 +201,11 @@ bar {
 
 workspace_auto_back_and_forth yes
 
-for_window [class="Emacs24"] mark "emacs"
+for_window [class="Emacs"] mark "emacs"
 for_window [class="Google-Apps"] mark "mail"
-for_window [class="Conkeror"] mark "browser"
+for_window [class="firefox"] mark "browser"
 for_window [instance="xterm"] mark "terminal"
+for_window [instance="st-256color"] mark "terminal"
 for_window [class="Eclipse"] mark "eclipse"
 
 exec --no-startup-id "lxsession -s i3wm -e i3wm"
