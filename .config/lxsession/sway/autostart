@@ -1,0 +1,10 @@
+#@nm-applet
+#@blueman-applet
+#@/usr/bin/lxpolkit - started by lxsession?
+@/usr/bin/start-pulseaudio-x11
+@/usr/bin/xscreensaver -no-splash
+#@/home/vedat/bin/battery_switch.sh
+@xset -b
+@/usr/bin/gpg-agent --daemon --enable-ssh-support --default-cache-ttl 3600 --default-cache-ttl-ssh 3600
+@xrdb -merge /home/vedat/.Xresources
+#https://forum.lxde.org/viewtopic.php?t=31593XS

@@ -38,6 +38,6 @@ create_templates() {
 
 autolink .aliases .bash_aliases .environment .gitconfig .gitignore .gitk .inputrc .screenrc .screenrc-irc .tmux.conf .XCompose .Xresources .zshrc .bashrc
 
-autolink_dir bin .i3 .emacs.d
+autolink_dir bin .i3 .emacs.d .config .xmonad
 
 create_templates .emacs-local-config.el
