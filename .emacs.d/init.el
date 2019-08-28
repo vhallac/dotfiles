@@ -575,7 +575,7 @@ into real text."
                             (:name "inbox.work" :query "tag:inbox and tag:pia" :key "ip")
                             (:name "unread.personal" :query "tag:unread and tag:personal" :key "um")
                             (:name "unread.work.pia" :query "tag:unread and tag:pia" :key "up")
-                            (:name "unread.work.qubit" :query "tag:unread and tag:qubit" :key "uq")
+                            (:name "unread.work.qubit" :query "tag:unread and tag:qbit" :key "uq")
                             (:name "flagged" :query "tag:flagged" :key "f")
                             (:name "flagged-tree" :search-type tree :query "tag:flagged" :key "F")
                             (:name "sent" :query "tag:sent" :key "t")
