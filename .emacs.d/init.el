@@ -1384,6 +1384,9 @@ into real text."
          ("M-g D" . dumb-jump-go-other-window)
          ("M-g b" . dumb-jump-back)))
 
+(use-package haskell-mode
+  :ensure t)
+
 (use-package yaml-mode
   :ensure t)
 
