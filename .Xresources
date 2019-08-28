@@ -35,8 +35,7 @@ Xft.hintstyle:              hintslight
 Xft.antialias:              rgba
 Xft.rgba:                   rgb
 Xft.embolden:               false
-!Xft.dpi:                    157
-Xft.dpi:                    138
+Xft.dpi:                    157
 
 ! This one is to satisfy KDE
 st-256color*background:           lemon chiffon
