@@ -7,12 +7,12 @@ import Data.Maybe (maybeToList)
 import XMonad
 import qualified XMonad.Hooks.DynamicLog as DL
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.ManageHelpers (isFullscreen, isDialog,  doFullFloat, doCenterFloat, isInProperty)
+import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Hooks.Minimize
 import XMonad.Hooks.Place
-import XMonad.Util.Run(safeSpawn, spawnPipe)
+import XMonad.Util.Run(safeSpawn, spawnPipe, unsafeSpawn)
 import XMonad.Util.EZConfig(additionalKeysP,removeKeysP)
 import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Actions.NoBorders(toggleBorder)
@@ -55,14 +55,17 @@ manageAppViews = composeAll . concat $
       codeViewClasses    = [ "Eclipse", "Java", "Code", "jetbrains-rider" ]
       tempViewClasses    = [ "Git-gui" ]
 
+doGiveFocusBack = ask >>= \w -> doF (W.focusDown)
+
 manageFloats = composeAll . concat $
                [
 --                [ WG.className =? b <&&> isFullscreen --> doFullFloat | b <- fullScreenClasses ],
                  [ isFullscreen --> doFullFloat ],
-                 [ WG.className =? b --> doFloat | b <- floatClasses ],
-                 [ WG.appName =? b --> doFloat | b <- floatAppNames ],
+                 [ WG.className =? b --> doCenterFloat | b <- floatClasses ],
+                 [ WG.appName =? b --> doCenterFloat | b <- floatAppNames ],
+                 [ WG.appName =? "pqiv" --> doGiveFocusBack <+> doSideFloat NC ],
                  [ (isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_SPLASH") <||>
-                   WG.title =? "Eclipse " <&&> WG.className =? "Java" --> doFloat ]
+                   WG.title =? "Eclipse " <&&> WG.className =? "Java" --> doCenterFloat ]
                ]
     where
       floatAppNames = [ "Dialog" ]
@@ -75,8 +78,7 @@ baseConf =  docks {--$ ewmh--} def
                     terminal           = "uxterm",
                     normalBorderColor  = "#888888",
                     focusedBorderColor = "#cd8d00",
-                    manageHook         = (placeHook $ fixed (0.5, 0.5))
-                                         <+> (manageHook defaultConfig)
+                    manageHook         = (manageHook defaultConfig)
                                          <+> manageAppViews
                                          <+> manageFloats,
                     layoutHook         = avoidStruts
@@ -117,7 +119,8 @@ baseConf =  docks {--$ ewmh--} def
                   ("<XF86AudioMute>", ezSpawn "pactl set-sink-mute 1 toggle"),
                   ("<XF86AudioMicMute>", ezSpawn "pactl set-source-mute 1 toggle"),
                   ("<XF86AudioRaiseVolume>", ezSpawn "pactl set-sink-volume 1 +5%"),
-                  ("<XF86AudioLowerVolume>", ezSpawn "pactl set-sink-volume 1 -5%")
+                  ("<XF86AudioLowerVolume>", ezSpawn "pactl set-sink-volume 1 -5%"),
+                  ("M-S-t", unsafeSpawn "osd.sh `date +\"%Y/%m/%d - %T\"`")
                  ]
 
 main = do
