@@ -85,7 +85,6 @@ baseConf =  docks {--$ ewmh--} def
                     workspaces         = namedWorkspaces,
                     handleEventHook    = handleEventHook def
                                          <+> minimizeEventHook
-                                         {-- <+> fullscreenEventHook --}
                   }
                  `removeKeysP`
                   [ "M-S-q", "M-S-c"]
@@ -111,8 +110,8 @@ baseConf =  docks {--$ ewmh--} def
 --                  ("M-S-e", confirmPrompt defaultXPConfig "Exit" $ io (exitWith ExitSuccess)),
                   ("M-S-C-e", io (exitWith ExitSuccess)),
                   ("M-S-q", kill),
---                  ("M-f", withFocused $ \w -> windows . W.float w (W.RationalRect 0 0 1 1)),
-                  ("M-S-f", sendMessage ToggleStruts),
+                  ("M-S-f", withFocused toggleFullScreen),
+                  ("M-f", sendMessage ToggleStruts),
                   ("<XF86MonBrightnessUp>", ezSpawn "light -A 5"),
                   ("<XF86MonBrightnessDown>", ezSpawn "light -U 5"),
                   ("<XF86AudioMute>", ezSpawn "pactl set-sink-mute 1 toggle"),
@@ -132,19 +131,8 @@ main = do
                startupHook        = startupHook baseConf >> setWMName "LG3D"
              }
 
-
-
-setFullScreen :: Window -> X ()
-setFullScreen window = do
-    atom_NET_WM_STATE <- getAtom "_NET_WM_STATE"
-    atom_NET_FULLSCREEN <- getAtom "_NET_WM_STATE_FULLSCREEN"
-    atom_NET_MAX_VERT <- getAtom "_NET_WM_STATE_MAXIMIZED_VERT"
-    atom_NET_MAX_HORZ <- getAtom "_NET_WM_STATE_MAXIMIZED_HORZ"
-
-    dpy <- asks display
-    io $ do
-        supportedList <- fmap (join . maybeToList) $ getWindowProperty32 dpy atom_NET_WM_STATE window
-        changeProperty32 dpy window atom_NET_WM_STATE aTOM propModePrepend (nub $ fromIntegral atom_NET_FULLSCREEN
-                                                              : fromIntegral atom_NET_MAX_HORZ
-                                                              : fromIntegral atom_NET_MAX_VERT
-                                                              : supportedList)
+toggleFullScreen :: Window -> X ()
+toggleFullScreen w = withWindowSet $ \ws ->
+  windows $ if (M.member w (W.floating ws))
+  then W.sink w
+  else W.float w (W.RationalRect 0 0 1 1)
