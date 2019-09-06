@@ -26,10 +26,6 @@ import XMonad.Prompt.ConfirmPrompt
 import XMonad.Prompt.Shell
 import qualified XMonad.Actions.WindowGo as WG
 import qualified XMonad.StackSet as W
-import XMonad.Hooks.DynamicHooks (oneShotHook)
-import Graphics.X11.Xlib.Extras (changeProperty32
-                                ,propModePrepend)
-import Graphics.X11.Xlib.Atom (aTOM)
 
 ezSpawn cmd = safeSpawn (head (words cmd)) (tail (words cmd))
 
