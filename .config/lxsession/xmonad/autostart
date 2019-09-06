@@ -14,3 +14,4 @@
 @setxkbmap -option compose:caps -layout tr -variant alt
 @/usr/bin/xinput set-prop "Elan TrackPoint" "libinput Accel Profile Enabled" 0, 1
 @xss-lock --transfer-sleep-lock -- i3lock -n
+@xcompmgr -n -c -C
