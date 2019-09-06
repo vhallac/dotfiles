@@ -107,6 +107,7 @@ baseConf =  docks {--$ ewmh--} def
                   ("M-b", withFocused toggleBorder),
 --                  ("M-S-e", confirmPrompt defaultXPConfig "Exit" $ io (exitWith ExitSuccess)),
                   ("M-S-C-e", io (exitWith ExitSuccess)),
+                  ("M-S-c", restart "xmonad" True),
                   ("M-S-q", kill),
                   ("M-S-f", withFocused toggleFullScreen),
                   ("M-f", sendMessage ToggleStruts),
