@@ -1,17 +1,13 @@
 import System.IO (hPutStrLn)
 import System.Exit (exitWith, ExitCode(ExitSuccess))
-import Control.Monad (liftM2, join)
-import Data.List ( isPrefixOf, nub )
-import Data.Monoid (mappend)
-import Data.Maybe (maybeToList)
+import Control.Monad (liftM2)
+import qualified Data.Map as M
 import XMonad
 import qualified XMonad.Hooks.DynamicLog as DL
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
-import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Hooks.Minimize
-import XMonad.Hooks.Place
 import XMonad.Util.Run(safeSpawn, spawnPipe, unsafeSpawn)
 import XMonad.Util.EZConfig(additionalKeysP,removeKeysP)
 import XMonad.Layout.NoBorders(smartBorders)
@@ -21,12 +17,11 @@ import XMonad.Layout.Master (mastered)
 import XMonad.Layout.Maximize (maximize, maximizeRestore)
 import XMonad.Layout.Minimize (minimize)
 import XMonad.Actions.Minimize (minimizeWindow, withFirstMinimized, maximizeWindowAndFocus)
-import XMonad.Prompt (defaultXPConfig)
-import XMonad.Prompt.ConfirmPrompt
 import XMonad.Prompt.Shell
 import qualified XMonad.Actions.WindowGo as WG
 import qualified XMonad.StackSet as W
 
+ezSpawn :: MonadIO m => String -> m ()
 ezSpawn cmd = safeSpawn (head (words cmd)) (tail (words cmd))
 
 smallScreenLayoutHook = let goldenMasteredTwoPane = mastered (1/100) (500/809) (Mirror (TwoPane (3/100) (1/2)))
@@ -34,6 +29,7 @@ smallScreenLayoutHook = let goldenMasteredTwoPane = mastered (1/100) (500/809) (
 
 namedWorkspaces = ["1.control", "2.browse", "3.code", "4.chat", "5.media", "6.--", "7.db", "8.--", "9.temp"]
 
+manageAppViews :: ManageHook
 manageAppViews = composeAll . concat $
                  [
                   [ WG.className =? b --> setView "1.control"        | b <- controlViewClasses ],
@@ -44,18 +40,25 @@ manageAppViews = composeAll . concat $
                  ]
     where
       setView = doF . liftM2 (.) W.greedyView W.shift
-      officerViewClasses = [ "libreoffice-calc" ]
       browseViewClasses  = [ "Chromium", "firefox" ]
       controlViewClasses = [ "UXTerm", "Gnome-terminal", "Lxterminal", "Emacs" ]
       chatViewClasses    = [ "Icedove", "Google-Apps", "Skype", "irc" ]
       codeViewClasses    = [ "Eclipse", "Java", "Code", "jetbrains-rider" ]
       tempViewClasses    = [ "Git-gui" ]
 
-doGiveFocusBack = ask >>= \w -> doF (W.focusDown)
+doGiveFocusBack :: ManageHook
+doGiveFocusBack = ask >>= \_ -> doF (W.focusDown)
 
+{--
+-- Usage: (manageBorder 0) >> idHook
+-- It doesn't work. Border gets set later
+manageBorder bw = ask >>= \w -> liftX (withDisplay $ \d -> io (setWindowBorderWidth d w bw))
+--}
+
+manageFloats :: ManageHook
 manageFloats = composeAll . concat $
                [
---                [ WG.className =? b <&&> isFullscreen --> doFullFloat | b <- fullScreenClasses ],
+                 [ WG.className =? b <&&> isFullscreen --> doFullFloat | b <- fullScreenClasses ],
                  [ isFullscreen --> doFullFloat ],
                  [ WG.className =? b --> doCenterFloat | b <- floatClasses ],
                  [ WG.appName =? b --> doCenterFloat | b <- floatAppNames ],
@@ -74,7 +77,7 @@ baseConf =  docks {--$ ewmh--} def
                     terminal           = "uxterm",
                     normalBorderColor  = "#888888",
                     focusedBorderColor = "#cd8d00",
-                    manageHook         = (manageHook defaultConfig)
+                    manageHook         = (manageHook def)
                                          <+> manageAppViews
                                          <+> manageFloats,
                     layoutHook         = avoidStruts
@@ -98,14 +101,13 @@ baseConf =  docks {--$ ewmh--} def
                   ("M-c M-S-p", ezSpawn "keepass2 --auto-type"),
                   ("M-c M-e", WG.runOrRaise "emacsclient -c" (className =? "Emacs")),
                   ("M-c M-c", WG.runOrRaise "st" (className =? "UXTerm")),
-               --   ("M-c M-S-c", confirmPrompt defaultXPConfig "Exit" $ ezSpawn "uxterm -fs 16"),
                   ("M-c M-S-c", shellPrompt def),
                   ("M-c M-S-p", ezSpawn "keepass --auto-type"),
                   ("M-S-m", withFocused (sendMessage . maximizeRestore)),
                   ("M-S-n", withFocused minimizeWindow),
                   ("M-n", withFirstMinimized maximizeWindowAndFocus),
                   ("M-b", withFocused toggleBorder),
---                  ("M-S-e", confirmPrompt defaultXPConfig "Exit" $ io (exitWith ExitSuccess)),
+                  ("M-S-b", withFocused $ \w -> windows $ W.float w (W.RationalRect 0 0 1 1)),
                   ("M-S-C-e", io (exitWith ExitSuccess)),
                   ("M-S-c", restart "xmonad" True),
                   ("M-S-q", kill),
@@ -120,6 +122,7 @@ baseConf =  docks {--$ ewmh--} def
                   ("M-S-t", unsafeSpawn "osd.sh `date +\"%Y/%m/%d - %T\"`")
                  ]
 
+main :: IO ()
 main = do
   xmproc <- spawnPipe "/usr/bin/xmobar /home/vedat/.config/xmobar/xmobarrc"
   ezSpawn "/usr/bin/lxsession -s xmonad -e xmonad"
