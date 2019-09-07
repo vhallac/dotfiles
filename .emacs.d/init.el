@@ -1385,7 +1385,10 @@ into real text."
          ("M-g b" . dumb-jump-back)))
 
 (use-package haskell-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq flycheck-ghc-args "-dynamic")
+  (custom-set-variables '(haskell-compile-command "ghc -dynamic -Wall -ferror-spans -fforce-recomp -c %s")))
 
 (use-package yaml-mode
   :ensure t)
