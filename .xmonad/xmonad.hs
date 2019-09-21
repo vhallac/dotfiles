@@ -137,5 +137,5 @@ main = do
 toggleFullScreen :: Window -> X ()
 toggleFullScreen w = withWindowSet $ \ws ->
   windows $ if (M.member w (W.floating ws))
-  then W.sink w
-  else W.float w (W.RationalRect 0 0 1 1)
+            then W.sink w
+            else W.float w (W.RationalRect 0 0 1 1)
