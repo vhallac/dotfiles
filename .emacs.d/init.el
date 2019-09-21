@@ -833,7 +833,37 @@ into real text."
       (setq flycheck-java-ecj-jar-path ecj-jar-file))))
 
 (use-package csharp-mode
-  :ensure t)
+  :ensure t
+  :bind* (:map csharp-mode-map
+               ("C-c . R" . #'vh/dotnet--restore)
+               ("C-c . ." . #'vh/dotnet--build)
+               ("C-c . T" . #'vh/dotnet--test))
+  :config
+  (defun vh/dotnet--project-root ()
+    (locate-dominating-file default-directory
+                            (lambda (parent) (directory-files parent nil ".*\\.csproj"))))
+
+  (defun vh/dotnet--run-dotnet (sub &rest args)
+    "Run the dotnet utility.
+
+SUB is the sub command. ARGS are additional arguments, if any"
+    (interactive "Msub command:")
+    (let ((default-directory (vh/dotnet--project-root)))
+      (compile (concat "dotnet " sub
+                       (apply #'concat args)))))
+
+  (defmacro vh/define-dotnet-command (subcommand)
+    "Defines a command VH/DOTNET--,SUBCOMMAND
+
+The command will invoke the specified subcommand in the project directory"
+    (let ((fname (intern (concat "vh/dotnet--" subcommand))))
+      `(defun ,fname  (&rest args)
+         (interactive)
+         (apply #'vh/dotnet--run-dotnet (cons ,subcommand args)))))
+
+  (vh/define-dotnet-command "build")
+  (vh/define-dotnet-command "test")
+  (vh/define-dotnet-command "restore"))
 
 (use-package mvn
   :ensure t
