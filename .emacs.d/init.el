@@ -1733,14 +1733,8 @@ immediately after current heading."
                                   (file "~/org/inbox.org")
                                   "* %? :NOTE:\n  %U\n  %a\n"
                                   :clock-in t :clock-resume t)
-                                 ("r" "research" entry
-                                  (file "~/org/inbox.org")
-                                  "* %? :RESEARCH:\n  %U\n  %x\n")
                                  ("q" "Quick note" item
                                   (file+headline "~/org/review.org" "Quick notes"))
-                                 ("s" "Schedule" entry
-                                  (file "~/org/inbox.org")
-                                  "* TODO %?\n  SCHEDULED: %t\n  %i")
                                  ("c" "Quick note on clocked task" item
                                   (clock)))))
 
