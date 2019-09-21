@@ -959,10 +959,6 @@
           ("s" (notmuch-search) "Search mail")
           ("z" (notmuch-tree) "Search Mail (tree view)")
           ("j" (notmuch-jump-search) "Search with saved queries "))
-        :config
-        ;; allow linking to mail from org-mode files
-        (require 'org-notmuch)
-        (setq notmuch-command (expand-file-name "~/bin/remote-notmuch.sh"))
         (custom-set-variables '(notmuch-saved-searches
                                 (quote
                                  ((:name "inbox.personal" :query "tag:inbox and tag:personal" :key "im")
@@ -979,16 +975,21 @@
                                   (:name "last week" :query "date:\"this month\"" :key "dm")
                                   (:name "all mail" :query "*" :key "a")
                                   (:name "info" :query "tag:info" "i")
-                                  (:name "recent" :query "tag:unread and (date:yesterday or date:today)" :key "ur" :search-type tree))))
-                              '(notmuch-archive-tags '("-inbox" "+archived"))
-                              '(notmuch-always-prompt-for-sender t)
-                              '(notmuch-identities (quote
-                                                    ("Vedat Hallaç <vedat.hallac@pia-team.com>"
-                                                     "Vedat Hallaç <vedath@7island.com>"
-                                                     "Vedat Hallaç <vedat@hallac.net>"
-                                                     "Ahmet Vedat Hallaç <vedathallac@lidyum.com.tr>"))))
-                              ;; Mark deleted messages unread for fast delete
-                              (setcar (cdr (assoc "d" notmuch-tagging-keys)) '("+deleted" "-inbox" "-unread"))
+                                  (:name "recent" :query "tag:unread and (date:yesterday or date:today)" :key "ur" :search-type tree)))))
+        :config
+        ;; allow linking to mail from org-mode files
+        (require 'org-notmuch)
+        (setq notmuch-command (expand-file-name "~/bin/remote-notmuch.sh"))
+        (custom-set-variables
+         '(notmuch-archive-tags '("-inbox" "+archived"))
+         '(notmuch-always-prompt-for-sender t)
+         '(notmuch-identities (quote
+                               ("Vedat Hallaç <vedat.hallac@pia-team.com>"
+                                "Vedat Hallaç <vedath@7island.com>"
+                                "Vedat Hallaç <vedat@hallac.net>"
+                                "Ahmet Vedat Hallaç <vedathallac@lidyum.com.tr>"))))
+        ;; Mark deleted messages unread for fast delete
+        (setcar (cdr (assoc "d" notmuch-tagging-keys)) '("+deleted" "-inbox" "-unread"))
         (push '("lf" ("+financial" "-inbox") "Financial") notmuch-tagging-keys)
         (push '("lp" ("+project" "-inbox") "Project") notmuch-tagging-keys)
         (push '("lP" ("+prospect" "-inbox") "Project") notmuch-tagging-keys)
