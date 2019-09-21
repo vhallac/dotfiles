@@ -68,7 +68,7 @@ export PS1=$PS1C
 
 #path
 typeset -U path
-path=(~/bin ~/.local/bin ~/go/bin $path)
+path=(~/bin ~/.local/bin ~/go/bin $path ~/.dotnet/tools)
 
 ## Common Files ##
 [[ -r ~/.environment ]] && . ~/.environment
