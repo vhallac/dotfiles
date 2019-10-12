@@ -2592,13 +2592,22 @@
      (use-package dockerfile-mode
        :ensure t)
    #+end_src
-** PDF reading and annotating
+** Non-text viewing and processing
+   PDF reading and annotating
    ~pdf-tools~ allow better interaction with PDF documents
    #+begin_src emacs-lisp
    (use-package pdf-tools
      :ensure t
      :config
      (custom-set-variables '(pdf-info-epdfinfo-program "/usr/bin/epdfinfo")))
+   #+end_src
+
+   EPUB reading (org links missing)
+   #+begin_src emacs-lisp
+     (use-package nov
+       :mode ("\\.epub\\'" . nov-mode)
+       :ensure t)
+   #+end_src
        :ensure t
        )
    #+end_src

@@ -1898,3 +1898,8 @@ immediately after current heading."
   :ensure t
   :config
   (custom-set-variables '(pdf-info-epdfinfo-program "/usr/bin/epdfinfo")))
+
+(use-package nov
+  :mode ("\\.epub\\'" . nov-mode)
+  :ensure t)
+
