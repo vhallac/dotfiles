@@ -67,8 +67,8 @@ manageFloats = composeAll . concat $
                    WG.title =? "Eclipse " <&&> WG.className =? "Java" --> doCenterFloat ]
                ]
     where
-      floatAppNames = [ "Dialog" ]
-      floatClasses = [ "grun", "java-lang-Thread" ]
+      floatAppNames = [ "Dialog", "grun" ]
+      floatClasses = [ "java-lang-Thread" ]
       fullScreenClasses = [ "VirtualBox", "firefox" ]
 
 baseConf =  docks {--$ ewmh--} def
