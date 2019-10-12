@@ -18,4 +18,4 @@ Finally, do a `git pull` to receive the contents.
 
 Normally, there will be a lot of untracked git files in your home directory, and they will clutter the output of git status. You can suppress these untracked files by using:
 
-    git config --local status.showUntracekdFiles no
+    git config --local status.showUntrackedFiles no
