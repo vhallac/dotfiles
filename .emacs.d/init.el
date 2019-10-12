@@ -838,11 +838,17 @@ into real text."
 
 (use-package csharp-mode
   :ensure t
+  :commands (csharp-mode)
+  :mode ("\\.cs" . csharp-mode)
+  :hook (csharp-mode . vh/csharp-mode-func)
   :bind* (:map csharp-mode-map
                ("C-c . R" . #'vh/dotnet--restore)
                ("C-c . ." . #'vh/dotnet--build)
                ("C-c . T" . #'vh/dotnet--test))
   :config
+  (defun vh/csharp-mode-func ()
+    (subword-mode 1))
+
   (defun vh/dotnet--project-root ()
     (locate-dominating-file default-directory
                             (lambda (parent) (directory-files parent nil ".*\\.csproj"))))
@@ -868,6 +874,66 @@ The command will invoke the specified subcommand in the project directory"
   (vh/define-dotnet-command "build")
   (vh/define-dotnet-command "test")
   (vh/define-dotnet-command "restore"))
+
+(use-package omnisharp
+  :ensure t
+  :commands (omnisharp-mode)
+  :hook (csharp-mode . vh/omnisharp-csharp-func)
+  :bind* (:map omnisharp-mode-map
+               ("M-<RET>" . #'omnisharp-run-code-action-refactoring)
+               ("C-c . <RET>" . #'omnisharp-run-code-action-refactoring)
+               ("C-c . r" . #'omnisharp-rename)
+               ("C-c . t" . #'vh/omnisharp-unit-test-at-point)
+               ("C-c . g d" . #'omnisharp-go-to-definition)
+               ("C-c . g D" . #'omnisharp-go-to-definition-other-window)
+               ("C-c . R" . #'omnisharp-run-code-action-refactoring)
+               ("C-c . U" . #'omnisharp-fix-usings)
+               ("C-c . g u" . #'omnisharp-find-usages)
+               ("C-c . g i" . #'omnisharp-find-implementations)
+               ("C-c . C-i" . #'omnisharp-auto-complete)
+               )
+  :init
+  (custom-set-variables '(omnisharp-server-executable-path "~/.emacs.d/.cache/omnisharp/server/v1.34.2/run"))
+  :config
+  (defun vh/omnisharp-csharp-func ()
+    (omnisharp-mode)
+    (auto-complete-mode))
+
+  (defun vh/omnisharp--namespace-of (stack)
+    (-let (((&alist 'Kind kind
+                    'Name name) (car stack)))
+      (when (not (equal "namespace" kind))
+        (error (concat "Expected namespace, got " kind)))
+      name))
+
+  (defun vh/omnisharp--class-of (stack)
+    (let ((last-class (last (delq nil
+                                  (mapcar (lambda (x)
+                                            (-let (((&alist 'Kind kind) x))
+                                              (when (equal kind "class") x))) stack)))))
+      (-let (((&alist 'Name name) (car last-class)))
+        name)))
+
+  (defun vh/omnisharp--method-of (stack)
+    (-let (((&alist 'Kind kind
+                    'Name name) (car (last stack))))
+      (when (equal "method" kind) name)))
+
+  (defun vh/omnisharp-unit-test-at-point ()
+    "Runs test case under point, if any."
+    (interactive)
+    (omnisharp--cs-element-stack-at-point
+     (lambda (stack)
+       (let ((default-directory (vh/dotnet--project-root))
+             (method (vh/omnisharp--method-of stack)))
+         (compile (concat "dotnet test --filter="
+                          (vh/omnisharp--namespace-of stack)
+                          "."
+                          (vh/omnisharp--class-of stack)
+                          (when method
+                            (concat
+                             "."
+                             (vh/omnisharp--method-of stack))))))))))
 
 (use-package mvn
   :ensure t
