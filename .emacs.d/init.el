@@ -447,6 +447,10 @@ into real text."
           ("C-c m S" . mc/mark-all-symbols-like-this)
           ("C-c m w" . mc/mark-all-symbols-like-this-in-defun)))
 
+;; I sometimes use this, too
+(use-package iedit
+  :ensure t)
+
 (use-package magit
   :ensure t
   :bind (("C-c g" . magit-status))

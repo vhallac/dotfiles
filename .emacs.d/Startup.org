@@ -820,6 +820,10 @@
                ("C-c m s" . mc/mark-all-symbols-like-this-in-defun)
                ("C-c m S" . mc/mark-all-symbols-like-this)
                ("C-c m w" . mc/mark-all-symbols-like-this-in-defun)))
+
+     ;; I sometimes use this, too
+     (use-package iedit
+       :ensure t)
    #+end_src
 ** Magit
    #+begin_src emacs-lisp
