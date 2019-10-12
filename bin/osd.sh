@@ -27,8 +27,6 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-#win=`xdotool getactivewindow`
-# Keep the border for now. XMonad borders are not under control
 pkill pqiv
 convert -size 1918x1078 xc:transparent -font "$font" $weight -pointsize "$fontsize" -gravity center \
         -fill "$light" -annotate -2-2 "$text" \
@@ -41,7 +39,4 @@ convert -size 1918x1078 xc:transparent -font "$font" $weight -pointsize "$fontsi
         -trim +repage xc:transparent \
         -bordercolor none -border 8 \
         png:- | \
-    pqiv -d 2 -s --end-of-files-action="quit" -i -F --disable-scaling --lazy-load -P off -c - &
-#while [ "$win" -eq `xdotool getactivewindow` ]; do sleep 0.05; done
-#xdotool getactivewindow windowmove x 0 windowraise
-#xdotool windowfocus $win
+	pqiv --action="set_scale_level_absolute(1)" -d 2 -s --end-of-files-action="quit" -i -F --lazy-load -P off -c - &
