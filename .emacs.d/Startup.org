@@ -63,6 +63,16 @@
     ;; (load-file custom-file)
   #+end_src
 
+** Disabling a code snippet
+
+   When you want to disable a snippet, add ~:tangle no~ to the relevant source block.
+
+   For example:
+
+   #+begin_src common-lisp :tangle no
+     ;;; This line will not be added to the generated configuration
+   #+end_src
+
 
 ** Generating ~init.el~
 
