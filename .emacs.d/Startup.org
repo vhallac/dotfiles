@@ -2595,8 +2595,10 @@
 ** PDF reading and annotating
    ~pdf-tools~ allow better interaction with PDF documents
    #+begin_src emacs-lisp
-
    (use-package pdf-tools
+     :ensure t
+     :config
+     (custom-set-variables '(pdf-info-epdfinfo-program "/usr/bin/epdfinfo")))
        :ensure t
        )
    #+end_src

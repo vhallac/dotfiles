@@ -1895,5 +1895,6 @@ immediately after current heading."
   :ensure t)
 
 (use-package pdf-tools
-    :ensure t
-    )
+  :ensure t
+  :config
+  (custom-set-variables '(pdf-info-epdfinfo-program "/usr/bin/epdfinfo")))
