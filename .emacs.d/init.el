@@ -1903,3 +1903,14 @@ immediately after current heading."
   :mode ("\\.epub\\'" . nov-mode)
   :ensure t)
 
+(use-package elfeed-org
+  :ensure t
+  :config
+  (elfeed-org)
+  (custom-set-variables '(rmh-elfeed-org-files '("~/org/feeds.org"))))
+
+(use-package elfeed
+  :bind (:map elfeed-show-mode-map ("<tab>" . shr-next-link)))
+
+(use-package hackernews
+  :ensure t)

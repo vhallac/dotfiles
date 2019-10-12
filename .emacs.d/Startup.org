@@ -2608,7 +2608,25 @@
        :mode ("\\.epub\\'" . nov-mode)
        :ensure t)
    #+end_src
+** News and Entertainment
+
+   First of all, elfeed is a life saver.
+
+   #+begin_src emacs-lisp
+     (use-package elfeed-org
        :ensure t
-       )
+       :config
+       (elfeed-org)
+       (custom-set-variables '(rmh-elfeed-org-files '("~/org/feeds.org"))))
+
+     (use-package elfeed
+       :bind (:map elfeed-show-mode-map ("<tab>" . shr-next-link)))
+   #+end_src
+
+   I also check hackernews.
+
+   #+begin_src emacs-lisp
+     (use-package hackernews
+       :ensure t)
    #+end_src
 * Final tweaks
