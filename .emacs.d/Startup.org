@@ -1593,6 +1593,7 @@
     #+begin_src emacs-lisp :noweb yes
       <<java-styles>>
       (add-hook 'java-mode-hook (lambda ()
+                                  (subword-mode)
                                   (c-set-style "java-custom")))
     #+end_src
 

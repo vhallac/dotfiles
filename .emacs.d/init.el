@@ -1396,6 +1396,7 @@ The command will invoke the specified subcommand in the project directory"
   
   
   (add-hook 'java-mode-hook (lambda ()
+                              (subword-mode)
                               (c-set-style "java-custom"))))
 
 (use-package flycheck
