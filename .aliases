@@ -72,3 +72,5 @@ alias ed='ed -p$\ '
 alias ec='emacsclient -nw'
 alias ecw='emacsclient -n -c'
 alias screenshot='grim -g "$(slurp)"'
+
+alias dfgit="git --git-dir=/home/vedat/dotfiles.git"
