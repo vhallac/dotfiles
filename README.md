@@ -19,3 +19,15 @@ Finally, do a `git pull` to receive the contents.
 Normally, there will be a lot of untracked git files in your home directory, and they will clutter the output of git status. You can suppress these untracked files by using:
 
     git config --local status.showUntrackedFiles no
+
+Update git gui to ignore the untracked files as well
+
+    git config --local gui.displayUntracked false
+
+Keeping the `.git` file is dangerous. You can easily add files to your home
+repository by mistake. For this reason, we will remove `.git`, and use the
+`dfgit` alias (which expands to `git --git-dir=$HOME/dotfiles.git
+--work-tree=$HOME`).
+
+Removing the `.git` file breaks magit, so we need to make do with command line,
+or `dfgit gui`.
