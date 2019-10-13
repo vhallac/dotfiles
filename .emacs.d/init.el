@@ -507,6 +507,9 @@ into real text."
                                                 ("gmail-pia"
                                                  (name "Vedat Hallaç")
                                                  (address "vedat.hallac@pia-team.com"))
+                                                ("ms-piasys"
+                                                 (name "Vedat Hallaç")
+                                                 (address "vedat.hallac@pia-systems.com"))
                                                 ("ms-lidyum"
                                                  (name "Ahmet Vedat Hallaç")
                                                  (address "vedathallac@lidyum.com.tr"))))
@@ -597,6 +600,7 @@ into real text."
                          ("Vedat Hallaç <vedat.hallac@pia-team.com>"
                           "Vedat Hallaç <vedath@7island.com>"
                           "Vedat Hallaç <vedat@hallac.net>"
+                          "Vedat Hallaç <vedat.hallac@pia-systems.com>"
                           "Ahmet Vedat Hallaç <vedathallac@lidyum.com.tr>"))))
   ;; Mark deleted messages unread for fast delete
   (setcar (cdr (assoc "d" notmuch-tagging-keys)) '("+deleted" "-inbox" "-unread"))
@@ -650,6 +654,7 @@ into real text."
                                                                    "vedat@hallac.net"
                                                                    "vedath@7island.com"
                                                                    "vedat.hallac@pia-team.com"
+                                                                   "vedat.hallac@pia-systems.com"
                                                                    "vedathallac@lidyum.com.tr")))
                         '(send-mail-function 'smtpmail-send-it))
 
@@ -713,6 +718,7 @@ into real text."
                          (ssl "dys.wowace@gmail.com" "gmail-2" "smtp.googlemail.com" 587)
                          (ssl "vedat@android.ciyiz.biz" "gmail-android" "smtp.googlemail.com" 587)
                          (ssl "vedat.hallac@pia-team.com" "gmail-pia" "smtp.googlemail.com" 587)
+                         (ssl "vedat.hallac@pia-systems.com" "ms-piasys" "smtp.office365.com" 587)
                          (ssl "vedat@hallac.net" "hallac-net" "smtp.yandex.com" 587)
                          (ssl "vedathallac@lidyum.com.tr" "ms-lidyum" "smtp.office365.com" 587)
                          (ssl "vedath@7island.com" "gmail-qubit" "smtp.googlemail.com" 587)))
