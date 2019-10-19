@@ -1,0 +1,16 @@
+@blueman-applet
+@/usr/bin/start-pulseaudio-x11
+@/usr/bin/xscreensaver -no-splash
+#@/home/vedat/bin/battery_switch.sh
+@/home/vedat/bin/monitor_switch.sh
+@xset -b
+@/usr/bin/gpg-agent --daemon --enable-ssh-support --default-cache-ttl 3600 --default-cache-ttl-ssh 3600
+#https://forum.lxde.org/viewtopic.php?t=31593XS
+@/usr/bin/xinput set-prop "Elan Touchpad" "libinput Tapping Enabled" 1
+@/usr/bin/xinput set-prop "Elan Touchpad" "libinput Natural Scrolling Enabled" 1
+@setxkbmap -option compose:caps -layout tr -variant alt
+@/usr/bin/xinput set-prop "Elan TrackPoint" "libinput Accel Profile Enabled" 0, 1
+# Screen locking using i3lock
+@xss-lock --transfer-sleep-lock -- i3lock -n
+@xset s 600
+@xcompmgr -n -c -C
