@@ -899,7 +899,7 @@ The command will invoke the specified subcommand in the project directory"
                ("C-c . C-i" . #'omnisharp-auto-complete)
                )
   :init
-  (custom-set-variables '(omnisharp-server-executable-path "~/.emacs.d/.cache/omnisharp/server/v1.34.2/run"))
+  (custom-set-variables '(omnisharp-server-executable-path "~/.emacs.d/.cache/omnisharp/server/v1.34.5/run"))
   :config
   (defun vh/omnisharp-csharp-func ()
     (omnisharp-mode)
