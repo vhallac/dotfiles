@@ -113,6 +113,30 @@
     (add-group (current-screen) "Float-2" :background t :type 'float-group)
 
   #+end_src
+* Appearance
+
+** TTF memory leak work around
+
+   This is a work-around for [[https://github.com/stumpwm/stumpwm/issues/474#issuecomment-481885037][Issue#474]] (see the [[https://github.com/stumpwm/stumpwm/issues/474#issuecomment-481885037][relevant post]])
+
+   #+begin_src common-lisp
+     (run-with-timer
+      900 900
+      (lambda ()
+        (loop for font in (stumpwm::screen-fonts (current-screen))
+           when (typep font 'xft:font)
+           do (clrhash (xft::font-string-line-bboxes font))
+             (clrhash (xft::font-string-line-alpha-maps font))
+             (clrhash (xft::font-string-bboxes font))
+             (clrhash (xft::font-string-alpha-maps font)))))
+   #+end_src
+** Pick up a fancy font
+
+   #+begin_src common-lisp
+     (ql:quickload :clx-truetype)
+     (load-module "ttf-fonts")
+     (set-font (make-instance 'xft:font :family "DejaVu Sans Mono" :subfamily "Book" :size 16))
+   #+end_src
 * Mouse Focus Policy
 
   Just old school
