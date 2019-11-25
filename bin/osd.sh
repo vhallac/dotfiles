@@ -1,4 +1,8 @@
 #!/bin/sh
+
+# I do not want messages in KDE
+if [ `xprop -root | grep KWIN_RUN | cut -f 2 -d= | sed 's/ 0x//'` == "1" ]; then exit 0; fi
+
 text=$*
 color=green
 light="light $color"
