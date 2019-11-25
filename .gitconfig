@@ -4,7 +4,8 @@
 [core]
 	autocrlf = input
 	safecrlf = false
-	excludesfile = ~/.gitignore
+	excludesfile = /home/vedat/.gitignore_global
+	exludesfile = /home/vedat/.gitignore_global
 [push]
 	default = simple
 	followTags = true
