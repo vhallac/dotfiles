@@ -74,3 +74,4 @@ alias ecw='emacsclient -n -c'
 alias screenshot='grim -g "$(slurp)"'
 
 alias dfgit="git --git-dir=$HOME/dotfiles.git --work-tree=$HOME"
+alias less="less -R"
