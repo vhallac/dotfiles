@@ -474,7 +474,9 @@ into real text."
 
 (use-package w3m
   :defer t
-  :ensure t)
+  :ensure t
+  :init
+  (custom-set-variables '(w3m-use-tab-line nil)))
 
 (use-package gnus
   :commands gnus
@@ -509,15 +511,11 @@ into real text."
                                                  (address "vedat.hallac@pia-team.com"))
                                                 ("ms-piasys"
                                                  (name "Vedat Hallaç")
-                                                 (address "vedat.hallac@pia-systems.com"))
-                                                ("ms-lidyum"
-                                                 (name "Ahmet Vedat Hallaç")
-                                                 (address "vedathallac@lidyum.com.tr"))))
+                                                 (address "vedat.hallac@pia-systems.com"))))
                         `(gnus-secondary-select-methods '(,(mk-gnus-select-method "gmail-1" "imap.gmail.com")
                                                          ,(mk-gnus-select-method "gmail-2" "imap.gmail.com")
                                                          ,(mk-gnus-select-method "gmail-android" "imap.gmail.com")
-                                                         ,(mk-gnus-select-method "gmail-pia" "imap.gmail.com")
-                                                         ,(mk-gnus-select-method "ms-lidyum" "smtp.office365.com")))
+                                                         ,(mk-gnus-select-method "gmail-pia" "imap.gmail.com")))
                         '(gnus-use-adaptive-scoring '(word line))
                         '(gnus-score-expiry-days 60)
                         '(gnus-default-adaptive-score-alist '((gnus-unread-mark)
@@ -578,7 +576,7 @@ into real text."
                             (:name "inbox.work" :query "tag:inbox and tag:pia" :key "ip")
                             (:name "unread.personal" :query "tag:unread and tag:personal" :key "um")
                             (:name "unread.work.pia" :query "tag:unread and tag:pia" :key "up")
-                            (:name "unread.work.qubit" :query "tag:unread and tag:qbit" :key "uq")
+                            (:name "unread.work.qbit" :query "tag:unread and tag:qbit" :key "uq")
                             (:name "flagged" :query "tag:flagged" :key "f")
                             (:name "flagged-tree" :search-type tree :query "tag:flagged" :key "F")
                             (:name "sent" :query "tag:sent" :key "t")
@@ -600,8 +598,7 @@ into real text."
                          ("Vedat Hallaç <vedat.hallac@pia-team.com>"
                           "Vedat Hallaç <vedath@7island.com>"
                           "Vedat Hallaç <vedat@hallac.net>"
-                          "Vedat Hallaç <vedat.hallac@pia-systems.com>"
-                          "Ahmet Vedat Hallaç <vedathallac@lidyum.com.tr>"))))
+                          "Vedat Hallaç <vedat.hallac@pia-systems.com>"))))
   ;; Mark deleted messages unread for fast delete
   (setcar (cdr (assoc "d" notmuch-tagging-keys)) '("+deleted" "-inbox" "-unread"))
   (push '("lf" ("+financial" "-inbox") "Financial") notmuch-tagging-keys)
@@ -654,8 +651,7 @@ into real text."
                                                                    "vedat@hallac.net"
                                                                    "vedath@7island.com"
                                                                    "vedat.hallac@pia-team.com"
-                                                                   "vedat.hallac@pia-systems.com"
-                                                                   "vedathallac@lidyum.com.tr")))
+                                                                   "vedat.hallac@pia-systems.com")))
                         '(send-mail-function 'smtpmail-send-it))
 
   (defun vh/message-edit-body-as-org ()
@@ -720,8 +716,7 @@ into real text."
                          (ssl "vedat.hallac@pia-team.com" "gmail-pia" "smtp.googlemail.com" 587)
                          (ssl "vedat.hallac@pia-systems.com" "ms-piasys" "smtp.office365.com" 587)
                          (ssl "vedat@hallac.net" "hallac-net" "smtp.yandex.com" 587)
-                         (ssl "vedathallac@lidyum.com.tr" "ms-lidyum" "smtp.office365.com" 587)
-                         (ssl "vedath@7island.com" "gmail-qubit" "smtp.googlemail.com" 587)))
+                         (ssl "vedath@7island.com" "gmail-qbit" "smtp.googlemail.com" 587)))
   (use-package gnutls
     :config
     (custom-set-variables '(gnutls-min-prime-bits 1024)))
