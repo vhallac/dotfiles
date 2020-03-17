@@ -106,6 +106,7 @@
     (split-frame-in-dir (current-group) :column 500/809)
     (add-group (current-screen) "Browse" :background t)
     (add-group (current-screen) "Code" :background t)
+    (add-group (current-screen) "Chat" :background t)
     (add-group (current-screen) "Temp1" :background t)
     (add-group (current-screen) "Temp2" :background t)
     (add-group (current-screen) "Temp3" :background t)
