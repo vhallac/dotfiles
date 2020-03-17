@@ -119,7 +119,7 @@
 
    This is a work-around for [[https://github.com/stumpwm/stumpwm/issues/474#issuecomment-481885037][Issue#474]] (see the [[https://github.com/stumpwm/stumpwm/issues/474#issuecomment-481885037][relevant post]])
 
-   #+begin_src common-lisp
+   #+begin_src common-lisp :tangle no
      (run-with-timer
       900 900
       (lambda ()
@@ -132,7 +132,7 @@
    #+end_src
 ** Pick up a fancy font
 
-   #+begin_src common-lisp
+   #+begin_src common-lisp :tangle no
      (ql:quickload :clx-truetype)
      (load-module "ttf-fonts")
      (set-font (make-instance 'xft:font :family "DejaVu Sans Mono" :subfamily "Book" :size 16))
