@@ -28,6 +28,7 @@
 (split-frame-in-dir (current-group) :column 500/809)
 (add-group (current-screen) "Browse" :background t)
 (add-group (current-screen) "Code" :background t)
+(add-group (current-screen) "Chat" :background t)
 (add-group (current-screen) "Temp1" :background t)
 (add-group (current-screen) "Temp2" :background t)
 (add-group (current-screen) "Temp3" :background t)
@@ -112,5 +113,12 @@
 (define-key *top-map* (kbd "XF86AudioLowerVolume") "exec pactl set-sink-volume 1 -5%")
 
 (run-prog "/usr/bin/lxsession" :args (split-string "-e stumpwm -s stumpwm" " ") :wait nil)
+
+(defun new-window-adjustments (new-window)
+  (when (or (window-matches-properties-p new-window :instance "gitk")
+            (window-matches-properties-p new-window :instance "git-gui"))
+    (setf (window-fullscreen new-window) t)))
+
+(add-hook *new-window-hook* #'new-window-adjustments)
 
 (redirect-all-output "~/.cache/stumpwm/log")

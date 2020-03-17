@@ -280,6 +280,17 @@
   #+begin_src common-lisp
     (run-prog "/usr/bin/lxsession" :args (split-string "-e stumpwm -s stumpwm" " ") :wait nil)
   #+end_src
+* Some window customizations
+** New window tweaks
+
+   #+begin_src common-lisp
+     (defun new-window-adjustments (new-window)
+       (when (or (window-matches-properties-p new-window :instance "gitk")
+                 (window-matches-properties-p new-window :instance "git-gui"))
+         (setf (window-fullscreen new-window) t)))
+
+     (add-hook *new-window-hook* #'new-window-adjustments)
+   #+end_src
 
 * Log stumpwm
 
