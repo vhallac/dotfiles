@@ -1,7 +1,10 @@
 #!/bin/sh
 
 # I do not want messages in KDE
-if [ `xprop -root | grep KWIN_RUN | cut -f 2 -d= | sed 's/ 0x//'` == "1" ]; then exit 0; fi
+if [ "`xprop -root | grep KWIN_RUN | cut -f 2 -d= | sed 's/ 0x//'`" == "1" ]; then exit 0; fi
+
+# nor in stumpwm -- for now (need to make it work)
+if [ `ps ax | grep lx.*stump | wc -l` -eq "2" ]; then exit 0; fi
 
 text=$*
 color=green
