@@ -860,7 +860,7 @@ into real text."
 SUB is the sub command. ARGS are additional arguments, if any"
     (interactive "Msub command:")
     (let ((default-directory (vh/dotnet--project-root)))
-      (compile (concat "dotnet " sub
+      (compile (concat "ncdotnet " sub
                        (apply #'concat args)))))
 
   (defmacro vh/define-dotnet-command (subcommand)
@@ -927,7 +927,7 @@ The command will invoke the specified subcommand in the project directory"
      (lambda (stack)
        (let ((default-directory (vh/dotnet--project-root))
              (method (vh/omnisharp--method-of stack)))
-         (compile (concat "dotnet test --filter="
+         (compile (concat "ncdotnet test --filter="
                           (vh/omnisharp--namespace-of stack)
                           "."
                           (vh/omnisharp--class-of stack)

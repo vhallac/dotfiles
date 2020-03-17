@@ -1675,7 +1675,12 @@
               (setq flycheck-java-ecj-jar-path ecj-jar-file))))
       #+end_src
 *** C# Mode
-    Basic c# processing
+    Basic c# processing.
+
+    Emacs and dotnet command line tool do not agree with each other. Use a
+    script called ncdotnet that pipes the output through ~sed
+    's/\x1b\[[0-9;]*m//g'~ to strip color.
+
     #+begin_src emacs-lisp
       (use-package csharp-mode
         :ensure t
@@ -1700,7 +1705,7 @@
       SUB is the sub command. ARGS are additional arguments, if any"
           (interactive "Msub command:")
           (let ((default-directory (vh/dotnet--project-root)))
-            (compile (concat "dotnet " sub
+            (compile (concat "ncdotnet " sub
                              (apply #'concat args)))))
 
         (defmacro vh/define-dotnet-command (subcommand)
@@ -1770,7 +1775,7 @@
            (lambda (stack)
              (let ((default-directory (vh/dotnet--project-root))
                    (method (vh/omnisharp--method-of stack)))
-               (compile (concat "dotnet test --filter="
+               (compile (concat "ncdotnet test --filter="
                                 (vh/omnisharp--namespace-of stack)
                                 "."
                                 (vh/omnisharp--class-of stack)
