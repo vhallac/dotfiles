@@ -201,7 +201,22 @@
 
 (use-package tramp-sh
   :config
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (customize-set-variable 'tramp-ssh-controlmaster-options
+   (concat
+    "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+    "-o ControlMaster=auto -o ControlPersist=15m"))
+
+  (customize-set-variable 'tramp-use-ssh-controlmaster-options t)
+
+  (customize-set-variable
+   'tramp-completion-reread-directory-timeout nil)
+
+  (defun cd-disable-projectile-mode-for-remote (current-dir)
+    (if (and (functionp 'projectile-mode) (file-remote-p current-dir))
+        (projectile-mode 0)
+      (projectile-mode 1)))
+  (advice-add 'cd :filter-return #'cd-disable-projectile-mode-for-remote))
 
 (use-package eshell
   :bind ("C-c s" . eshell)
