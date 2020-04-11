@@ -35,7 +35,7 @@
 (add-group (current-screen) "Float-1" :background t :type 'float-group)
 (add-group (current-screen) "Float-2" :background t :type 'float-group)
 
-(setf *mouse-focus-policy* :sloppy)
+(setf *mouse-focus-policy* :click)
 
 (defun osd-new-window-hook (new-window)
   (when (window-matches-properties-p new-window :instance "pqiv")

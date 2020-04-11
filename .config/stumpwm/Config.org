@@ -143,7 +143,7 @@
   Just old school
 
   #+begin_src common-lisp
-    (setf *mouse-focus-policy* :sloppy)
+    (setf *mouse-focus-policy* :click)
   #+end_src
 
 * OSD handler
