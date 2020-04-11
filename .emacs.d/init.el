@@ -1825,6 +1825,9 @@ immediately after current heading."
                                   (file "~/org/inbox.org")
                                   "* %? :NOTE:\n  %U\n  %a\n"
                                   :clock-in t :clock-resume t)
+                                 ("j" "journal" entry
+                                  (file+olp+datetree "~/org/notes/journal.org" "Daily Notes")
+                                  "* %?\nEntered on %U\n  %i\n  %a")
                                  ("q" "Quick note" item
                                   (file+headline "~/org/review.org" "Quick notes"))
                                  ("c" "Quick note on clocked task" item
