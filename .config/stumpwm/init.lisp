@@ -55,6 +55,9 @@
 
 (add-hook *focus-window-hook* #'osd-focus-window-hook)
 
+(define-key *root-map* (kbd "c") "exec /usr/bin/uxterm")
+(define-key *root-map* (kbd "C-c") "exec /usr/bin/uxterm")
+
 (define-key *top-map* (kbd "s-G") "gselect")
 
 (define-key *top-map* (kbd "s-1") "gselect 1")
@@ -111,6 +114,10 @@
 (define-key *top-map* (kbd "XF86AudioMicMute") "exec pactl set-source-mute 2 toggle")
 (define-key *top-map* (kbd "XF86AudioRaiseVolume") "exec pactl set-sink-volume 1 +5%")
 (define-key *top-map* (kbd "XF86AudioLowerVolume") "exec pactl set-sink-volume 1 -5%")
+
+(define-key *top-map* (kbd "s-i") "time")
+(define-key *top-map* (kbd "s-:") "eval")
+(define-key *top-map* (kbd "s-;") "colon")
 
 (run-prog "/usr/bin/lxsession" :args (split-string "-e stumpwm -s stumpwm" " ") :wait nil)
 
