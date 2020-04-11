@@ -592,6 +592,7 @@ into real text."
                             (:name "unread.personal" :query "tag:unread and tag:personal" :key "um")
                             (:name "unread.work.pia" :query "tag:unread and tag:pia" :key "up")
                             (:name "unread.work.qbit" :query "tag:unread and tag:qbit" :key "uq")
+                            (:name "unread.work.wamo" :query "tag:unread and tag:wamo" :key "uw")
                             (:name "flagged" :query "tag:flagged" :key "f")
                             (:name "flagged-tree" :search-type tree :query "tag:flagged" :key "F")
                             (:name "sent" :query "tag:sent" :key "t")
@@ -613,7 +614,8 @@ into real text."
                          ("Vedat Hallaç <vedat.hallac@pia-team.com>"
                           "Vedat Hallaç <vedath@7island.com>"
                           "Vedat Hallaç <vedat@hallac.net>"
-                          "Vedat Hallaç <vedat.hallac@pia-systems.com>"))))
+                          "Vedat Hallaç <vedat.hallac@pia-systems.com>"
+                          "Vedat Hallaç <vedat@wamo.io>"))))
   ;; Mark deleted messages unread for fast delete
   (setcar (cdr (assoc "d" notmuch-tagging-keys)) '("+deleted" "-inbox" "-unread"))
   (push '("lf" ("+financial" "-inbox") "Financial") notmuch-tagging-keys)
@@ -666,7 +668,8 @@ into real text."
                                                                    "vedat@hallac.net"
                                                                    "vedath@7island.com"
                                                                    "vedat.hallac@pia-team.com"
-                                                                   "vedat.hallac@pia-systems.com")))
+                                                                   "vedat.hallac@pia-systems.com"
+                                                                   "vedat@wamo.io")))
                         '(send-mail-function 'smtpmail-send-it))
 
   (defun vh/message-edit-body-as-org ()
@@ -731,7 +734,8 @@ into real text."
                          (ssl "vedat.hallac@pia-team.com" "gmail-pia" "smtp.googlemail.com" 587)
                          (ssl "vedat.hallac@pia-systems.com" "ms-piasys" "smtp.office365.com" 587)
                          (ssl "vedat@hallac.net" "hallac-net" "smtp.yandex.com" 587)
-                         (ssl "vedath@7island.com" "gmail-qbit" "smtp.googlemail.com" 587)))
+                         (ssl "vedath@7island.com" "gmail-qbit" "smtp.googlemail.com" 587)
+                         (ssl "vedat@wamo.io" "gmail-wamo" "smtp.googlemail.com" 587)))
   (use-package gnutls
     :config
     (custom-set-variables '(gnutls-min-prime-bits 1024)))
