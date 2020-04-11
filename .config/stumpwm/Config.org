@@ -177,6 +177,11 @@
   #+end_src
 * Key bindings
 
+** Corrections to *root-map*
+   #+begin_src common-lisp
+     (define-key *root-map* (kbd "c") "exec /usr/bin/uxterm")
+     (define-key *root-map* (kbd "C-c") "exec /usr/bin/uxterm")
+   #+end_src
 ** Group management keys
 
    These keys give faster access to groups - after they are created.
