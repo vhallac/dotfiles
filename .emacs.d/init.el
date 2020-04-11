@@ -1488,6 +1488,7 @@ The command will invoke the specified subcommand in the project directory"
 
 (use-package flycheck
   :ensure t
+  :bind (:map flycheck-mode-map ("C-c ! !" . org-time-stamp-inactive))
   :init
   (global-flycheck-mode)
   :config
