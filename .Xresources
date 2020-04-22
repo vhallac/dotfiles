@@ -79,3 +79,5 @@ xterm*color12:                 MO_blueAlt
 xterm*color13:                 MO_magentaAlt
 xterm*color14:                 MO_cyanAlt
 xterm*color15:                 MO_bgMain
+
+UXTerm.termName:               xterm-256color
