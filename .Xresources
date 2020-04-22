@@ -1,4 +1,5 @@
 Xcursor.size:               16
+
 XTerm*altIsNotMeta:         true
 XTerm*eightBitInput:        false
 XTerm*eightBitOutput:       true
