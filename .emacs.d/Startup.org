@@ -1672,30 +1672,6 @@
 
 
      #+end_src
-**** Extra Java Packages
-     :PROPERTIES:
-     :header-args: :tangle init.el
-     :END:
-***** flycheck-java
-      A flycheck module that uses eclipse's ecj.jar to check java files.
-
-      This package is not in ELPA yet, so it is loaded as a git submodule. I
-      check whether the submodule is available, then check if ecj.jar is
-      available (I will not commit a binary to git). If both conditions are
-      satisfied, I will initialize the module.
-
-      #+begin_src emacs-lisp
-        (let* ((flycheck-java-dir "~/.emacs.d/elisp/thirdparty/flycheck-java")
-               (bin-dir "~/.emacs.d/bin")
-               (ecj-jar-file (when (file-directory-p bin-dir)
-                               (car (last (directory-files  bin-dir t "ecj.*jar"))))))
-          (when (and ecj-jar-file
-                     (file-exists-p flycheck-java-dir))
-            (setq load-path (cons flycheck-java-dir load-path))
-            (use-package flycheck-java
-              :config
-              (setq flycheck-java-ecj-jar-path ecj-jar-file))))
-      #+end_src
 *** C# Mode
     Basic c# processing.
 
@@ -2108,7 +2084,6 @@
         <<java-setup>>)
     #+end_src
 *** Flycheck
-
     #+begin_src emacs-lisp :noweb yes
       (use-package flycheck
         :ensure t
@@ -2116,13 +2091,14 @@
         :init
         (global-flycheck-mode)
         :config
-        <<flycheck-module-config>>
+        <<flycheck-config-js>>
+        <<flycheck-config-elisp>>
         (custom-set-variables '(flycheck-temp-prefix "#flycheck")))
     #+end_src
 **** Javascript
      I use =eslint= instead of =jshint= in flycheck.
 
-     #+name: flycheck-module-config
+     #+name: flycheck-config-js
      #+begin_src emacs-lisp :tangle no
        (add-hook 'js2-mode-hook (lambda nil
                                   (add-to-list 'flycheck-disabled-checkers 'javascript-jshint)))
@@ -2130,11 +2106,31 @@
        (custom-set-variables '(flycheck-javascript-eslint-executable "/usr/local/bin/eslint"))
      #+end_src
 **** elisp
-     #+name: flycheck-module-config
-     #+begin_src emacs-lisp
+     #+name: flycheck-config-elisp
+     #+begin_src emacs-lisp :tangle no
        (custom-set-variables '(flycheck-emacs-lisp-load-path 'inherit))
        (add-hook 'emacs-lisp-mode-hook (lambda nil
                                          (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)))
+     #+end_src
+**** java
+     A flycheck module that uses eclipse's ecj.jar to check java files.
+
+     This package is not in ELPA yet, so it is loaded as a git submodule. I
+     check whether the submodule is available, then check if ecj.jar is
+     available (I will not commit a binary to git). If both conditions are
+     satisfied, I will initialize the module.
+
+     #+begin_src emacs-lisp
+       (let* ((flycheck-java-dir "~/.emacs.d/elisp/thirdparty/flycheck-java")
+              (bin-dir "~/.emacs.d/bin")
+              (ecj-jar-file (when (file-directory-p bin-dir)
+                              (car (last (directory-files  bin-dir t "ecj.*jar"))))))
+         (when (and ecj-jar-file
+                    (file-exists-p flycheck-java-dir))
+           (setq load-path (cons flycheck-java-dir load-path))
+           (use-package flycheck-java
+             :config
+             (setq flycheck-java-ecj-jar-path ecj-jar-file))))
      #+end_src
 *** Navigation
 

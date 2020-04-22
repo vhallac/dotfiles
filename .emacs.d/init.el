@@ -846,17 +846,6 @@ into real text."
   :config
   (counsel-projectile-mode))
 
-(let* ((flycheck-java-dir "~/.emacs.d/elisp/thirdparty/flycheck-java")
-       (bin-dir "~/.emacs.d/bin")
-       (ecj-jar-file (when (file-directory-p bin-dir)
-                       (car (last (directory-files  bin-dir t "ecj.*jar"))))))
-  (when (and ecj-jar-file
-             (file-exists-p flycheck-java-dir))
-    (setq load-path (cons flycheck-java-dir load-path))
-    (use-package flycheck-java
-      :config
-      (setq flycheck-java-ecj-jar-path ecj-jar-file))))
-
 (use-package csharp-mode
   :ensure t
   :commands (csharp-mode)
@@ -1215,8 +1204,8 @@ The command will invoke the specified subcommand in the project directory"
     (interactive)
     (progn
     (if (or (not filename)
-        	  (eq (string-width filename) 0))
-        (setq filename (read-string "Please enter the file name: "
+        		  (eq (string-width filename) 0))
+        	  (setq filename (read-string "Please enter the file name: "
                                       ""
                                       'c-helper-find-file-history
                                       "")) )
@@ -1226,9 +1215,9 @@ The command will invoke the specified subcommand in the project directory"
                             nil))))
                                           ; Try to find in the tag list, if appropriate
       (if (buffer-tag-table-list)
-        	(let ((fname (c-helper-find-in-tags filename)))
-        	  (if fname
-        		  (progn
+        	    (let ((fname (c-helper-find-in-tags filename)))
+        		  (if fname
+        			  (progn
                     (if (> (count-windows) 1)
                         (find-file-other-window fname)
                       (find-file fname))
@@ -1236,13 +1225,13 @@ The command will invoke the specified subcommand in the project directory"
   
                                           ; Otherwise, try the specified directories
       (if dirs
-        	(let ((fname (c-helper-find-under-dirs dirs filename)))
-        	  (if fname
-        		  (if (> (count-windows) 1)
-        			  (find-file-other-window fname)
-        			(find-file fname))
-        		(error (concat "Cannot find file: " filename))))
-        (error "Cannot construct search path")))))
+        	    (let ((fname (c-helper-find-under-dirs dirs filename)))
+        		  (if fname
+        			  (if (> (count-windows) 1)
+        				  (find-file-other-window fname)
+        			    (find-file fname))
+        		    (error (concat "Cannot find file: " filename))))
+        	  (error "Cannot construct search path")))))
   
   
   (defun c-helper-find-in-tags (filename)
@@ -1316,14 +1305,14 @@ The command will invoke the specified subcommand in the project directory"
     (save-excursion
     (beginning-of-line)
     (if (search-forward-regexp "#include\\s-*[\\\"<]\\(.*\\)[\\\">]"
-        						 (point-at-eol) ; limit
-        						 t ; noerror
-        						 )
-        (let ((file-name (buffer-substring-no-properties
+        						     (point-at-eol) ; limit
+        						     t ; noerror
+        						     )
+        	  (let ((file-name (buffer-substring-no-properties
                             (match-beginning 1) (match-end 1))))
-        	(if file-name
-        		(c-helper-find-file file-name)
-        	  (error "No file specified in the #include statement")))
+        	    (if file-name
+        		    (c-helper-find-file file-name)
+        		  (error "No file specified in the #include statement")))
       (error "Not on a line with a #include statement"))))
   (c-add-style "tda" '((c-basic-offset . 4)
                        (c-comment-only-line-offset . 0)
@@ -1496,11 +1485,21 @@ The command will invoke the specified subcommand in the project directory"
                              (add-to-list 'flycheck-disabled-checkers 'javascript-jshint)))
   ;;; Use "sudo npm install -g eslint"
   (custom-set-variables '(flycheck-javascript-eslint-executable "/usr/local/bin/eslint"))
+  (custom-set-variables '(flycheck-emacs-lisp-load-path 'inherit))
+  (add-hook 'emacs-lisp-mode-hook (lambda nil
+                                    (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)))
   (custom-set-variables '(flycheck-temp-prefix "#flycheck")))
 
-(custom-set-variables '(flycheck-emacs-lisp-load-path 'inherit))
-(add-hook 'emacs-lisp-mode-hook (lambda nil
-                                  (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)))
+(let* ((flycheck-java-dir "~/.emacs.d/elisp/thirdparty/flycheck-java")
+       (bin-dir "~/.emacs.d/bin")
+       (ecj-jar-file (when (file-directory-p bin-dir)
+                       (car (last (directory-files  bin-dir t "ecj.*jar"))))))
+  (when (and ecj-jar-file
+             (file-exists-p flycheck-java-dir))
+    (setq load-path (cons flycheck-java-dir load-path))
+    (use-package flycheck-java
+      :config
+      (setq flycheck-java-ecj-jar-path ecj-jar-file))))
 
 (use-package dumb-jump
   :ensure t
