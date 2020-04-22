@@ -1,39 +1,3 @@
-
-! Common
-
-#define S_yellow        #b58900
-#define S_orange        #cb4b16
-#define S_red           #dc322f
-#define S_magenta       #d33682
-#define S_violet        #6c71c4
-#define S_blue          #268bd2
-#define S_cyan          #2aa198
-#define S_green         #859900
-
-
-! Dark
-
-! #define S_base03        #002b36
-! #define S_base02        #073642
-! #define S_base01        #586e75
-! #define S_base00        #657b83
-! #define S_base0         #839496
-! #define S_base1         #93a1a1
-! #define S_base2         #eee8d5
-! #define S_base3         #fdf6e3
-
-
-! Light
-
-#define S_base03        #fdf6e3
-#define S_base02        #eee8d5
-#define S_base01        #93a1a1
-#define S_base00        #839496
-#define S_base0         #657b83
-#define S_base1         #586e75
-#define S_base2         #073642
-#define S_base3         #002b36
-
 Xcursor.size:               16
 XTerm*altIsNotMeta:         true
 XTerm*eightBitInput:        false
@@ -73,32 +37,26 @@ Xft.rgba:                   rgb
 Xft.embolden:               false
 Xft.dpi:                    157
 
+#define MO_fgMain                    #000000
+#define MO_red                       #a80000
+#define MO_green                     #005200
+#define MO_yellow                    #8b3800
+#define MO_blue                      #0030a6
+#define MO_magenta                   #721045
+#define MO_cyan                      #005589
+#define MO_bgAlt                     #f3f1f3
+#define MO_fgAlt                     #505050
+#define MO_redAlt                    #880000
+#define MO_greenAlt                  #4a5700
+#define MO_yellowAlt                 #714900
+#define MO_blueAlt                   #223fbf
+#define MO_magentaAlt                #8f0075
+#define MO_cyanAlt                   #185870
+#define MO_bgMain                    #ffffff
 
-xterm*background:              S_base03
-xterm*foreground:              S_base3
+xterm*background:              MO_bgMain
+xterm*foreground:              MO_fgMain
 xterm*fading:                  40
-xterm*fadeColor:               S_base03
-xterm*cursorColor:             S_base1
-xterm*pointerColorBackground:  S_base01
-xterm*pointerColorForeground:  S_base1
-
-xterm*color0:                  S_base02
-xterm*color1:                  S_red
-xterm*color2:                  S_green
-xterm*color3:                  S_yellow
-xterm*color4:                  S_blue
-xterm*color5:                  S_magenta
-xterm*color6:                  S_cyan
-xterm*color7:                  S_base2
-xterm*color9:                  S_orange
-xterm*color8:                  S_base03
-xterm*color10:                 S_base01
-xterm*color11:                 S_base00
-xterm*color12:                 S_base0
-xterm*color13:                 S_violet
-xterm*color14:                 S_base1
-xterm*color15:                 S_base3
-
 st-256color*background:              S_base03
 st-256color*foreground:              S_base0
 st-256color*fading:                  40
@@ -123,3 +81,24 @@ st-256color*color12:                 S_base0
 st-256color*color13:                 S_violet
 st-256color*color14:                 S_base1
 st-256color*color15:                 S_base3
+xterm*fadeColor:               MO_bgMain
+xterm*cursorColor:             MO_fgAlt
+xterm*pointerColorBackground:  MO_fgAlt
+xterm*pointerColorForeground:  MO_bgAlt
+
+xterm*color0:                  MO_fgMain
+xterm*color1:                  MO_red
+xterm*color2:                  MO_green
+xterm*color3:                  MO_yellow
+xterm*color4:                  MO_blue
+xterm*color5:                  MO_magenta
+xterm*color6:                  MO_cyan
+xterm*color7:                  MO_bgMain
+xterm*color8:                  MO_fgAlt
+xterm*color9:                  MO_redAlt
+xterm*color10:                 MO_greenAlt
+xterm*color11:                 MO_yellowAlt
+xterm*color12:                 MO_blueAlt
+xterm*color13:                 MO_magentaAlt
+xterm*color14:                 MO_cyanAlt
+xterm*color15:                 MO_bgMain
