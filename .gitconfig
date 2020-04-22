@@ -21,6 +21,7 @@
 	mstat = status --porcelain
 	prr = pull --rebase
 	pff = pull --ff-only
+	pffn = merge --ff-only
 	force-push = push --force-with-lease
 	cmerge = merge --no-ff
 	glog = log --oneline --decorate --color --graph
