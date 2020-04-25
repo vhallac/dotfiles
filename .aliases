@@ -75,3 +75,4 @@ alias screenshot='grim -g "$(slurp)"'
 
 alias dfgit="git --git-dir=$HOME/dotfiles.git --work-tree=$HOME"
 alias less="less -R"
+alias jdk=". /opt/java/pick-java.sh"
