@@ -622,9 +622,11 @@
    #+end_src
 ** eyebrowse
 
-   Emacs session manager
+   Emacs session manager. I use this for virtual "desktops" or window configurations.
 
-   #+begin_src emacs-lisp :noweb yes
+   I am disabling for now. It looks like using multiple frames is good enough for me.
+
+   #+begin_src emacs-lisp :noweb yes :tangle no
      (use-package eyebrowse
        :ensure t
        :demand
