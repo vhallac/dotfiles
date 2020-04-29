@@ -308,6 +308,22 @@
      (add-hook *new-window-hook* #'new-window-adjustments)
    #+end_src
 
+   I want my dialog windows to float.
+
+   Not sure about transients. Use ~window-transient-p~ instead?
+
+   #+begin_src common-lisp
+     (defun float-dialogs-hook (win)
+       (let ((grp (current-group)) )
+         (when (and (not (typep grp 'float-group))
+                    (or
+                     (eq (window-type win) :dialog)
+                     (string-match (window-res win) "pinentry-gtk-2")))
+           (float-window win grp))))
+
+     (add-hook *new-window-hook* #'float-dialogs-hook)
+   #+end_src
+
 * Log stumpwm
 
   Send all logs to [[file:~/.cache/stumpwm/log][~/.cache/stumpwm/log]].

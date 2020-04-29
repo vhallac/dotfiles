@@ -128,4 +128,12 @@
 
 (add-hook *new-window-hook* #'new-window-adjustments)
 
+(defun float-dialogs-hook (win)
+  (let ((grp (current-group)) )
+    (when (and (not (typep grp 'float-group))
+               (eq (window-type win) :dialog))
+      (float-window win grp))))
+
+(add-hook *new-window-hook* #'float-dialogs-hook)
+
 (redirect-all-output "~/.cache/stumpwm/log")
