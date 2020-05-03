@@ -159,6 +159,25 @@
      ;;                       '(use-package-always-ensure t))
    #+end_src
 
+** Minimum versions of built-in packages
+
+   I require minimum versions of certain packages. Sometime built-in package
+   versions are not enough.
+
+   The following portion installs packages when builtin version is not present,
+   or not recent enough.
+
+   #+begin_src emacs-lisp
+     (defconst upgrade-builtins-min-versions '((tramp . (2 4))))
+
+     (dolist (elt upgrade-builtins-min-versions)
+       (let ((pkg (car elt))
+             (min-ver (cdr elt)))
+         (unless (package-installed-p pkg min-ver)
+           (message "installing")
+           (package-install (cadr (assoc pkg package-archive-contents))))))
+   #+end_src
+
 ** Paths
    There are some paths required by different components. I will set those up in
    this section.

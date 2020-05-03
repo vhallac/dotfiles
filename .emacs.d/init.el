@@ -59,6 +59,15 @@
 ;; (custom-set-variables '(use-package-verbose t)
 ;;                       '(use-package-always-ensure t))
 
+(defconst upgrade-builtins-min-versions '((tramp . (2 4))))
+
+(dolist (elt upgrade-builtins-min-versions)
+  (let ((pkg (car elt))
+        (min-ver (cdr elt)))
+    (unless (package-installed-p pkg min-ver)
+      (message "installing")
+      (package-install (cadr (assoc pkg package-archive-contents))))))
+
 (custom-set-variables '(erc-dcc-get-default-directory "~/erc_dcc"))
 
 (load "term/xterm")
