@@ -138,10 +138,10 @@
    refresh the package contents.
 
    #+begin_src emacs-lisp
-     (add-to-list 'package-archives '("melpa"  . "http://melpa.milkbox.net/packages/") t)
-     (add-to-list 'package-archives '("tromey" . "http://tromey.com/elpa/") t)
-     (add-to-list 'package-archives '("elpa"   . "http://elpa.gnu.org/packages/") t)
-     (add-to-list 'package-archives '("orgm"   . "http://orgmode.org/elpa/") t)
+     (add-to-list 'package-archives '("melpa"  . "https://melpa.org/packages/") t)
+     (add-to-list 'package-archives '("tromey" . "https://tromey.com/elpa/") t)
+     (add-to-list 'package-archives '("gnu"    . "https://elpa.gnu.org/packages/") t)
+     (add-to-list 'package-archives '("orgm"   . "https://orgmode.org/elpa/") t)
      (add-to-list 'package-archives '("copcu"  . "http://cop.cuyuz.biz/elpa/") t)
      (unless (> (length package-archive-contents) 0 )
        (package-refresh-contents))
