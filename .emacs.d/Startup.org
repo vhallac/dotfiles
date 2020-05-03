@@ -131,7 +131,7 @@
               (setq toplevel (cdr toplevel))))
           (setq dirs (append dirs (list path)))))
     #+end_src
-** Packaging
+** Packages
 
    Set up my favorite package sources. Usually [[https://melpa.org/][MELPA]] is enough on its own, but I
    like having a few more sources. If this is the first time emacs is started, I
