@@ -208,6 +208,20 @@
 
 (add-hook 'window-configuration-change-hook 'wg/kludge-gpg-agent)
 
+(defun vh/tramp-add-or-change-param (method param)
+  (let ((elt (assoc method tramp-methods)))
+    (when elt
+      (let ((filtered-params (delq nil
+                                   (mapcar (lambda (e) (when (not (eq (car e) (car param))) e))
+                                           (cdr elt)))))
+        (setcdr elt (push param filtered-params))))))
+
+(use-package tramp
+  :ensure t
+  :config
+  (vh/tramp-add-or-change-param "sudo" '(tramp-session-timeout 600))
+  (vh/tramp-add-or-change-param "ssh" `(tramp-session-timeout ,(* 5 60 60))))
+
 (use-package tramp-sh
   :config
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
