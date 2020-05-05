@@ -18,6 +18,8 @@
 ;; should be moved to the appropriate section in startup.
 ;; (load-file custom-file)
 
+(require 'cl-lib)
+
 (package-initialize)
 ;;; (setq package-enable-at-startup nil)
 
@@ -649,12 +651,12 @@ into real text."
       (notmuch-show-archive-thread-then-exit)))
   (defun vh/notmuch-address-selection-function (prompt collection initial-input)
     (let* ((from (or  (message-fetch-field "From" "")))
-           (mail-addr (first
+           (mail-addr (car
                        (delq nil (mapcar
                                   (lambda (x) (when  (string-match "@" x) x))
                                   (split-string from "[<>]")))))
            (domain (when mail-addr
-                     (second (split-string mail-addr "@"))))
+                     (cadr (split-string mail-addr "@"))))
            (exists (and (delq nil (mapcar
                                    (lambda (x)  (string-match domain x))
                                    collection))
@@ -784,16 +786,16 @@ into real text."
     "Change the SMTP server according to the current from line."
     (save-excursion
       (let ((case-fold-search t))
-        (loop with from = (save-restriction
+        (cl-loop with from = (save-restriction
                             (message-narrow-to-headers)
                             (message-fetch-field "from"))
               for (auth-mech address . auth-spec) in smtp-accounts
               when (string-match address from)
               do (cond
                   ((memq auth-mech '(cram-md5 plain login))
-                   (return (apply 'set-smtp 'auth-mech auth-spec)))
+                   (cl-return (apply 'set-smtp 'auth-mech auth-spec)))
                   ((eql auth-mech 'ssl)
-                   (return (apply 'set-smtp-ssl auth-spec)))
+                   (cl-return (apply 'set-smtp-ssl auth-spec)))
                   (t (error "Unrecognized SMTP auth. mechanism: `%s'" auth-mech)))
               finally (error "Cannot infer SMTP information")))))
   
