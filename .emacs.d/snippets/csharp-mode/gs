@@ -1,0 +1,4 @@
+# key: gs
+# name: Get / Set
+# --
+{ get; set; }
