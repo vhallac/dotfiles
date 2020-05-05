@@ -14,3 +14,15 @@
 /.mc-lists.el
 /kkcrc
 /image-dired
+workspace
+elpa
+eclipse.jdt.ls
+.cask
+session.*
+.lsp-session*
+hackernews
+network-security.data
+url
+request
+transient/
+nov-places
