@@ -131,7 +131,9 @@
 (defun float-dialogs-hook (win)
   (let ((grp (current-group)) )
     (when (and (not (typep grp 'float-group))
-               (eq (window-type win) :dialog))
+               (or
+                (eq (window-type win) :dialog)
+                (string-match (window-res win) "pinentry-gtk-2")))
       (float-window win grp))))
 
 (add-hook *new-window-hook* #'float-dialogs-hook)
