@@ -622,7 +622,7 @@ into real text."
                             (:name "recent" :query "tag:unread and (date:yesterday or date:today)" :key "ur" :search-type tree)))))
   :config
   ;; allow linking to mail from org-mode files
-  (require 'org-notmuch)
+  (require 'ol-notmuch)
   (setq notmuch-command (expand-file-name "~/bin/remote-notmuch.sh"))
   (custom-set-variables
    '(notmuch-archive-tags '("-inbox" "+archived"))
