@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: ccteb
+# key: ccteb
+# --
+  $1 TL
+Liabilities:CC:cepteteb                         -$1 TL
