@@ -1659,6 +1659,7 @@ immediately after current heading."
         org-src-fontify-natively t
         org-time-clocksum-use-effort-durations t
         org-M-RET-may-split-line '((default . nil)))
+  (custom-set-variables '(org-tags-column 0))
   (unbind-key "C-c ;" org-mode-map)
   (unbind-key "C-c C-x C-s" org-mode-map)
   (add-to-list 'org-modules 'org-habit)
