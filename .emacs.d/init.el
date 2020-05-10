@@ -209,6 +209,20 @@
   (when fixed-pitch-faces
     (mapcar (lambda (x) (set-face-attribute x nil :inherit 'fixed-pitch)) fixed-pitch-faces)))
 
+(use-package eww
+  :bind (:map eww-link-keymap
+              ("V" . (lambda () (interactive "") (shr-browse-url t)))))
+
+(use-package shr
+  :bind (:map shr-map
+              ("v" . (lambda () (interactive "") (eww (get-text-property (point) 'shr-url))))
+              ("V" . (lambda () (interactive "") (shr-browse-url t)))))
+
+(use-package elfeed
+  :bind (:map elfeed-show-mode-map
+              ("v" . (lambda () (interactive "") (eww (get-text-property (point) 'shr-url))))
+              ("V" . (lambda () (interactive "") (shr-browse-url t)))))
+
 (defun wg/kludge-gpg-agent ()
   (if (display-graphic-p)
       (setenv "DISPLAY" (terminal-name))

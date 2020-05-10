@@ -414,6 +414,24 @@
        (when fixed-pitch-faces
          (mapcar (lambda (x) (set-face-attribute x nil :inherit 'fixed-pitch)) fixed-pitch-faces)))
    #+end_src
+* Keyboard Shortcuts
+  The key bindings below are for visiting URLs locally and globally in various shr-derived modes.
+
+  #+begin_src emacs-lisp
+    (use-package eww
+      :bind (:map eww-link-keymap
+                  ("V" . (lambda () (interactive "") (shr-browse-url t)))))
+
+    (use-package shr
+      :bind (:map shr-map
+                  ("v" . (lambda () (interactive "") (eww (get-text-property (point) 'shr-url))))
+                  ("V" . (lambda () (interactive "") (shr-browse-url t)))))
+
+    (use-package elfeed
+      :bind (:map elfeed-show-mode-map
+                  ("v" . (lambda () (interactive "") (eww (get-text-property (point) 'shr-url))))
+                  ("V" . (lambda () (interactive "") (shr-browse-url t)))))
+  #+end_src
 * GPG setup
 
 ** Agent connection
