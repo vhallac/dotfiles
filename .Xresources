@@ -8,7 +8,7 @@ XTerm*on2Clicks:            regex [^/@ `\047\n]+
 XTerm*on3Clicks:            regex [^ `\047\n]+
 XTerm*on4Clicks:            regex [^#$]+
 XTerm*on5Clicks:            line
-XTerm*faceName:             "Inconsolata"
+XTerm*faceName:             JetBrains Mono
 XTerm*faceSize:             11.0
 XTerm*renderFont:           true
 XTerm*scrollBar:            false
@@ -21,7 +21,7 @@ UXTerm*on2Clicks:           regex [^/@ `\047\n]+
 UXTerm*on3Clicks:           regex [^ `\047\n]+
 UXTerm*on4Clicks:           regex [^#$]+
 UXTerm*on5Clicks:           line
-UXTerm*faceName:            "xft:Droid Sans Mono"
+UXTerm*faceName:            JetBrains Mono
 UXTerm*faceSize:            11
 UXTerm*renderFont:          true
 UXTerm*scrollBar:           false
