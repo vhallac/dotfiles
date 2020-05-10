@@ -970,12 +970,6 @@
 ** E-mail
 *** Reading: GNUS
     #+begin_src emacs-lisp :noweb yes
-      (use-package w3m
-        :defer t
-        :ensure t
-        :init
-        (custom-set-variables '(w3m-use-tab-line nil)))
-
       (use-package gnus
         :commands gnus
         :config
@@ -2776,5 +2770,19 @@
    #+begin_src emacs-lisp
      (use-package hackernews
        :ensure t)
+   #+end_src
+** Browse web inside editor
+   Small tweaks for eww and w3m.
+
+   #+begin_src emacs-lisp
+     (use-package eww
+       :ensure t
+       :hook ((eww-mode . #'set-buffer-variable-pitch)))
+
+     (use-package w3m
+       :defer t
+       :ensure t
+       :init                                 ; shouldn't this be :config? Check with gnus
+       (custom-set-variables '(w3m-use-tab-line nil)))
    #+end_src
 * Final tweaks

@@ -528,12 +528,6 @@ into real text."
   :config
   (which-key-mode))
 
-(use-package w3m
-  :defer t
-  :ensure t
-  :init
-  (custom-set-variables '(w3m-use-tab-line nil)))
-
 (use-package gnus
   :commands gnus
   :config
@@ -2004,3 +1998,13 @@ immediately after current heading."
 
 (use-package hackernews
   :ensure t)
+
+(use-package eww
+  :ensure t
+  :hook ((eww-mode . #'set-buffer-variable-pitch)))
+
+(use-package w3m
+  :defer t
+  :ensure t
+  :init                                 ; shouldn't this be :config? Check with gnus
+  (custom-set-variables '(w3m-use-tab-line nil)))
