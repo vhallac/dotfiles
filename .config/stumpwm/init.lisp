@@ -119,6 +119,10 @@
 (define-key *top-map* (kbd "s-:") "eval")
 (define-key *top-map* (kbd "s-;") "colon")
 
+(require 'sb-posix)
+
+(sb-posix:setenv "GDK_CORE_DEVICE_EVENTS" "1" 1)
+
 (run-prog "/usr/bin/lxsession" :args (split-string "-e stumpwm -s stumpwm" " ") :wait nil)
 
 (defun new-window-adjustments (new-window)
