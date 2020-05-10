@@ -203,6 +203,12 @@
                                  (run-hook-with-args 'after-make-frame-functions
                                                      (selected-frame)))))
 
+(defun set-buffer-variable-pitch (&rest fixed-pitch-faces)
+  (variable-pitch-mode t)
+  (setq line-spacing 3)
+  (when fixed-pitch-faces
+    (mapcar (lambda (x) (set-face-attribute x nil :inherit 'fixed-pitch)) fixed-pitch-faces)))
+
 (defun wg/kludge-gpg-agent ()
   (if (display-graphic-p)
       (setenv "DISPLAY" (terminal-name))
@@ -1891,6 +1897,16 @@ immediately after current heading."
 (use-package org-mobile
   :commands (org-mobile-push org-mobile-pull)
   :config (setq org-mobile-directory "~/outgoing/mobileorg"))
+
+(use-package org
+  :hook ((org-mode . (lambda () (set-buffer-variable-pitch 'org-table 'org-code 'org-block 'org-meta-line)))))
+
+(use-package org-superstar
+  :ensure t
+  :hook ((org-mode . org-superstar-mode))
+  :config
+  (custom-set-variables '(org-superstar-remove-leading-stars nil)
+                        '(org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✚" "✜" "◆" "◇" "▶"))))
 
 (use-package quantified
   :disabled

@@ -397,6 +397,23 @@
                                                           (selected-frame)))))
    #+end_src
 
+** Variable pitch mode setup
+
+   This is a helper function to switch to variable pitch mode. Use this as:
+   #+begin_src emacs-lisp :tangle no
+     (use-package some-package
+       :hook ((some-package-mode . #'set-buffer-variable-pitch)))
+   #+end_src
+
+   You can pass a list of face definitions in mode that should still be left as fixed pitch.
+
+   #+begin_src emacs-lisp
+     (defun set-buffer-variable-pitch (&rest fixed-pitch-faces)
+       (variable-pitch-mode t)
+       (setq line-spacing 3)
+       (when fixed-pitch-faces
+         (mapcar (lambda (x) (set-face-attribute x nil :inherit 'fixed-pitch)) fixed-pitch-faces)))
+   #+end_src
 * GPG setup
 
 ** Agent connection
@@ -2583,6 +2600,20 @@
        :config (setq org-mobile-directory "~/outgoing/mobileorg"))
 
 
+   #+end_src
+
+   I want variable pitch fonts in org mode. I also want a little eye candy on headings.
+
+   #+begin_src emacs-lisp
+     (use-package org
+       :hook ((org-mode . (lambda () (set-buffer-variable-pitch 'org-table 'org-code 'org-block 'org-meta-line)))))
+
+     (use-package org-superstar
+       :ensure t
+       :hook ((org-mode . org-superstar-mode))
+       :config
+       (custom-set-variables '(org-superstar-remove-leading-stars nil)
+                             '(org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✚" "✜" "◆" "◇" "▶"))))
    #+end_src
 *** DISABLED Quantified self
     I've abandoned planning, but I will come back to it with a different
