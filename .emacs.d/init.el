@@ -203,6 +203,10 @@
                                  (run-hook-with-args 'after-make-frame-functions
                                                      (selected-frame)))))
 
+(defface large-variable-pitch '((t (:inherit 'variable-pitch :height 95)))
+  "Font for less eye strain during prolonged reading"
+  :group 'local)
+
 (defun set-buffer-variable-pitch (&rest fixed-pitch-faces)
   (variable-pitch-mode t)
   (setq line-spacing 3)
@@ -1980,8 +1984,23 @@ immediately after current heading."
   (elfeed-org)
   (custom-set-variables '(rmh-elfeed-org-files '("~/org/feeds.org"))))
 
+(defun elfeed-search-case-fold (orig-fun &rest args)
+  (let ((case-fold-search t))
+    (apply orig-fun args)))
+
+(defun elfeed-search-compile-case-fold (orig-fun &rest args)
+  (let ((filter (apply orig-fun args)))
+    `(lambda (entry feed count) (let ((case-fold-search t))
+                                  ,@(cddr filter)))))
 (use-package elfeed
-  :bind (:map elfeed-show-mode-map ("<tab>" . shr-next-link)))
+  :bind (:map elfeed-show-mode-map ("<tab>" . shr-next-link))
+  :hook (elfeed-show-mode . (lambda ()
+                              (make-local-variable 'shr-current-font)
+                              (setq shr-current-font 'large-variable-pitch)))
+
+  :config
+  (advice-add #'elfeed-search-filter :around #'elfeed-search-case-fold)
+  (advice-add #'elfeed-search-compile-filter :around #'elfeed-search-compile-case-fold))
 
 (use-package hackernews
   :ensure t)
