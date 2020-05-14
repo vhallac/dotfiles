@@ -411,7 +411,7 @@
    This is a helper function to switch to variable pitch mode. Use this as:
    #+begin_src emacs-lisp :tangle no
      (use-package some-package
-       :hook ((some-package-mode . #'set-buffer-variable-pitch)))
+       :hook ((some-package-mode . set-buffer-variable-pitch)))
    #+end_src
 
    You can pass a list of face definitions in mode that should still be left as fixed pitch.
@@ -2778,7 +2778,7 @@
    #+begin_src emacs-lisp
      (use-package eww
        :ensure t
-       :hook ((eww-mode . #'set-buffer-variable-pitch)))
+       :hook ((eww-mode . set-buffer-variable-pitch)))
 
      (use-package w3m
        :defer t

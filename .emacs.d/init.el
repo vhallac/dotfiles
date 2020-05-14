@@ -2002,7 +2002,7 @@ immediately after current heading."
 
 (use-package eww
   :ensure t
-  :hook ((eww-mode . #'set-buffer-variable-pitch)))
+  :hook ((eww-mode . set-buffer-variable-pitch)))
 
 (use-package w3m
   :defer t
