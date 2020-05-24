@@ -368,6 +368,19 @@ into real text."
     ("t" er/mark-nxml-tag "Tag")
     ("e" er/mark-nxml-element "Element")))
 
+(defun vh/expand-region-to-lines ()
+    (interactive)
+  (when (eq (point) (region-beginning))
+    (exchange-point-and-mark))
+  (let ((end (+ 1 (point-at-eol))))
+    (exchange-point-and-mark)
+    (let ((start (point-at-bol)))
+      (push-mark end)
+      (exchange-point-and-mark)
+      (push-mark start))))
+
+(bind-key "C-c C-v" #'vh/expand-region-to-lines)
+
 (use-package hydra
   :ensure t)
 
