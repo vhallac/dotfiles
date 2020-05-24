@@ -138,7 +138,8 @@
                (or
                 (eq (window-type win) :dialog)
                 (string-match (window-res win) "pinentry-gtk-2")))
-      (float-window win grp))))
+      (float-window win grp)
+      (focus-window win t))))
 
 (add-hook *new-window-hook* #'float-dialogs-hook)
 
