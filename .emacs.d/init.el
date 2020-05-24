@@ -1887,7 +1887,7 @@ immediately after current heading."
                                   "* %? :NOTE:\n  %U\n  %a\n"
                                   :clock-in t :clock-resume t)
                                  ("j" "journal" entry
-                                  (file+olp+datetree "~/org/notes/journal.org" "Daily Notes")
+                                  (file+olp+datetree "~/org/journal.org" "Daily Notes")
                                   "* %?\nEntered on %U\n  %i\n  %a")
                                  ("q" "Quick note" item
                                   (file+headline "~/org/review.org" "Quick notes"))
