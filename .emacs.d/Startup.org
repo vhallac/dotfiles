@@ -992,6 +992,9 @@
    #+end_src
 ** E-mail
 *** Reading: GNUS
+
+    For variable pitch, find the hook and use ~(set-buffer-variable-pitch 'gnus-header-name 'gnus-header-subject 'gnus-header-content 'gnus-header-from)~.
+
     #+begin_src emacs-lisp :noweb yes
       (use-package gnus
         :commands gnus
