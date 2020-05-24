@@ -875,6 +875,10 @@ into real text."
                         '(bbdb-mua-summary-unify-format-letter "B") )
   (setq bbdb/gnus-score-default 10))
 
+(use-package notmuch-forget
+  :init
+  (with-eval-after-load "notmuch-address" (notmuch-forget-install)))
+
 (use-package projectile
   :ensure t
   :config

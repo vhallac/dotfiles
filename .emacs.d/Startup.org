@@ -1393,6 +1393,17 @@
 
 
     #+end_src
+
+    I am currently using notmuch for sending emails. Auto complete wortks great for me, but accumulating all my emails over more that
+    a decade caused lots of old emails to come up as completion candidates for some people. The little package below allows me to filter out these emails.
+
+    For the code, see [[file:./elisp/mine/notmuch-forget.el][notmuch-forget.el]].
+
+    #+begin_src emacs-lisp
+      (use-package notmuch-forget
+        :init
+        (with-eval-after-load "notmuch-address" (notmuch-forget-install)))
+    #+end_src
 ** Projectile
    #+begin_src emacs-lisp
      (use-package projectile
