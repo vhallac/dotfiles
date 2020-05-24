@@ -1085,7 +1085,6 @@
     - Get the union using ~(let ((t nil)) (mapcan lambda (x) x aweek-list) t)~.
     - Calculate tag differences. Not sure how. There may be a function. If not, use variation of the above. Then apply tag delta. find function.
 
-
     #+begin_src emacs-lisp
       (use-package notmuch
         :ensure t
