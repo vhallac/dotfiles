@@ -1932,9 +1932,9 @@ immediately after current heading."
   (setq org-habit-graph-column 80
         org-habit-show-habits-only-for-today nil))
 
-(use-package org-mobile
-  :commands (org-mobile-push org-mobile-pull)
-  :config (setq org-mobile-directory "~/outgoing/mobileorg"))
+;; (use-package org-mobile
+;;   :commands (org-mobile-push org-mobile-pull)
+;;   :config (setq org-mobile-directory "~/outgoing/mobileorg"))
 
 (use-package org
   :hook ((org-mode . (lambda () (set-buffer-variable-pitch 'org-table 'org-code 'org-block 'org-meta-line)))))
