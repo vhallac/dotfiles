@@ -1597,6 +1597,9 @@ The command will invoke the specified subcommand in the project directory"
 
 (use-package org
   :ensure org-plus-contrib
+  :hook (org-mode . (lambda ()
+                      (flyspell-mode)
+                      (auto-fill-mode)))
   :bind (("C-c b o"   . org-switchb)
          ("C-c b 4 o" . org-switch-to-buffer-other-window)
          ("C-c l"     . org-store-link))
@@ -1683,8 +1686,6 @@ immediately after current heading."
   (unbind-key "C-c ;" org-mode-map)
   (unbind-key "C-c C-x C-s" org-mode-map)
   (add-to-list 'org-modules 'org-habit)
-  (flyspell-mode 1)
-  (auto-fill-mode t)
   
   )
 
