@@ -2729,7 +2729,7 @@
    #+begin_src emacs-lisp
      (use-package sdcv-mode
        :defer
-       :bind ( ("C-c d" . sdcv-search)))
+       :bind ( ("C-c C-d" . sdcv-search)))
    #+end_src
 ** Edit grep/occur buffers
    It is useful for mass editing.

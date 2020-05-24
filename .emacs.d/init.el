@@ -1977,7 +1977,7 @@ immediately after current heading."
 
 (use-package sdcv-mode
   :defer
-  :bind ( ("C-c d" . sdcv-search)))
+  :bind ( ("C-c C-d" . sdcv-search)))
 
 (use-package wgrep
   :ensure t)
