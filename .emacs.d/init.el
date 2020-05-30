@@ -382,7 +382,9 @@ into real text."
     "Expand Region"
     ("v" (er/expand-region 1) "Expand")
     ("V" er/contract-region "Contract")
+    ("l" vh/expand-region-to-lines)
     ("C-v" (er/expand-region 0) "Reset" :color blue)
+    ("s" (mark-sexp) "Sexp")
     ("t" er/mark-nxml-tag "Tag")
     ("e" er/mark-nxml-element "Element")))
 
