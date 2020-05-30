@@ -1836,17 +1836,6 @@ immediately after current heading."
                                      "/*]]>*/-->"
                                      "</style>")))
 
-(use-package ob-core                         ;org-babel
-  :after org
-  :defer
-  :config
-  (setq org-babel-min-lines-for-block-output 999
-        org-babel-results-keyword "results")
-
-  (org-babel-do-load-languages 'org-babel-load-languages '((ledger . t)
-                                                           (dot . t)
-                                                           (shell . t))))
-
 (use-package org-clock
   :after org
   :bind (("C-c C-x C-j" . org-clock-goto))
@@ -1888,6 +1877,17 @@ immediately after current heading."
 ;; (use-package org-mobile
 ;;   :commands (org-mobile-push org-mobile-pull)
 ;;   :config (setq org-mobile-directory "~/outgoing/mobileorg"))
+
+(use-package ob-core                         ;org-babel
+  :after org
+  :defer
+  :config
+  (custom-set-variables '(org-babel-min-lines-for-block-output 999)
+                        '(org-babel-results-keyword "results"))
+
+  (org-babel-do-load-languages 'org-babel-load-languages '((ledger . t)
+                                                           (dot . t)
+                                                           (shell . t))))
 
 (use-package org-capture
   :after org
