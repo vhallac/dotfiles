@@ -285,6 +285,13 @@
 (use-package eshell
   :bind ("C-c s" . eshell)
   :config
+  (custom-set-variables '(eshell-scroll-to-bottom-on-input 'all)
+                        '(eshell-error-if-no-glob t)
+                        '(eshell-hist-ignoredups t)
+                        '(eshell-save-history-on-exit t)
+                        ;; Not sure about this (eshell-prefer-lisp-functions nil)
+                        '(eshell-destroy-buffer-when-process-dies t))
+  (setenv "PAGER" "cat")
   (defvar zakame/ansi-escapes-re
     (rx (or ?\233 (and ?\e ?\[))
         (zero-or-more (char (?0 . ?\?)))
@@ -302,6 +309,9 @@
               (add-to-list 'eshell-output-filter-functions
                            'zakame/eshell-nuke-ansi-escapes t))
             ))
+
+(use-package shell
+  :bind ("C-c S" . shell))
 
 (defun overlays-to-text ()
   "Create a new buffer called *text* containing the visible text
