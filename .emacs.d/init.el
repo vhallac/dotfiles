@@ -1646,47 +1646,13 @@ immediately after current heading."
 
   (advice-add #'org-insert-heading :around #'vh/revert-org-insert-heading-arg-behavior)
   :config
-  (setq org-enforce-todo-checkbox-dependencies t
-        org-enforce-todo-dependencies t
-        org-hide-leading-stars t
+  (setq org-hide-leading-stars t
         org-log-done 'time
         org-log-reschedule 'note
         org-log-redeadline 'note
         org-log-into-drawer "LOGBOOK"
         org-return-follows-link t
         org-special-ctrl-a/e t
-        org-use-fast-todo-selection t
-        ;; TODO sequences
-        org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
-                            (sequence "WAITING(w@/!)" "|" "HOLD(h@/!)"
-                                      "CANCELLED(c@/!)" "PHONE" "MEETING")
-                            (sequence "QUOTE(q!)" "QUOTED(Q!)" "|"
-                                      "APPROVED(A@)" "EXPIRED(E@)" "REJECTED(R@)")
-                            (sequence "OPEN(O)" "|" "CLOSED(C)")
-                            (type "PERIODIC(P)" "|" "DONE(d!/!)"))
-        org-todo-keyword-faces '(("TODO"      :foreground "red"          :weight bold)
-                                 ("PERIODIC"  :foreground "magenta"      :weight bold)
-                                 ("NEXT"      :foreground "blue"         :weight bold)
-                                 ("DONE"      :foreground "forest green" :weight bold)
-                                 ("WAITING"   :foreground "yellow"       :weight bold)
-                                 ("HOLD"      :foreground "goldenrod"    :weight bold)
-                                 ("CANCELLED" :foreground "orangered"    :weight bold)
-                                 ("PHONE"     :foreground "forest green" :weight bold)
-                                 ("MEETING"   :foreground "forest green" :weight bold)
-                                 ("QUOTE"     :foreground "hotpink"      :weight bold)
-                                 ("QUOTED"    :foreground "indianred1"   :weight bold)
-                                 ("APPROVED"  :foreground "forest green" :weight bold)
-                                 ("EXPIRED"   :foreground "olivedrab1"   :weight bold)
-                                 ("REJECTED"  :foreground "olivedrab"    :weight bold)
-                                 ("OPEN"      :foreground "magenta"      :weight bold)
-                                 ("CLOSED"    :foreground "forest green" :weight bold))
-        org-todo-state-tags-triggers '(("CANCELLED" ("CANCELLED" . t))
-                                       ("WAITING" ("WAITING" . t))
-                                       ("HOLD" ("WAITING" . t) ("HOLD" . t))
-                                       (done ("WAITING") ("HOLD"))
-                                       ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-                                       ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-                                       ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))
         org-treat-S-cursor-todo-selection-as-state-change nil
         ;; Column view and estimates
         org-columns-default-format "%80ITEM(Task) %7TODO(To Do) %10Effort(Estim){:} %10CLOCKSUM{+}"
@@ -1956,6 +1922,45 @@ immediately after current heading."
   :config
   (custom-set-variables '(org-superstar-remove-leading-stars nil)
                         '(org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✚" "✜" "◆" "◇" "▶"))))
+
+(use-package org
+  :config
+  (custom-set-variables '(org-enforce-todo-checkbox-dependencies t)
+                        '(org-enforce-todo-dependencies t)
+                        '(org-use-fast-todo-selection t)
+                        '(org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
+                                              (sequence "WAITING(w@/!)" "|" "HOLD(h@/!)" "CANCELLED(c@/!)" "PHONE" "MEETING")
+                                              (sequence "QUOTE(q!)" "QUOTED(Q!)" "|" "APPROVED(A@)" "EXPIRED(E@)" "REJECTED(R@)")
+                                              (sequence "OPEN(O)" "|" "CLOSED(C)")
+                                              (type "PERIODIC(P)" "|" "DONE(d!/!)")))
+                        '(org-todo-keyword-faces '(("TODO"      :foreground "red"          :weight bold)
+                                                   ("PERIODIC"  :foreground "magenta"      :weight bold)
+                                                   ("NEXT"      :foreground "blue"         :weight bold)
+                                                   ("DONE"      :foreground "forest green" :weight bold)
+                                                   ("WAITING"   :foreground "yellow"       :weight bold)
+                                                   ("HOLD"      :foreground "goldenrod"    :weight bold)
+                                                   ("CANCELLED" :foreground "orangered"    :weight bold)
+                                                   ("PHONE"     :foreground "forest green" :weight bold)
+                                                   ("MEETING"   :foreground "forest green" :weight bold)
+                                                   ("QUOTE"     :foreground "hotpink"      :weight bold)
+                                                   ("QUOTED"    :foreground "indianred1"   :weight bold)
+                                                   ("APPROVED"  :foreground "forest green" :weight bold)
+                                                   ("EXPIRED"   :foreground "olivedrab1"   :weight bold)
+                                                   ("REJECTED"  :foreground "olivedrab"    :weight bold)
+                                                   ("OPEN"      :foreground "magenta"      :weight bold)
+                                                   ("CLOSED"    :foreground "forest green" :weight bold)))
+                        '(org-todo-state-tags-triggers '(("CANCELLED" ("CANCELLED" . t))
+                                                         ("WAITING" ("WAITING" . t))
+                                                         ("HOLD" ("WAITING" . t) ("HOLD" . t))
+                                                         (done ("WAITING") ("HOLD"))
+                                                         ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+                                                         ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+                                                         ("DONE" ("WAITING") ("CANCELLED") ("HOLD"))))
+
+
+                        )
+
+  )
 
 (use-package org
   :config
