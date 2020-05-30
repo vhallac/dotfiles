@@ -213,26 +213,34 @@
   (when fixed-pitch-faces
     (mapcar (lambda (x) (set-face-attribute x nil :inherit 'fixed-pitch)) fixed-pitch-faces)))
 
+(defun eww-browse-external ()
+  (interactive)
+  (shr-browse-url t))
+
+(defun eww-browse-shr-url ()
+  (interactive)
+  (eww (get-text-property (point) 'shr-url)))
+
 (use-package eww
   :bind (:map eww-link-keymap
-              ("V" . (lambda () (interactive "") (shr-browse-url t)))))
+              ("V" . eww-browse-external)))
 
 (use-package shr
   :bind (:map shr-map
-              ("v" . (lambda () (interactive "") (eww (get-text-property (point) 'shr-url))))
-              ("V" . (lambda () (interactive "") (shr-browse-url t)))))
+              ("v" . eww-browse-shr-url)
+              ("V" . eww-browse-external)))
 
 (use-package elfeed
   :ensure t
   :bind (:map elfeed-show-mode-map
-              ("v" . (lambda () (interactive "") (eww (get-text-property (point) 'shr-url))))
-              ("V" . (lambda () (interactive "") (shr-browse-url t)))))
+              ("v" . eww-browse-shr-url)
+              ("V" . eww-browse-external)))
 
 (use-package w3m
   :ensure t
   :bind (:map w3m-link-map
-              ("v" . (lambda () (interactive "") (w3m-view-this-url (w3m-anchor (point)))))
-              ("V" . (lambda () (interactive "") (w3m-view-url-with-browse-url (w3m-anchor (point)))))))
+              ("v" . (lambda () (interactive) (w3m-view-this-url (w3m-anchor (point)))))
+              ("V" . (lambda () (interactive) (w3m-view-url-with-browse-url (w3m-anchor (point)))))))
 
 (defun wg/kludge-gpg-agent ()
   (if (display-graphic-p)
