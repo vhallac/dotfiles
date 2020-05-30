@@ -1688,17 +1688,8 @@ immediately after current heading."
                                        ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
                                        ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))
         org-treat-S-cursor-todo-selection-as-state-change nil
-        ;; Targets start with the file name - allows creating level 1 tasks
-        ;; !!!!!!!!!!!!!!!!!!! REMOVED. It doesn't work well with ivy/org
-        ;;;;; org-refile-use-outline-path 'file
-        ;; Targets complete in steps so we start with filename, TAB shows the
-        ;; next level of targets etc
-        ;; !!!!!!!!!!!!!!!!!!! REMOVED. It breaks ivy/org
-        ;;;;; org-outline-path-complete-in-steps t
-        ;; Allow refile to create parent tasks with confirmation
-        org-refile-allow-creating-parent-nodes 'confirm
         ;; Column view and estimates
-        org-columns-default-format "%80ITEM(Task) %7TODO(To Do) %10Effort(Estim){:} %10CLOCKSUM{Total}"
+        org-columns-default-format "%80ITEM(Task) %7TODO(To Do) %10Effort(Estim){:} %10CLOCKSUM{+}"
         org-global-properties '(("Effort_ALL" . "0:0 0:10 0:30 1:00 2:00 3:00 4:00 8:00"))
         org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)
         ;; Mark a task as DONE when archiving
@@ -1965,6 +1956,13 @@ immediately after current heading."
   :config
   (custom-set-variables '(org-superstar-remove-leading-stars nil)
                         '(org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✚" "✜" "◆" "◇" "▶"))))
+
+(use-package org
+  :config
+  (customize-set-value 'org-refile-use-outline-path 'file)
+  ;; makes org-refile outline working with helm/ivy
+  (customize-set-value 'org-outline-path-complete-in-steps nil)
+  (customize-set-value 'org-refile-allow-creating-parent-nodes 'confirm))
 
 (use-package quantified
   :disabled
