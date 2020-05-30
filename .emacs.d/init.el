@@ -1847,30 +1847,6 @@ immediately after current heading."
                                                            (dot . t)
                                                            (shell . t))))
 
-(use-package org-capture
-  :after org
-  :bind (("C-c c" .  org-capture))
-  :config
-  (setq org-default-notes-file "~/org/refile.org"
-        org-capture-templates  '(("w" "Web" entry
-                                  (file "~/org/inbox.org")
-                                  "* %c :BOOKMARK:\n\n%i" :immediate-finish t)
-                                 ("t" "TODO" entry
-                                  (file+headline "~/org/inbox.org" "Incoming")
-                                  "* TODO %?\n  :PROPERTIES:\n  :CREATED: %U\n  :LINK: %a\n  :END:\n %i"
-                                  :clock-in t :clock-resume t)
-                                 ("n" "note" entry
-                                  (file "~/org/inbox.org")
-                                  "* %? :NOTE:\n  %U\n  %a\n"
-                                  :clock-in t :clock-resume t)
-                                 ("j" "journal" entry
-                                  (file+olp+datetree "~/org/journal.org" "Daily Notes")
-                                  "* %?\nEntered on %U\n  %i\n  %a")
-                                 ("q" "Quick note" item
-                                  (file+headline "~/org/review.org" "Quick notes"))
-                                 ("c" "Quick note on clocked task" item
-                                  (clock)))))
-
 (use-package org-clock
   :after org
   :bind (("C-c C-x C-j" . org-clock-goto))
@@ -1913,15 +1889,29 @@ immediately after current heading."
 ;;   :commands (org-mobile-push org-mobile-pull)
 ;;   :config (setq org-mobile-directory "~/outgoing/mobileorg"))
 
-(use-package org
-  :hook ((org-mode . (lambda () (set-buffer-variable-pitch 'org-table 'org-code 'org-block 'org-meta-line)))))
-
-(use-package org-superstar
-  :ensure t
-  :hook ((org-mode . org-superstar-mode))
+(use-package org-capture
+  :after org
+  :bind (("C-c c" .  org-capture))
   :config
-  (custom-set-variables '(org-superstar-remove-leading-stars nil)
-                        '(org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✚" "✜" "◆" "◇" "▶"))))
+  (custom-set-variables '(org-default-notes-file "~/org/refile.org")
+                        '(org-capture-templates '(("w" "Web" entry
+                                                   (file "~/org/inbox.org")
+                                                   "* %c :BOOKMARK:\n\n%i" :immediate-finish t)
+                                                  ("t" "TODO" entry
+                                                   (file+headline "~/org/inbox.org" "Incoming")
+                                                   "* TODO %?\n  :PROPERTIES:\n  :CREATED: %U\n  :LINK: %a\n  :END:\n %i"
+                                                   :clock-in t :clock-resume t)
+                                                  ("n" "note" entry
+                                                   (file "~/org/inbox.org")
+                                                   "* %? :NOTE:\n  %U\n  %a\n"
+                                                   :clock-in t :clock-resume t)
+                                                  ("j" "journal" entry
+                                                   (file+olp+datetree "~/org/journal.org" "Daily Notes")
+                                                   "* %?\nEntered on %U\n  %i\n  %a")
+                                                  ("q" "Quick note" item
+                                                   (file+headline "~/org/review.org" "Quick notes"))
+                                                  ("c" "Quick note on clocked task" item
+                                                   (clock))))))
 
 (use-package org
   :config
@@ -1968,6 +1958,16 @@ immediately after current heading."
   ;; makes org-refile outline working with helm/ivy
   (customize-set-value 'org-outline-path-complete-in-steps nil)
   (customize-set-value 'org-refile-allow-creating-parent-nodes 'confirm))
+
+(use-package org
+  :hook ((org-mode . (lambda () (set-buffer-variable-pitch 'org-table 'org-code 'org-block 'org-meta-line)))))
+
+(use-package org-superstar
+  :ensure t
+  :hook ((org-mode . org-superstar-mode))
+  :config
+  (custom-set-variables '(org-superstar-remove-leading-stars nil)
+                        '(org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✚" "✜" "◆" "◇" "▶"))))
 
 (use-package quantified
   :disabled
