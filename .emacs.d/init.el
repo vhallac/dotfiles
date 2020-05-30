@@ -2030,13 +2030,31 @@ immediately after current heading."
   (let ((filter (apply orig-fun args)))
     `(lambda (entry feed count) (let ((case-fold-search t))
                                   ,@(cddr filter)))))
+
+(defun vh/elfeed-tag-untag-junk (arg)
+  "Mark a post as junk.
+
+When marking as junk, we also remove the unread tag. With prefix
+argument, this function removes the junk tag (but doesn't add unread tag)."
+  (interactive "p")
+  (if (eq arg 4)
+      (elfeed-search-untag-all 'junk)
+    (let ((elfeed-search-remain-on-entry t))
+      (elfeed-search-tag-all 'junk))
+    (elfeed-search-untag-all 'unread)))
+
 (use-package elfeed
-  :bind (:map elfeed-show-mode-map ("<tab>" . shr-next-link))
+  :ensure t
+  :bind (:map elfeed-show-mode-map
+              ("<tab>" . shr-next-link)
+              :map elfeed-search-mode-map
+              ("j" . vh/elfeed-tag-untag-junk))
   :hook (elfeed-show-mode . (lambda ()
                               (make-local-variable 'shr-current-font)
                               (setq shr-current-font 'large-variable-pitch)))
 
   :config
+  (customize-set-value 'elfeed-search-filter "-junk @6-months-ago +unread")
   (advice-add #'elfeed-search-filter :around #'elfeed-search-case-fold)
   (advice-add #'elfeed-search-compile-filter :around #'elfeed-search-compile-case-fold))
 
