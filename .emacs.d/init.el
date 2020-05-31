@@ -378,7 +378,8 @@ into real text."
   :ensure t
   :bind (("C-c v" . hydra-expand-region/body))
   :init
-  (defhydra hydra-expand-region (:color red)
+  (defhydra hydra-expand-region (:pre (activate-mark)
+                                      :color red)
     "Expand Region"
     ("v" (er/expand-region 1) "Expand")
     ("V" er/contract-region "Contract")
