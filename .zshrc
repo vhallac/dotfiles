@@ -62,9 +62,11 @@ bindkey '^H' backward-delete-char
 bindkey '^?' backward-delete-char
 
 # Fancy prompt
-export  PS1C=$'\n┌┬───\[%F{red}%D{%H:%M:%S}%f\]──\[%?\]—\[%F{green}%n@%m%f\]—\[%F{blue}%~%f\]\n└┴%# '
-export PS1NC=$'\n┌┬───\[%D{%H:%M:%S}\]──\[%?\]—\[%n@%m\]—\[%~\]\n└┴%# '
-export PS1=$PS1C
+if [ "$TERM" != "dumb" ]; then
+       export  PS1C=$'\n┌┬───\[%F{red}%D{%H:%M:%S}%f\]──\[%?\]—\[%F{green}%n@%m%f\]—\[%F{blue}%~%f\]\n└┴%# '
+       export PS1NC=$'\n┌┬───\[%D{%H:%M:%S}\]──\[%?\]—\[%n@%m\]—\[%~\]\n└┴%# '
+       export PS1=$PS1C
+fi
 
 #path
 typeset -U path
