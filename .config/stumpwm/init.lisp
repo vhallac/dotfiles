@@ -119,11 +119,15 @@
 (define-key *top-map* (kbd "s-:") "eval")
 (define-key *top-map* (kbd "s-;") "colon")
 
+(define-key *root-map* (kbd "s-s") "vsplit 2/3")
+(define-key *root-map* (kbd "s-S") "hsplit 2/3")
+
 (require 'sb-posix)
 
 (sb-posix:setenv "GDK_CORE_DEVICE_EVENTS" "1" 1)
 
 (sb-posix:setenv "QT_AUTO_SCREEN_SCALE_FACTOR" "0" 1)
+
 (run-prog "/usr/bin/lxsession" :args (split-string "-e stumpwm -s stumpwm" " ") :wait nil)
 
 (defun new-window-adjustments (new-window)
