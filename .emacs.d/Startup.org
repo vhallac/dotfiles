@@ -596,6 +596,10 @@
   #+end_src
 * Packages
 
+** Spellchecking
+   #+begin_src emacs-lisp
+     (use-package wucuo :ensure t)
+   #+end_src
 ** Buffers
 
 *** Auto close buffers
@@ -2304,8 +2308,11 @@
     #+end_src
 ** YAML
    #+begin_src emacs-lisp
-     (use-package yaml-mode
-       :ensure t)
+     (use-package yaml-mode :ensure t
+       :hook (yaml-mode . (lambda ()
+                            (wucuo-start)
+                            (subword-mode)
+                            (auto-fill-mode))))
    #+end_src
 ** XML editing
 

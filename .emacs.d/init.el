@@ -346,6 +346,8 @@ into real text."
         (insert x)))
     (pop-to-buffer tb)))
 
+(use-package wucuo :ensure t)
+
 (use-package midnight
   :config
   ;; run clean-buffer-list every 2 hours
@@ -1596,8 +1598,11 @@ The command will invoke the specified subcommand in the project directory"
   (setq flycheck-ghc-args "-dynamic")
   (custom-set-variables '(haskell-compile-command "ghc -dynamic -Wall -ferror-spans -fforce-recomp -c %s")))
 
-(use-package yaml-mode
-  :ensure t)
+(use-package yaml-mode :ensure t
+  :hook (yaml-mode . (lambda ()
+                       (wucuo-start)
+                       (subword-mode)
+                       (auto-fill-mode))))
 
 (use-package nxml-mode
   :commands nxml-mode
