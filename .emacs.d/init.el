@@ -221,9 +221,20 @@
   (interactive)
   (eww (get-text-property (point) 'shr-url)))
 
+(defun vh/eww-toggle-size ()
+  "Use large fonts in shr buffer"
+  (interactive)
+  (if (eq shr-current-font 'large-variable-pitch)
+      (setq shr-current-font 'variable-pitch)
+    (make-local-variable 'shr-current-font)
+    (setq shr-current-font 'large-variable-pitch))
+  (eww-reload))
+
 (use-package eww
-  :bind (:map eww-link-keymap
-              ("V" . eww-browse-external)))
+  :bind (:map eww-mode-map
+              (", f" . vh/eww-toggle-size)
+         :map eww-link-keymap
+         ("V" . eww-browse-external)))
 
 (use-package shr
   :bind (:map shr-map
@@ -2024,7 +2035,14 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
 
 (use-package eww
   :ensure t
-  :hook ((eww-mode . set-buffer-variable-pitch)))
+  :hook ((eww-mode . set-buffer-variable-pitch))
+  :config
+  (customize-set-variable 'eww-search-prefix "https://startpage.com/do/search?prf=95fa00857b1c3634f33a56a3f0f7e96b&query="))
+
+(use-package shr
+  :config
+  (setq shr-bullet "• "
+        shr-folding-mode t))
 
 (use-package w3m
   :defer t
