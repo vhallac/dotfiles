@@ -31,7 +31,7 @@ URxvt.selection.pattern-0:  ([[:word:]]+)
 URxvt.selection.pattern-1:  ([[:word:].]+)
 URxvt.color4:               #0000BB
 
-Xft.hinting:                true
+Xft.hinting:                false
 Xft.hintstyle:              hintslight
 Xft.antialias:              rgba
 Xft.rgba:                   rgb
