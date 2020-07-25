@@ -291,6 +291,11 @@
 
     (sb-posix:setenv "GDK_CORE_DEVICE_EVENTS" "1" 1)
   #+end_src
+* Fix QT5 font scale factors
+
+  #+begin_src common-lisp
+    (sb-posix:setenv "QT_AUTO_SCREEN_SCALE_FACTOR" "0" 1)
+  #+end_src
 
 * Run all my scripts and helpers
 
