@@ -2049,3 +2049,8 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
   :ensure t
   :init                                 ; shouldn't this be :config? Check with gnus
   (custom-set-variables '(w3m-use-tab-line nil)))
+
+(use-package url-cookie
+  :config
+  (custom-set-variables '(url-cookie-trusted-urls '())
+                        '(url-cookie-untrusted-urls '(".*"))))
