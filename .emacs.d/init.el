@@ -239,7 +239,7 @@
 (use-package w3m
   :ensure t
   :bind (:map w3m-link-map
-              ("v" . (lambda () (interactive) (w3m-view-this-url (w3m-anchor (point)))))
+              ("v" . (lambda () (interactive) (eww (w3m-anchor (point)))))
               ("V" . (lambda () (interactive) (w3m-view-url-with-browse-url (w3m-anchor (point)))))))
 
 (defun wg/kludge-gpg-agent ()
