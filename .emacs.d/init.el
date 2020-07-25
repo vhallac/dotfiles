@@ -1679,79 +1679,6 @@ immediately after current heading."
   
   )
 
-(use-package ox
-  :after org
-  :bind (:map org-mode-map
-              ("C-c C-p" . org-publish-current-project))
-  :config
-  (setq  org-publish-project-alist '(("org-notes-static"
-                                      :base-directory "~/org/notes"
-                                      :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-                                      :publishing-directory "~/org-publish/"
-                                      :recursive t
-                                      :publishing-function org-publish-attachment)
-                                     ("org-notes"
-                                      :base-directory "~/org/notes"
-                                      :base-extension "org"
-                                      :publishing-directory "~/org-publish/")
-                                     ("org-notes-all"
-                                      :components ("org-notes" "org-notes-static"))
-
-                                     )
-         org-publish-use-timestamps-flag nil
-         org-html-head-extra (concat "<style type=\"text/css\">"
-                                     "<!--/*--><![CDATA[/*><!--*/"
-                                     "pre.src {overflow-x: auto; }"
-                                     ".src { background-color: #f5deb3; color: #black;}"
-                                     "/*]]>*/-->"
-                                     "</style>")))
-
-(use-package org-clock
-  :after org
-  :bind (("C-c C-x C-j" . org-clock-goto))
-  :config
-  (require 'org-helper)
-
-  (setq org-clock-persist t
-        ;; Yes it's long... but more is better ;)
-        org-clock-history-length 28
-        ;; Resume clocking task on clock-in if the clock is open
-        org-clock-in-resume t
-        ;; Save clock data in the CLOCK drawer and state changes and notes in the LOGBOOK drawer
-        org-clock-into-drawer "CLOCK"
-        ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks
-        ;; with 0:00 duration
-        org-clock-out-remove-zero-time-clocks t
-        ;; Clock out when moving task to DONE
-        org-clock-out-when-done t
-        ;; Save the running clock and all clock history when exiting Emacs, load it on
-        ;; startup
-        org-clock-persist t
-        ;; Enable auto clock resolution for finding open clocks
-        org-clock-auto-clock-resolution 'when-no-clock-is-running
-        ;; Include current clocking task in clock reports
-        org-clock-report-include-clocking-task t
-        ;; Change task state to NEXT from TODO when clocking in
-        org-clock-in-switch-to-state 'bh/clock-in-to-next
-        org-clock-modeline-total 'current)
-  (org-clock-persistence-insinuate)
-  (org-clock-load))
-
-(use-package org-habit
-  :after org-agenda
-  :defer
-  :config
-  (setq org-habit-graph-column 80
-        org-habit-show-habits-only-for-today nil))
-
-;; (use-package org-mobile
-;;   :commands (org-mobile-push org-mobile-pull)
-;;   :config (setq org-mobile-directory "~/outgoing/mobileorg"))
-;; Reporting and logs
-
-;; Agenda clock report parameters (no links, 2 levels deep)
-;; C-c a < a v m b R
-
 (use-package org-agenda
   :after org
   :bind (("C-c a" . org-agenda))
@@ -1874,6 +1801,19 @@ immediately after current heading."
                                         all-files))))
     (customize-set-variable 'org-agenda-text-search-extra-files extra-files)))
 
+(use-package ox
+  :after org
+  :bind (:map org-mode-map
+              ("C-c C-p" . org-publish-current-project))
+  :config
+  (custom-set-variables '(org-publish-use-timestamps-flag nil)
+                        '(org-html-head-extra (concat "<style type=\"text/css\">"
+                                                      "<!--/*--><![CDATA[/*><!--*/"
+                                                      "pre.src {overflow-x: auto; }"
+                                                      ".src { background-color: #f5deb3; color: #black;}"
+                                                      "/*]]>*/-->"
+                                                      "</style>"))))
+
 (use-package ob-core                         ;org-babel
   :after org
   :defer
@@ -1948,6 +1888,13 @@ immediately after current heading."
 
   )
 
+(use-package org-habit
+  :after org-agenda
+  :defer
+  :config
+  (custom-set-variables '(org-habit-graph-column 80)
+                        '(org-habit-show-habits-only-for-today nil)))
+
 (use-package org
   :config
   (customize-set-value 'org-refile-use-outline-path 'file)
@@ -1965,12 +1912,25 @@ immediately after current heading."
   (custom-set-variables '(org-superstar-remove-leading-stars nil)
                         '(org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✚" "✜" "◆" "◇" "▶"))))
 
-(use-package quantified
-  :disabled
-  :commands (quantified-text quantified-track quantified-share-org-subtree quantified-summarize-time)
+(use-package org-clock
+  :after org
+  :bind (("C-c C-x C-j" . org-clock-goto))
   :config
-  ;; Load my passwords so that I can login to quantified awesome
-  (require 'secrets))
+  (require 'org-helper)
+
+  (custom-set-variables '(org-clock-persist t)
+                        '(org-clock-history-length 28)
+                        '(org-clock-in-resume t)
+                        '(org-clock-into-drawer "CLOCK")
+                        '(org-clock-out-remove-zero-time-clocks t)
+                        '(org-clock-out-when-done t)
+                        '(org-clock-persist t)
+                        '(org-clock-auto-clock-resolution 'when-no-clock-is-running)
+                        '(org-clock-report-include-clocking-task t)
+                        '(org-clock-in-switch-to-state 'bh/clock-in-to-next)
+                        '(org-clock-modeline-total 'current))
+  (org-clock-persistence-insinuate)
+  (org-clock-load))
 
 (use-package diary-lib
   :defer
