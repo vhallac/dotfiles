@@ -691,7 +691,8 @@ into real text."
                           "Vedat Hallaç <vedath@7island.com>"
                           "Vedat Hallaç <vedat@hallac.net>"
                           "Vedat Hallaç <vedat.hallac@pia-systems.com>"
-                          "Vedat Hallaç <vedat@wamo.io>"))))
+                          "Vedat Hallaç <vedat@wamo.io>")))
+   '(mm-text-html-renderer 'w3m))
   ;; Mark deleted messages unread for fast delete
   (setcar (cdr (assoc "d" notmuch-tagging-keys)) '("+deleted" "-inbox" "-unread"))
   (push '("lf" ("+financial" "-inbox") "Financial") notmuch-tagging-keys)
