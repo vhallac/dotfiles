@@ -646,6 +646,29 @@ into real text."
                         '(mm-inline-large-images t)
                         '(mm-coding-system-priorities '(utf-8))))
 
+(defun vh/notmuch-show-delete-thread ()
+  (interactive "")
+  (let ((notmuch-archive-tags '("-inbox" "+deleted")))
+    (notmuch-show-archive-thread-then-exit)))
+
+(defun vh/notmuch-address-selection-function (prompt collection initial-input)
+  (let* ((from (or  (message-fetch-field "From" "")))
+         (mail-addr (car
+                     (delq nil (mapcar
+                                (lambda (x) (when  (string-match "@" x) x))
+                                (split-string from "[<>]")))))
+         (domain (when mail-addr
+                   (cadr (split-string mail-addr "@"))))
+         (exists (and (delq nil (mapcar
+                                 (lambda (x)  (string-match domain x))
+                                 collection))
+                      t)))
+    ;; I am doing something nasty - orig is the string we search for
+    (notmuch-address-selection-function prompt collection
+                                        (or
+                                         (and exists domain)
+                                         orig))))
+
 (use-package notmuch
   :ensure t
   :commands (vh/notmuch-show-delete-thread notmuch-mua-new-mail)
@@ -705,27 +728,6 @@ into real text."
   (push '("lns" ("+siam" "-inbox") "SIAM") notmuch-tagging-keys)
   (push '("lna" ("+acm" "-inbox") "SIAM") notmuch-tagging-keys)
   (push '("lnb" ("+boun" "-inbox") "Boğ. Üni.") notmuch-tagging-keys)
-  (defun vh/notmuch-show-delete-thread ()
-    (interactive "")
-    (let ((notmuch-archive-tags '("-inbox" "+deleted")))
-      (notmuch-show-archive-thread-then-exit)))
-  (defun vh/notmuch-address-selection-function (prompt collection initial-input)
-    (let* ((from (or  (message-fetch-field "From" "")))
-           (mail-addr (car
-                       (delq nil (mapcar
-                                  (lambda (x) (when  (string-match "@" x) x))
-                                  (split-string from "[<>]")))))
-           (domain (when mail-addr
-                     (cadr (split-string mail-addr "@"))))
-           (exists (and (delq nil (mapcar
-                                   (lambda (x)  (string-match domain x))
-                                   collection))
-                        t)))
-      ;; I am doing something nasty - orig is the string we search for
-      (notmuch-address-selection-function prompt collection
-                                          (or
-                                           (and exists domain)
-                                           orig))))
 
   (setq notmuch-address-selection-function #'vh/notmuch-address-selection-function))
 
