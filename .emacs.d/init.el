@@ -1642,7 +1642,7 @@ The command will invoke the specified subcommand in the project directory"
 (use-package org
   :ensure org-plus-contrib
   :hook (org-mode . (lambda ()
-                      (flyspell-mode)
+                      (wucuo-start)
                       (auto-fill-mode)))
   :bind (("C-c b o"   . org-switchb)
          ("C-c b 4 o" . org-switch-to-buffer-other-window)
