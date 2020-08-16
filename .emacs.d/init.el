@@ -1610,11 +1610,23 @@ The command will invoke the specified subcommand in the project directory"
   (setq flycheck-ghc-args "-dynamic")
   (custom-set-variables '(haskell-compile-command "ghc -dynamic -Wall -ferror-spans -fforce-recomp -c %s")))
 
+(defun yaml-outline-level ()
+    "Return the outline level based on the indentation, hardcoded at 2 spaces."
+    (s-count-matches "[ ]\\{2\\}" (match-string 0)))
+
+(defun yaml-mode-outline-hook ()
+    (outline-minor-mode)
+    (setq outline-regexp "^\\([ ]\\{2\\}\\)*\\([-] \\)?\\([\"'][^\"']*[\"']\\|[a-zA-Z0-9_-]*\\|/[^:]*\\): *\\([>|]\\|&[a-zA-Z0-9_-]*\\)?$")
+    (setq outline-level 'yaml-outline-level))
+
 (use-package yaml-mode :ensure t
   :hook (yaml-mode . (lambda ()
                        (wucuo-start)
                        (subword-mode)
-                       (auto-fill-mode))))
+                       (auto-fill-mode)
+                       (yaml-mode-outline-hook)))
+  :bind (:map yaml-mode-map
+         ("C-<tab>" . outline-toggle-children)))
 
 (use-package nxml-mode
   :commands nxml-mode
