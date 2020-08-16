@@ -443,7 +443,7 @@
           (setq shr-current-font 'variable-pitch)
         (make-local-variable 'shr-current-font)
         (setq shr-current-font 'large-variable-pitch))
-      (eww-reload))
+      (eww-reload t))
 
     (use-package eww
       :bind (:map eww-mode-map
