@@ -313,9 +313,10 @@
                  'delete-trailing-whitespace)
      #+end_src
 
-   - Allow narrowing to region:
+   - Allow narrowing to region and page:
      #+begin_src emacs-lisp
        (put 'narrow-to-region 'disabled nil)
+       (put 'narrow-to-page 'disabled nil)
      #+end_src
 
    - Editing environment:

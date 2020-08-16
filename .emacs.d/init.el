@@ -158,6 +158,7 @@
           'delete-trailing-whitespace)
 
 (put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
 
 (setq kill-do-not-save-duplicates t
       next-line-add-newlines nil
