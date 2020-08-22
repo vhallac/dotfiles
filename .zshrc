@@ -62,10 +62,13 @@ bindkey '^H' backward-delete-char
 bindkey '^?' backward-delete-char
 
 # Fancy prompt
-if [ "$TERM" != "dumb" ]; then
-       export  PS1C=$'\n┌┬───\[%F{red}%D{%H:%M:%S}%f\]──\[%?\]—\[%F{green}%n@%m%f\]—\[%F{blue}%~%f\]\n└┴%# '
-       export PS1NC=$'\n┌┬───\[%D{%H:%M:%S}\]──\[%?\]—\[%n@%m\]—\[%~\]\n└┴%# '
-       export PS1=$PS1C
+export  PS1C=$'\n┌┬───\[%F{red}%D{%H:%M:%S}%f\]──\[%?\]—\[%F{green}%n@%m%f\]—\[%F{blue}%~%f\]\n└┴%# '
+export PS1NC=$'\n┌┬───\[%D{%H:%M:%S}\]──\[%?\]—\[%n@%m\]—\[%~\]\n└┴%# '
+if [ "$TERM" = "dumb" ]; then
+	export PS1=$PS1NC
+	unset zle_bracketed_paste
+else
+	export PS1=$PS1C
 fi
 
 #path
