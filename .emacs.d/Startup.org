@@ -609,7 +609,7 @@
 * Packages
 
 ** Spellchecking
-   #+begin_src emacs-lisp
+   #+begin_src emacs-lisp :tangle no
      (use-package wucuo :ensure t)
    #+end_src
 ** Buffers

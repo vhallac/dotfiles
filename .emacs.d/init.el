@@ -358,7 +358,6 @@ into real text."
         (insert x)))
     (pop-to-buffer tb)))
 
-(use-package wucuo :ensure t)
 
 (use-package midnight
   :config
