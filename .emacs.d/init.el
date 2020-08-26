@@ -649,7 +649,7 @@ into real text."
         ;; files to be generated, but not used in these groups.
         ;; The following setting ensures these two characters are never used in ADAPT
         ;; file names.
-        nnheader-file-name-translation-alist '((?[ . ?_) (?] . ?_))
+        nnheader-file-name-translation-alist '((?\[ . ?_) (?\] . ?_))
         ;; see bbdb-mua-summary-unify-format-letter configuration for bbdb for uB
         gnus-summary-line-format "%U%R%z%I%(%[%4L: %-23,23uB%]%) %s\n"
         )
