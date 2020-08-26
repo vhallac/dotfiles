@@ -2944,6 +2944,15 @@
        (custom-set-variables '(url-cookie-trusted-urls '())
                              '(url-cookie-untrusted-urls '(".*"))))
    #+end_src
+* Incubator
+  I play around with some ideas; and I want to keep them separate from here until they become part of my standard workflow. The
+  incubator init file is used for these ideas.
+
+  #+begin_src emacs-lisp
+    (let ((incubator-config-file (concat (expand-file-name "incobator-init.el" user-emacs-directory))))
+      (when (file-exists-p incubator-config-file)
+        (load-file incubator-config-file)))
+  #+end_src
 * Per machine setup
 
   I may need to tweak some variables on individual machines, or leave some

@@ -2072,6 +2072,10 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
   (custom-set-variables '(url-cookie-trusted-urls '())
                         '(url-cookie-untrusted-urls '(".*"))))
 
+(let ((incubator-config-file (concat (expand-file-name "incobator-init.el" user-emacs-directory))))
+  (when (file-exists-p incubator-config-file)
+    (load-file incubator-config-file)))
+
 (let ((local-config-file "~/.emacs-local-config.el"))
   (when (file-exists-p local-config-file)
     (load-file local-config-file)))
