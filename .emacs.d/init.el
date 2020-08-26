@@ -1630,7 +1630,6 @@ The command will invoke the specified subcommand in the project directory"
 
 (use-package yaml-mode :ensure t
   :hook (yaml-mode . (lambda ()
-                       (wucuo-start)
                        (subword-mode)
                        (auto-fill-mode)
                        (yaml-mode-outline-hook)))
@@ -1664,7 +1663,6 @@ The command will invoke the specified subcommand in the project directory"
 (use-package org
   :ensure org-plus-contrib
   :hook (org-mode . (lambda ()
-                      (wucuo-start)
                       (auto-fill-mode)))
   :bind (("C-c b o"   . org-switchb)
          ("C-c b 4 o" . org-switch-to-buffer-other-window)
