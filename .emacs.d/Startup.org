@@ -612,6 +612,22 @@
    #+begin_src emacs-lisp :tangle no
      (use-package wucuo :ensure t)
    #+end_src
+
+   I use multiple languages in my documents and source code. Set up hunspell and languages.
+
+   For this to work correctly, I need the hunspell package, and the dictionaries for all languages installed on the system.
+   #+begin_src emacs-lisp
+     (with-eval-after-load "ispell"
+       (let ((personal-dictionary (expand-file-name "~/.config/emacs/hunspell-personal.dict"))
+             (languages "en_US,en_AU,en_GB,tr_TR"))
+         (setq ispell-program-name "hunspell"
+               ispell-dictionary languages
+               ispell-personal-dictionary personal-dictionary)
+         (ispell-set-spellchecker-params)
+         (ispell-hunspell-add-multi-dic languages)
+         (unless (file-exists-p personal-dictionary)
+           (shell-command (concat "touch " personal-dictionary)))))
+   #+end_src
 ** Buffers
 
 *** Auto close buffers

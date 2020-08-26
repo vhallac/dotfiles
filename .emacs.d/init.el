@@ -358,6 +358,16 @@ into real text."
         (insert x)))
     (pop-to-buffer tb)))
 
+(with-eval-after-load "ispell"
+  (let ((personal-dictionary (expand-file-name "~/.config/emacs/hunspell-personal.dict"))
+        (languages "en_US,en_AU,en_GB,tr_TR"))
+    (setq ispell-program-name "hunspell"
+          ispell-dictionary languages
+          ispell-personal-dictionary personal-dictionary)
+    (ispell-set-spellchecker-params)
+    (ispell-hunspell-add-multi-dic languages)
+    (unless (file-exists-p personal-dictionary)
+      (shell-command (concat "touch " personal-dictionary)))))
 
 (use-package midnight
   :config
