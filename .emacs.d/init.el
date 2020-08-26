@@ -2062,7 +2062,8 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
 (use-package shr
   :config
   (setq shr-bullet "• "
-        shr-folding-mode t))
+        shr-folding-mode t
+        shr-width 120))
 
 (use-package w3m
   :defer t
