@@ -8,5 +8,5 @@
 #https://forum.lxde.org/viewtopic.php?t=31593XS
 @/usr/bin/xinput set-prop "Elan Touchpad" "libinput Tapping Enabled" 1
 @/usr/bin/xinput set-prop "Elan Touchpad" "libinput Natural Scrolling Enabled" 1
-@setxkbmap -option compose:caps -layout tr -variant alt
+@setxkbmap -option shift:both_shiftlock -option compose:caps -layout tr -variant alt
 @/usr/bin/xinput set-prop "Elan TrackPoint" "libinput Accel Profile Enabled" 0, 1
