@@ -2834,20 +2834,6 @@
      (use-package wgrep
        :ensure t)
    #+end_src
-** Per machine setup
-
-   I may need to tweak some variables on individual machines, or leave some
-   sensitive data outside my git repository. This section handles loading the
-   machine setup.
-
-   It has to be the last thing we do before we are finished, so that the
-   per-machine script can override everything.
-
-   #+begin_src emacs-lisp
-     (let ((local-config-file "~/.emacs-local-config.el"))
-       (when (file-exists-p local-config-file)
-         (load-file local-config-file)))
-   #+end_src
 ** Docker
 
    #+begin_src emacs-lisp
@@ -2958,4 +2944,18 @@
        (custom-set-variables '(url-cookie-trusted-urls '())
                              '(url-cookie-untrusted-urls '(".*"))))
    #+end_src
+* Per machine setup
+
+  I may need to tweak some variables on individual machines, or leave some
+  sensitive data outside my git repository. This section handles loading the
+  machine setup.
+
+  It has to be the last thing we do before we are finished, so that the
+  per-machine script can override everything.
+
+  #+begin_src emacs-lisp
+    (let ((local-config-file "~/.emacs-local-config.el"))
+      (when (file-exists-p local-config-file)
+        (load-file local-config-file)))
+  #+end_src
 * Final tweaks

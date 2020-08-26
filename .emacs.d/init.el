@@ -1992,10 +1992,6 @@ immediately after current heading."
 (use-package wgrep
   :ensure t)
 
-(let ((local-config-file "~/.emacs-local-config.el"))
-  (when (file-exists-p local-config-file)
-    (load-file local-config-file)))
-
 (use-package dockerfile-mode
   :ensure t)
 
@@ -2075,3 +2071,7 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
   :config
   (custom-set-variables '(url-cookie-trusted-urls '())
                         '(url-cookie-untrusted-urls '(".*"))))
+
+(let ((local-config-file "~/.emacs-local-config.el"))
+  (when (file-exists-p local-config-file)
+    (load-file local-config-file)))
