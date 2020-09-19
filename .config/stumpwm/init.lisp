@@ -104,8 +104,10 @@
 (define-key *top-map* (kbd "s-C-9") "gmove 9")
 (define-key *top-map* (kbd "s-C-0") "gmove 10")
 
-(define-key *top-map* (kbd "s-D") "exec dmenu_run")
-(define-key *top-map* (kbd "s-d") "exec dmenu_run_history")
+(define-key *top-map* (kbd "s-D") "exec rofi -show-icons -show drun")
+(define-key *top-map* (kbd "s-d") "exec rofi -show-icons -show run")
+(define-key *top-map* (kbd "s-W") "exec rofi -show-icons -show window")
+(define-key *top-map* (kbd "s-w") "exec rofi -show-icons -show windowcd")
 (define-key *top-map* (kbd "s-F") "fullscreen")
 (define-key *top-map* (kbd "s-Q") "delete-window")
 (define-key *top-map* (kbd "s-C-Q") "kill-window")
