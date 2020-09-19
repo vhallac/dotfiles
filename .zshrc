@@ -1,5 +1,5 @@
 # The following lines were added by compinstall
-zstyle :compinstall filename '/home/aib/.zshrc'
+zstyle :compinstall filename '/home/vedat/.zshrc'
 
 autoload -Uz compinit
 compinit
