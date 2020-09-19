@@ -1,1 +1,6 @@
 include "%L"
+
+<Multi_key> <j> <j> : "~"
+<Multi_key> <j> <J> : "`"
+
+<Multi_key> <Escape> : "`"
