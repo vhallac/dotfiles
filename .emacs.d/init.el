@@ -447,6 +447,8 @@ into real text."
 (use-package avy
   :ensure t
   :bind (("M-g j" . avy-goto-char-timer)
+         ("M-g w" . avy-goto-subword-1)
+         ("M-g l" . avy-goto-line)
          ("C-c y l" . avy-copy-line)
          ("C-c y r" . avy-copy-region)
          ("C-c k l" . avy-kill-whole-line)

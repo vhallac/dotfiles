@@ -848,13 +848,14 @@
      (use-package avy
        :ensure t
        :bind (("M-g j" . avy-goto-char-timer)
+              ("M-g w" . avy-goto-subword-1)
+              ("M-g l" . avy-goto-line)
               ("C-c y l" . avy-copy-line)
               ("C-c y r" . avy-copy-region)
               ("C-c k l" . avy-kill-whole-line)
               ("C-c k r" . avy-kill-region)
               ("C-c K l" . avy-kill-ring-save-whole-line)
               ("C-c K r" . avy-kill-ring-save-region)))
-
    #+end_src
 
 ** ace-jump-buffer
