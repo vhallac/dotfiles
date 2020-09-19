@@ -58,6 +58,28 @@
 (define-key *root-map* (kbd "c") "exec /usr/bin/uxterm")
 (define-key *root-map* (kbd "C-c") "exec /usr/bin/uxterm")
 
+;; TODO: Convert to loop, add all modifier combinations:
+;; S, C, M, and all their permutations
+(define-key *top-map* (kbd "s-h") "meta Left")
+(define-key *top-map* (kbd "s-j") "meta Down")
+(define-key *top-map* (kbd "s-k") "meta Up")
+(define-key *top-map* (kbd "s-l") "meta Right")
+
+(define-key *top-map* (kbd "s-C-h") "meta C-Left")
+(define-key *top-map* (kbd "s-C-j") "meta C-Down")
+(define-key *top-map* (kbd "s-C-k") "meta C-Up")
+(define-key *top-map* (kbd "s-C-l") "meta C-Right")
+
+(define-key *top-map* (kbd "s-H") "meta S-Left")
+(define-key *top-map* (kbd "s-J") "meta S-Down")
+(define-key *top-map* (kbd "s-K") "meta S-Up")
+(define-key *top-map* (kbd "s-L") "meta S-Right")
+
+(define-key *top-map* (kbd "s-C-H") "meta C-S-Left")
+(define-key *top-map* (kbd "s-C-J") "meta C-S-Down")
+(define-key *top-map* (kbd "s-C-K") "meta C-S-Up")
+(define-key *top-map* (kbd "s-C-L") "meta C-S-Right")
+
 (define-key *top-map* (kbd "s-G") "gselect")
 
 (define-key *top-map* (kbd "s-1") "gselect 1")
