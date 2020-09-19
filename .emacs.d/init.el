@@ -249,6 +249,7 @@
               ("V" . eww-browse-external)))
 
 (use-package w3m
+  :defer t
   :ensure t
   :bind (:map w3m-link-map
               ("v" . (lambda () (interactive) (eww (w3m-anchor (point)))))
@@ -534,7 +535,8 @@ into real text."
   :bind (("C-c g" . magit-status))
   :init
   (use-package git-commit
-    :ensure t))
+    :ensure t
+    :defer t))
 
 (use-package auto-complete
   :ensure t
@@ -1929,6 +1931,7 @@ immediately after current heading."
 
 (use-package pdf-tools
   :ensure t
+  :defer t
   :config
   (custom-set-variables '(pdf-info-epdfinfo-program "/usr/bin/epdfinfo")))
 

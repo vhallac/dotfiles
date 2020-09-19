@@ -463,6 +463,7 @@
                   ("V" . eww-browse-external)))
 
     (use-package w3m
+      :defer t
       :ensure t
       :bind (:map w3m-link-map
                   ("v" . (lambda () (interactive) (eww (w3m-anchor (point)))))
@@ -1013,7 +1014,8 @@
        :bind (("C-c g" . magit-status))
        :init
        (use-package git-commit
-         :ensure t))
+         :ensure t
+         :defer t))
    #+end_src
 ** TODO Auto complete
 
@@ -2850,12 +2852,15 @@
    #+end_src
 ** Non-text viewing and processing
    PDF reading and annotating
-   ~pdf-tools~ allow better interaction with PDF documents
+   ~pdf-tools~ allow better interaction with PDF documents.
+
+   Loading takes 1.5 seconds if not deferred.
    #+begin_src emacs-lisp
-   (use-package pdf-tools
-     :ensure t
-     :config
-     (custom-set-variables '(pdf-info-epdfinfo-program "/usr/bin/epdfinfo")))
+      (use-package pdf-tools
+        :ensure t
+        :defer t
+        :config
+        (custom-set-variables '(pdf-info-epdfinfo-program "/usr/bin/epdfinfo")))
    #+end_src
 
    EPUB reading (org links missing)
