@@ -621,12 +621,18 @@ into real text."
     (bbdb-initialize 'gnus)
     (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus))
 
-  (add-hook 'gnus-group-mode-hook 'gnus-topic-mode))
+  (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+  (defun gnus-article-large-shr-fonts ()
+    (with-current-buffer gnus-article-buffer
+      (make-local-variable 'shr-current-font)
+      (setq shr-current-font 'large-variable-pitch)))
+
+  (add-hook 'gnus-article-prepare-hook #'gnus-article-large-shr-fonts))
 
 (use-package mm-decode
   :defer
   :config
-  (custom-set-variables '(mm-text-html-renderer 'w3m)
+  (custom-set-variables '(mm-text-html-renderer 'shr)
                         '(mm-inline-text-html-with-images t)
                         '(mm-w3m-safe-url-regexp nil)
                         '(mm-inline-large-images t)
@@ -701,7 +707,8 @@ into real text."
                           "Vedat Hallaç <vedat@hallac.net>"
                           "Vedat Hallaç <vedat.hallac@pia-systems.com>"
                           "Vedat Hallaç <vedat@wamo.io>")))
-   '(mm-text-html-renderer 'shr))
+   '(mm-text-html-renderer 'shr)
+   '(notmuch-address-use-company nil))
   ;; Mark deleted messages unread for fast delete
   (setcar (cdr (assoc "d" notmuch-tagging-keys)) '("+deleted" "-inbox" "-unread"))
   (push '("lf" ("+financial" "-inbox") "Financial") notmuch-tagging-keys)
