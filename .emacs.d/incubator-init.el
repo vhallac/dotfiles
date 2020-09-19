@@ -299,3 +299,18 @@ Currently, we use youtube-dl and mpv to listen to the video"
 ;;                        (when (string-prefix-p "*tramp" (buffer-name b)) b))
 ;;                      (buffer-list)))
 ;;   (when buf (kill-buffer buf))))
+(use-package icomplete :demand
+  :config
+  (setq icomplete-separator " ▪ ")
+  (setq icomplete-prospects-height 1)
+  (fido-mode -1)
+  (icomplete-mode 1))
+
+(use-package minibuffer :demand
+  :config
+  (setq completion-styles '(partial-completion substring initials flex emacs22)))
+
+
+(use-package rg :ensure t
+  :config
+  (rg-enable-default-bindings "\C-cf"))
