@@ -286,13 +286,7 @@
   (customize-set-variable 'tramp-use-ssh-controlmaster-options t)
 
   (customize-set-variable
-   'tramp-completion-reread-directory-timeout nil)
-
-  (defun cd-disable-projectile-mode-for-remote (current-dir)
-    (if (and (functionp 'projectile-mode) (file-remote-p current-dir))
-        (projectile-mode 0)
-      (projectile-mode 1)))
-  (advice-add 'cd :filter-return #'cd-disable-projectile-mode-for-remote))
+   'tramp-completion-reread-directory-timeout nil))
 
 (use-package eshell
   :bind ("C-c s" . eshell)
@@ -499,42 +493,6 @@ into real text."
   ;; If the DCC download directory is missing, create it.
   (if (not (file-exists-p erc-dcc-get-default-directory))
       (make-directory erc-dcc-get-default-directory t)))
-
-(use-package ivy
-  :ensure t
-  :pin melpa
-  :demand
-  :config
-  (ivy-mode)
-  (custom-set-variables '(ivy-use-virtual-buffers t)
-                        '(ivy-count-format "(%d/%d) "))
-  (ivy-set-occur 'ivy-switch-buffer 'ivy-switch-buffer-occur))
-
-(use-package ivy-hydra
-  :requires ivy
-  :ensure t)
-
-(use-package swiper
-  :ensure t
-  :requires ivy
-  :bind ("C-s" . swiper)
-  :config
-  ;; This is an emacs25.x feature - for folding characters into native ASCII
-  (setq search-default-mode nil)
-  (ivy-set-occur 'swiper 'swiper-occur))
-
-(use-package counsel
-  :ensure t
-  :bind (("M-g h" . counsel-org-agenda-headlines)
-         ("M-g i" . counsel-imenu))
-  :config
-  ;; Assume utf-8 output from my counsel commands
-  (defun vh/coding-system--counsel-cmd (&optional old-function &rest args)
-    (let ((coding-system-for-read 'utf-8-unix))
-      (apply old-function args)))
-
-  ;; Patch counsel-ag only for now. Will extend as more problems show up
-  (advice-add #'counsel-ag :around #'vh/coding-system--counsel-cmd))
 
 (use-package ido-vertical-mode
   :disabled)
@@ -925,32 +883,6 @@ into real text."
 (use-package notmuch-forget
   :init
   (with-eval-after-load "notmuch-address" (notmuch-forget-install)))
-
-(use-package projectile
-  :ensure t
-  :config
-  (projectile-register-project-type 'ant '("build.xml")
-                                    :compile "ant"
-                                    :test "ant test")
-  (add-to-list 'projectile-project-root-files "build.xml")
-  (projectile-register-project-type 'nodejs '("package.json")
-                                    :compile "npm --no-color build"
-                                    :test "npm --no-color test")
-  (mapc (lambda (x) (add-to-list 'projectile-globally-ignored-directories x))
-        (list "node_modules" "target" "bower_components"))
-
-  (custom-set-variables '(projectile-project-root-files-functions '(projectile-root-top-down
-                                                                    projectile-root-bottom-up
-                                                                    projectile-root-top-down-recurring))
-                        '(projectile-enable-caching t))
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-global-mode))
-
-(use-package counsel-projectile
-  :ensure t
-  :after projectile
-  :config
-  (counsel-projectile-mode))
 
 (use-package csharp-mode
   :ensure t

@@ -519,13 +519,7 @@
       (customize-set-variable 'tramp-use-ssh-controlmaster-options t)
 
       (customize-set-variable
-       'tramp-completion-reread-directory-timeout nil)
-
-      (defun cd-disable-projectile-mode-for-remote (current-dir)
-        (if (and (functionp 'projectile-mode) (file-remote-p current-dir))
-            (projectile-mode 0)
-          (projectile-mode 1)))
-      (advice-add 'cd :filter-return #'cd-disable-projectile-mode-for-remote))
+       'tramp-completion-reread-directory-timeout nil))
   #+end_src
 
 * Misc Functions
@@ -928,7 +922,7 @@
     Abo abo has created a really useful module for completing input that
     strikes a good balance between size and functionality.
 
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package ivy
         :ensure t
         :pin melpa
@@ -1104,12 +1098,18 @@
           (bbdb-initialize 'gnus)
           (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus))
 
-        (add-hook 'gnus-group-mode-hook 'gnus-topic-mode))
+        (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+        (defun gnus-article-large-shr-fonts ()
+          (with-current-buffer gnus-article-buffer
+            (make-local-variable 'shr-current-font)
+            (setq shr-current-font 'large-variable-pitch)))
+
+        (add-hook 'gnus-article-prepare-hook #'gnus-article-large-shr-fonts))
 
       (use-package mm-decode
         :defer
         :config
-        (custom-set-variables '(mm-text-html-renderer 'w3m)
+        (custom-set-variables '(mm-text-html-renderer 'shr)
                               '(mm-inline-text-html-with-images t)
                               '(mm-w3m-safe-url-regexp nil)
                               '(mm-inline-large-images t)
@@ -1211,7 +1211,8 @@
                                 "Vedat Hallaç <vedat@hallac.net>"
                                 "Vedat Hallaç <vedat.hallac@pia-systems.com>"
                                 "Vedat Hallaç <vedat@wamo.io>")))
-         '(mm-text-html-renderer 'shr))
+         '(mm-text-html-renderer 'shr)
+         '(notmuch-address-use-company nil))
         ;; Mark deleted messages unread for fast delete
         (setcar (cdr (assoc "d" notmuch-tagging-keys)) '("+deleted" "-inbox" "-unread"))
         (push '("lf" ("+financial" "-inbox") "Financial") notmuch-tagging-keys)
@@ -1465,33 +1466,40 @@
         :init
         (with-eval-after-load "notmuch-address" (notmuch-forget-install)))
     #+end_src
-** Projectile
-   #+begin_src emacs-lisp
-     (use-package projectile
-       :ensure t
-       :config
-       (projectile-register-project-type 'ant '("build.xml")
-                                         :compile "ant"
-                                         :test "ant test")
-       (add-to-list 'projectile-project-root-files "build.xml")
-       (projectile-register-project-type 'nodejs '("package.json")
-                                         :compile "npm --no-color build"
-                                         :test "npm --no-color test")
-       (mapc (lambda (x) (add-to-list 'projectile-globally-ignored-directories x))
-             (list "node_modules" "target" "bower_components"))
+** DISABLED Projectile
 
-       (custom-set-variables '(projectile-project-root-files-functions '(projectile-root-top-down
-                                                                         projectile-root-bottom-up
-                                                                         projectile-root-top-down-recurring))
-                             '(projectile-enable-caching t))
-       (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-       (projectile-global-mode))
+   #+begin_src emacs-lisp :tangle no
+          (use-package projectile
+            :ensure t
+            :config
+            (projectile-register-project-type 'ant '("build.xml")
+                                              :compile "ant"
+                                              :test "ant test")
+            (add-to-list 'projectile-project-root-files "build.xml")
+            (projectile-register-project-type 'nodejs '("package.json")
+                                              :compile "npm --no-color build"
+                                              :test "npm --no-color test")
+            (mapc (lambda (x) (add-to-list 'projectile-globally-ignored-directories x))
+                  (list "node_modules" "target" "bower_components"))
 
-     (use-package counsel-projectile
-       :ensure t
-       :after projectile
-       :config
-       (counsel-projectile-mode))
+            (custom-set-variables '(projectile-project-root-files-functions '(projectile-root-top-down
+                                                                              projectile-root-bottom-up
+                                                                              projectile-root-top-down-recurring))
+                                  '(projectile-enable-caching t))
+            (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+            (projectile-global-mode)
+
+            (defun cd-disable-projectile-mode-for-remote (current-dir)
+              (if (and (functionp 'projectile-mode) (file-remote-p current-dir))
+                  (projectile-mode 0)
+                (projectile-mode 1)))
+            (advice-add 'cd :filter-return #'cd-disable-projectile-mode-for-remote))
+
+          (use-package counsel-projectile
+            :ensure t
+            :after projectile
+            :config
+            (counsel-projectile-mode))
    #+end_src
 ** Programming Languages
 *** C
