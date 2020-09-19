@@ -2964,7 +2964,7 @@
   incubator init file is used for these ideas.
 
   #+begin_src emacs-lisp
-    (let ((incubator-config-file (concat (expand-file-name "incobator-init.el" user-emacs-directory))))
+    (let ((incubator-config-file (concat (expand-file-name "incubator-init.el" user-emacs-directory))))
       (when (file-exists-p incubator-config-file)
         (load-file incubator-config-file)))
   #+end_src
