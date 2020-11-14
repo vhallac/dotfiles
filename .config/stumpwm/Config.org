@@ -293,6 +293,8 @@
    #+begin_src common-lisp
      (define-key *vh/user-map* (kbd "c") "exec xsel | xsel -i -b")
      (define-key *vh/user-map* (kbd "C") "exec xsel -b | xsel -i")
+     (define-key *vh/user-map* (kbd "w") "exec xsel -b | xargs mpv")
+     (define-key *vh/user-map* (kbd "l") "exec xsel -b | xargs mpv --vo=null")
    #+end_src
 ** ACPI Function Keys
    These are the hardware control keys.

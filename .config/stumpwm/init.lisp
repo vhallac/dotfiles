@@ -113,6 +113,8 @@
 
 (define-key *vh/user-map* (kbd "c") "exec xsel | xsel -i -b")
 (define-key *vh/user-map* (kbd "C") "exec xsel -b | xsel -i")
+(define-key *vh/user-map* (kbd "w") "exec xsel -b | xargs mpv")
+(define-key *vh/user-map* (kbd "l") "exec xsel -b | xargs mpv --vo=null")
 
 (define-key *top-map* (kbd "XF86MonBrightnessUp") "exec light -A 5")
 (define-key *top-map* (kbd "XF86MonBrightnessDown") "exec light -U 5")
