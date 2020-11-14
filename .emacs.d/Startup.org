@@ -711,7 +711,14 @@
    #+begin_src emacs-lisp
      (custom-set-variables '(compilation-scroll-output t))
    #+end_src
-** escreen [Disabled - using elscreen now]
+
+** Session / desktop management
+   I used to use multiple desktop or sessions a lot in my workflow. But after switching them off, I realized that using multiple
+   frames and jumping around in buffers was enough.
+
+   I may need to use some sort of window configuration save / restore at some point, but I suspect I will start with
+   ~window-configuration-to-register~ if the day comes.
+*** DISABLED escreen
 
    This is one of my favorites: emacs window session manager. It provides
    something similar to a window manager virtual desktops.
@@ -763,7 +770,8 @@
                          " ")))
          (message "escreen: %s" screen-msg)))
    #+end_src
-** elscreen [Disabled
+*** DISABLED elscreen
+    CLOSED: [2020-09-23 Wed 09:51]
    Emacs window session manager - sort of a pager for emacs
 
    #+begin_src emacs-lisp :noweb yes :tangle no
@@ -774,7 +782,8 @@
        (elscreen-start)
        (custom-set-variables '(elscreen-display-tab nil)))
    #+end_src
-** eyebrowse
+*** DISABLED eyebrowse
+    CLOSED: [2020-09-23 Wed 09:51]
 
    Emacs session manager. I use this for virtual "desktops" or window configurations.
 
