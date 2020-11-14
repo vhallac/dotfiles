@@ -296,11 +296,71 @@ Currently, we use youtube-dl and mpv to listen to the video"
 ;;                      (buffer-list)))
 ;;   (when buf (kill-buffer buf))))
 
+(defun recenter-or-lock (&optional arg)
+  "Toggle scroll lock with two prefix args. Otherwise call recenter-top-bottom."
+  (interactive "p")
+  (if (= arg 16)
+      (scroll-lock-mode 'toggle)
+    (call-interactively #'recenter-top-bottom arg)))
 
+(bind-key "C-l" #'recenter-or-lock)
+
+(use-package god-mode :ensure t
+  :bind (:map global-map
+              ("<escape>" . #'god-local-mode)
+              :map god-local-mode-map
+              ("i" . #'god-local-mode)
+              ("." . #'repeat)))
+
+(defun vh/style-rot ()
+  (interactive)
+  (let ((styles (cons (car (last completion-styles)) (butlast completion-styles))))
+    (setq completion-styles styles))
+  (message (symbol-name (car completion-styles))))
+
+(define-key icomplete-minibuffer-map (kbd "C-|") #'vh/style-rot)
 
 (use-package rg :ensure t
   :config
   (rg-enable-default-bindings "\C-cf"))
+
+(use-package url-util :demand
+  :bind ("C-c w" . #'mpv-at-point )
+  :init
+  (defun mpv-at-point ()
+    (interactive)
+    (let ((url (or (get-text-property (point) 'shr-url)
+                   (url-get-url-at-point))))
+      (when url
+        (async-shell-command (format "mpv \"%s\"" url))))))
+
+(use-package visual-fill-column :ensure t
+  :hook (gnus-article-mode . visual-fill-column-mode)
+  :hook (visual-fill-column-mode . visual-line-mode)
+  )
+
+(use-package imenu :demand
+  :bind ("M-g i" . imenu))
+
+(use-package elpher :ensure t)
+
+(use-package bongo :ensure t
+  :config
+  (customize-set-variable 'bongo-enabled-backends '(mpv mpg123 vlc mplayer speexdec)))
+
+;;; This is interesting.
+(defun er-reinstall-package (pkg)
+  (unload-feature pkg)
+  (package-reinstall pkg)
+  (require pkg))
+
+(use-package eradio :ensure t)
+
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
 (define-key global-map (kbd "C-z") (make-sparse-keymap))
 
 (use-package face-remap
@@ -318,3 +378,7 @@ Currently, we use youtube-dl and mpv to listen to the video"
     ("0" (face-remap-reset-base 'variable-pitch) "Reset variable-pitch (?)" :exit t)
     ("a" hydra-zoom-all/body "Zoom all fonts")))
 
+(set-fontset-font t 'symbol "Symbola")
+(set-fontset-font t 'symbol "Noto Color Emoji")
+
+(customize-set-variable 'display-line-numbers-type 'visual)
