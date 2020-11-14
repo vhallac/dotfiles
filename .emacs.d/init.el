@@ -555,6 +555,7 @@ into real text."
   :ensure t)
 
 (use-package magit
+  :defer 5
   :ensure t
   :bind (("C-c g" . magit-status))
   :init
