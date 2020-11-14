@@ -80,3 +80,6 @@ alias jdk=". /opt/java/pick-java.sh"
 alias x="exit"
 
 alias repostat="repo forall -c 'git -P branch --format=\"%(refname:short) %(upstream:track)%(if)%(upstream)%(then)%(else)<local>%(end)\" | sed \"s|^|\$REPO_PATH:|;s|^[^:]*/||\"' | column -t -s:"
+
+alias ytclip="mpv \`xsel -b\`"
+alias ytmclip="mpv --vo=null \`xsel -b\`"
