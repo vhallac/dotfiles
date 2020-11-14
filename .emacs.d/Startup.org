@@ -840,9 +840,9 @@
        (custom-set-variables '(aw-scope 'visible)))
    #+end_src
 
-** avy
+** Navigation
 
-   Jump around in the buffer quickly.
+   Avy is an excellent package to jump around in visible areas or buffer quickly.
 
    #+begin_src emacs-lisp
      (use-package avy
@@ -857,6 +857,23 @@
               ("C-c K l" . avy-kill-ring-save-whole-line)
               ("C-c K r" . avy-kill-ring-save-region)))
    #+end_src
+
+   I also find ~imenu~ to be a convenient tool to find points of interest in the buffer in lots of modes.
+
+   #+begin_src emacs-lisp
+     (use-package imenu :demand
+       :bind ("M-g i" . imenu))
+   #+end_src
+
+ Dumb-jump is an almost zero-config pacakge that finds the definition of keyword under cursor.
+
+    #+begin_src emacs-lisp
+      (use-package dumb-jump
+        :ensure t
+        :bind (("M-g d" . dumb-jump-go)
+               ("M-g D" . dumb-jump-go-other-window)
+               ("M-g b" . dumb-jump-back)))
+    #+end_src
 
 ** ace-jump-buffer
 
@@ -2323,19 +2340,6 @@
              :config
              (setq flycheck-java-ecj-jar-path ecj-jar-file))))
      #+end_src
-*** Navigation
-
-    Packages in here allow fast navigation in programming languages.
-
-    Dumb-jump is an almost zero-config pacakge that finds the definition of keyword under cursor.
-
-    #+begin_src emacs-lisp
-      (use-package dumb-jump
-        :ensure t
-        :bind (("M-g d" . dumb-jump-go)
-               ("M-g D" . dumb-jump-go-other-window)
-               ("M-g b" . dumb-jump-back)))
-    #+end_src
 *** Haskell
 
     #+begin_src emacs-lisp

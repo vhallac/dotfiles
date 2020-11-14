@@ -447,6 +447,15 @@ into real text."
          ("C-c K l" . avy-kill-ring-save-whole-line)
          ("C-c K r" . avy-kill-ring-save-region)))
 
+(use-package imenu :demand
+  :bind ("M-g i" . imenu))
+
+(use-package dumb-jump
+  :ensure t
+  :bind (("M-g d" . dumb-jump-go)
+         ("M-g D" . dumb-jump-go-other-window)
+         ("M-g b" . dumb-jump-back)))
+
 (use-package ace-jump-buffer
   :ensure t
   :bind (("C-c b b"   . ace-jump-buffer)
@@ -1540,12 +1549,6 @@ The command will invoke the specified subcommand in the project directory"
     (use-package flycheck-java
       :config
       (setq flycheck-java-ecj-jar-path ecj-jar-file))))
-
-(use-package dumb-jump
-  :ensure t
-  :bind (("M-g d" . dumb-jump-go)
-         ("M-g D" . dumb-jump-go-other-window)
-         ("M-g b" . dumb-jump-back)))
 
 (use-package haskell-mode
   :ensure t
