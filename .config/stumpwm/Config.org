@@ -146,7 +146,8 @@
     (setf *mouse-focus-policy* :click)
   #+end_src
 
-* OSD handler
+* DISABLED OSD handler
+  CLOSED: [2020-09-29 Tue 06:29]
 
   This is not really a standard thing. I use pqiv solely for displaying some on
   screen display messages. So I need to float the window, and make it lose focus.
@@ -159,7 +160,7 @@
   *NOTE*: This is not working at the moment. I disabled OSD until I can solve
    its problems.
 
-  #+begin_src common-lisp
+  #+begin_src common-lisp :tangle no
     (defun osd-new-window-hook (new-window)
       (when (window-matches-properties-p new-window :instance "pqiv")
         (push-event (lambda ()

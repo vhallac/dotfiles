@@ -37,24 +37,6 @@
 
 (setf *mouse-focus-policy* :click)
 
-(defun osd-new-window-hook (new-window)
-  (when (window-matches-properties-p new-window :instance "pqiv")
-    (push-event (lambda ()
-                  (if (not (typep (current-group) 'float-group))
-                      (float-window new-window (current-group)))
-                  (push-event (lambda ()
-                                (push new-window (group-on-top-windows (current-group)))
-                                (setf (window-fullscreen new-window) t)))))))
-
-(defun osd-focus-window-hook (new-window old-window)
-  (when (window-matches-properties-p new-window :instance "pqiv")
-    (push-event (lambda ()
-                  (focus-window old-window)))))
-
-(add-hook *new-window-hook* #'osd-new-window-hook)
-
-(add-hook *focus-window-hook* #'osd-focus-window-hook)
-
 (define-key *root-map* (kbd "c") "exec /usr/bin/uxterm")
 (define-key *root-map* (kbd "C-c") "exec /usr/bin/uxterm")
 
