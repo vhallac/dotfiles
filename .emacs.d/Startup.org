@@ -937,7 +937,8 @@
    #+end_src
 ** Mini buffer input and completion
 
-*** Ivy and friends
+*** DISABLED Ivy and friends
+    CLOSED: [2020-09-23 Wed 09:31]
     Abo abo has created a really useful module for completing input that
     strikes a good balance between size and functionality.
 
@@ -1005,6 +1006,27 @@
         :bind ( ("C-x C-f" . helm-find-files)
                 ("C-x b" . helm-buffers-list)
                 ("M-x"  . helm-M-x)))
+    #+end_src
+*** icomplete
+    In a (perhaps misguided) attempt to go back to basics, I am now using icomplete with vanilla features. For now, it requires
+    minimal setup. It doesn't have lots of bells and whistles, but I realized that other completion packages got in the was as much
+    as they added convenence.
+
+    I reserve the right to go back to any of the experiments above.
+
+    #+begin_src emacs-lisp
+      (use-package icomplete :demand
+        :config
+        (setq icomplete-separator " ▪ ")
+        (setq icomplete-prospects-height 1)
+        (fido-mode -1)
+        (icomplete-mode 1)
+        (setq read-buffer-completion-ignore-case t)
+        (setq read-file-name-completion-ignore-case t))
+
+      (use-package minibuffer :demand
+        :config
+        (setq completion-styles '(partial-completion substring initials flex emacs22)))
     #+end_src
 ** Multiple Cursors
    #+begin_src emacs-lisp

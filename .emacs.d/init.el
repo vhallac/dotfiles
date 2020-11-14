@@ -515,6 +515,19 @@ into real text."
           ("C-x b" . helm-buffers-list)
           ("M-x"  . helm-M-x)))
 
+(use-package icomplete :demand
+  :config
+  (setq icomplete-separator " ▪ ")
+  (setq icomplete-prospects-height 1)
+  (fido-mode -1)
+  (icomplete-mode 1)
+  (setq read-buffer-completion-ignore-case t)
+  (setq read-file-name-completion-ignore-case t))
+
+(use-package minibuffer :demand
+  :config
+  (setq completion-styles '(partial-completion substring initials flex emacs22)))
+
 (use-package multiple-cursors
   :ensure t
   :bind ( ("C-c m l" . mc/edit-lines)
