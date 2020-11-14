@@ -85,17 +85,25 @@
               ("M-g l t" . lsp-find-type-definition)))
 
 (use-package lsp-java
-  :hook (java-mode . vh/lsp-java-hook)
+                                        ;  :hook (java-mode . vh/lsp-java-hook)
   :bind* (:map java-mode-map
                ("C-c . I" . lsp-java-organize-imports)
                ("C-c . i" . lsp-java-add-import)
                ("C-c . C-i" . lsp-java-add-unimplemented-methods))
   :ensure t
   :config
-  (defun vh/lsp-java-hook ()
-    (lsp)))
+  (setq lsp-java-java-path "/opt/java/java-14-openjdk/bin/java")
+  (setq lsp-java-import-gradle-java-home "/opt/java/java-14-openjdk")
+  (setq lsp-java-configuration-runtimes '[(:name "JavaSE-14"
+                                                 :path "/opt/java/java-14-openjdk"
+                                                 :default t)])
+  (setq lsp-java-vmargs (list
+                         "--enable-preview"))
 
-(custom-set-variables '(lsp-java-configuration-maven-user-settings "~/m2/nsm-dev/settings.xml"))
+                                        ;
+  ;; (defun vh/lsp-java-hook ()
+  ;;   (lsp))
+  )
 
 ;; TODO: This is still borked. I need to carry the local variableness of global arguments
 ;; into pop-up buffers
