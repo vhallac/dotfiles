@@ -72,7 +72,7 @@
 
 (defun vh--get-gcalcli-agenda-for (date &optional config-path)
   (let* ((date-start (apply 'format "%d/%d/%d" (calendar-gregorian-from-absolute date)))
-         (date-end (concat date-start " 12pm"))
+         (date-end (apply 'format "%d/%d/%d" (calendar-gregorian-from-absolute (1+ date))))
          (gcalcli-params (concat (when config-path
                                    (concat " --config-folder=" config-path))
                                  " --nocolor "
