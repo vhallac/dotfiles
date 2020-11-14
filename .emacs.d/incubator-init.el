@@ -1,6 +1,6 @@
 (use-package impatient-mode
   :ensure t
- :commands (impatient-mode)
+  :commands (impatient-mode)
   :hook (impatient-mode . vh/impatient-mode-func)
   :config
   (defun is-html-buffer ()
@@ -67,7 +67,7 @@ This function cleans up the invisible temp buffers"
   "Put the last two kills to temporary buffers and diff them."
   (interactive)
   (let ((old (generate-new-buffer "old"))
-	(new (generate-new-buffer "new")))
+	    (new (generate-new-buffer "new")))
     (set-buffer old)
     (insert (current-kill 0 t))
     (set-buffer new)
@@ -114,7 +114,7 @@ This function cleans up the invisible temp buffers"
 (defun magit-home ()
   (interactive)
   (let* ((args (cons "--git-dir=dotfiles.git" magit-git-global-arguments))
-        (magit-git-global-arguments args))
+         (magit-git-global-arguments args))
     (with-current-buffer (magit-status (expand-file-name "~"))
       (make-local-variable 'magit-git-global-arguments)
       (setq 'magit-git-global-arguments args)
@@ -210,9 +210,9 @@ Currently, we use youtube-dl and mpv to listen to the video"
   (interactive "P")
   (let ((entries (elfeed-search-selected)))
     (cl-loop for entry in entries
-	     do (elfeed-untag entry 'unread)
-	     when (elfeed-entry-link entry)
-	     do (vh/view-video-from-url it))
+	         do (elfeed-untag entry 'unread)
+	         when (elfeed-entry-link entry)
+	         do (vh/view-video-from-url it))
     (mapc #'elfeed-search-update-entry entries)
     (unless (use-region-p) (forward-line))))
 
@@ -221,9 +221,9 @@ Currently, we use youtube-dl and mpv to listen to the video"
   (interactive "P")
   (let ((entries (elfeed-search-selected)))
     (cl-loop for entry in entries
-	     do (elfeed-untag entry 'unread)
-	     when (elfeed-entry-link entry)
-	     do (vh/listen-youtube-from-url it))
+	         do (elfeed-untag entry 'unread)
+	         when (elfeed-entry-link entry)
+	         do (vh/listen-youtube-from-url it))
     (mapc #'elfeed-search-update-entry entries)
     (unless (use-region-p) (forward-line))))
 
