@@ -33,18 +33,6 @@
                           (window-list f)))
                 (frame-list))))
 
-(defun vh/kill-temps ()
-  "Kill all temp buffers (by buffer name).
-
-platuml-mode preview buffers accumulate quickly, slowing some emacs operations down.
-This function cleans up the invisible temp buffers"
-  (interactive)
-  (dolist (buf (mapcar (lambda (b)
-                       (when (string-prefix-p " *temp*" (buffer-name b)) b))
-                     (buffer-list)))
-    (when (and buf (not (vh/buffer-visible-p buf)))
-      (kill-buffer buf))))
-
 (use-package graphviz-dot-mode
   :ensure t)
 
