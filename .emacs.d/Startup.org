@@ -1253,7 +1253,7 @@
                                   (:name "last week" :query "date:\"this week\"" :key "dw")
                                   (:name "last week" :query "date:\"this month\"" :key "dm")
                                   (:name "all mail" :query "*" :key "a")
-                                  (:name "info" :query "tag:info" "i")
+                                  (:name "info" :query "tag:info" :key "i")
                                   (:name "recent" :query "tag:unread and (date:yesterday or date:today)" :key "ur" :search-type tree)))))
         :config
         ;; allow linking to mail from org-mode files
