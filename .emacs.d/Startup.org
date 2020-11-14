@@ -402,7 +402,9 @@
    I need some additional face definitions for certain modes.
 
    #+begin_src emacs-lisp
-     (defface large-variable-pitch '((t (:inherit 'variable-pitch :height 95)))
+     (defconst browse-font-large-font-size 95)
+
+     (defface large-variable-pitch `((t (:inherit 'variable-pitch :height ,browse-font-large-font-size)))
        "Font for less eye strain during prolonged reading"
        :group 'local)
    #+end_src
@@ -436,19 +438,8 @@
       (interactive)
       (eww (get-text-property (point) 'shr-url)))
 
-    (defun vh/eww-toggle-size ()
-      "Use large fonts in shr buffer"
-      (interactive)
-      (if (eq shr-current-font 'large-variable-pitch)
-          (setq shr-current-font 'variable-pitch)
-        (make-local-variable 'shr-current-font)
-        (setq shr-current-font 'large-variable-pitch))
-      (eww-reload t))
-
     (use-package eww
-      :bind (:map eww-mode-map
-                  (", f" . vh/eww-toggle-size)
-             :map eww-link-keymap
+      :bind (:map eww-link-keymap
              ("V" . eww-browse-external)))
 
     (use-package shr
@@ -1105,8 +1096,7 @@
         (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
         (defun gnus-article-large-shr-fonts ()
           (with-current-buffer gnus-article-buffer
-            (make-local-variable 'shr-current-font)
-            (setq shr-current-font 'large-variable-pitch)))
+            (face-remap-add-relative 'variable-pitch :height browse-font-large-font-size)))
 
         (add-hook 'gnus-article-prepare-hook #'gnus-article-large-shr-fonts))
 
@@ -2910,8 +2900,7 @@
                    :map elfeed-search-mode-map
                    ("j" . vh/elfeed-tag-untag-junk))
        :hook (elfeed-show-mode . (lambda ()
-                                   (make-local-variable 'shr-current-font)
-                                   (setq shr-current-font 'large-variable-pitch)))
+                                   (face-remap-add-relative 'variable-pitch :height browse-font-large-font-size)))
 
        :config
        (customize-set-value 'elfeed-search-filter "-junk @6-months-ago +unread")
@@ -2928,24 +2917,19 @@
 ** Browse web inside editor
    Small tweaks for eww and w3m.
 
-   I am not sure what ~shr-folding-mode~ does. I've seen two side-effects:
-
-   1. It reduces empty lines around some headings
-   2. It doesn't render some titles in bold
-
-   Overall it seemed to make things a little more readable, so I am keeping it.
+   I used to have ~shr-folding-mode~ set to ~t~, but I couldn't figure out what it does (except when I set it to ~'none~ - which
+   removed fontifications altogether. I am removing until I know for sure it improves readability.
 
    #+begin_src emacs-lisp
      (use-package eww
        :ensure t
-       :hook ((eww-mode . set-buffer-variable-pitch))
        :config
        (customize-set-variable 'eww-search-prefix "https://startpage.com/do/search?prf=95fa00857b1c3634f33a56a3f0f7e96b&query="))
 
      (use-package shr
        :config
        (setq shr-bullet "• "
-             shr-folding-mode t
+             shr-use-fonts t
              shr-width 120))
 
      (use-package w3m

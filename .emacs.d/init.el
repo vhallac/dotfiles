@@ -204,7 +204,9 @@
                                  (run-hook-with-args 'after-make-frame-functions
                                                      (selected-frame)))))
 
-(defface large-variable-pitch '((t (:inherit 'variable-pitch :height 95)))
+(defconst browse-font-large-font-size 95)
+
+(defface large-variable-pitch `((t (:inherit 'variable-pitch :height ,browse-font-large-font-size)))
   "Font for less eye strain during prolonged reading"
   :group 'local)
 
@@ -222,19 +224,8 @@
   (interactive)
   (eww (get-text-property (point) 'shr-url)))
 
-(defun vh/eww-toggle-size ()
-  "Use large fonts in shr buffer"
-  (interactive)
-  (if (eq shr-current-font 'large-variable-pitch)
-      (setq shr-current-font 'variable-pitch)
-    (make-local-variable 'shr-current-font)
-    (setq shr-current-font 'large-variable-pitch))
-  (eww-reload t))
-
 (use-package eww
-  :bind (:map eww-mode-map
-              (", f" . vh/eww-toggle-size)
-         :map eww-link-keymap
+  :bind (:map eww-link-keymap
          ("V" . eww-browse-external)))
 
 (use-package shr
@@ -624,8 +615,7 @@ into real text."
   (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
   (defun gnus-article-large-shr-fonts ()
     (with-current-buffer gnus-article-buffer
-      (make-local-variable 'shr-current-font)
-      (setq shr-current-font 'large-variable-pitch)))
+      (face-remap-add-relative 'variable-pitch :height browse-font-large-font-size)))
 
   (add-hook 'gnus-article-prepare-hook #'gnus-article-large-shr-fonts))
 
@@ -1983,8 +1973,7 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
               :map elfeed-search-mode-map
               ("j" . vh/elfeed-tag-untag-junk))
   :hook (elfeed-show-mode . (lambda ()
-                              (make-local-variable 'shr-current-font)
-                              (setq shr-current-font 'large-variable-pitch)))
+                              (face-remap-add-relative 'variable-pitch :height browse-font-large-font-size)))
 
   :config
   (customize-set-value 'elfeed-search-filter "-junk @6-months-ago +unread")
@@ -1996,14 +1985,13 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
 
 (use-package eww
   :ensure t
-  :hook ((eww-mode . set-buffer-variable-pitch))
   :config
   (customize-set-variable 'eww-search-prefix "https://startpage.com/do/search?prf=95fa00857b1c3634f33a56a3f0f7e96b&query="))
 
 (use-package shr
   :config
   (setq shr-bullet "• "
-        shr-folding-mode t
+        shr-use-fonts t
         shr-width 120))
 
 (use-package w3m
