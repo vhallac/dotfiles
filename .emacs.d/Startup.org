@@ -459,6 +459,15 @@
       :bind (:map w3m-link-map
                   ("v" . (lambda () (interactive) (eww (w3m-anchor (point)))))
                   ("V" . (lambda () (interactive) (w3m-view-url-with-browse-url (w3m-anchor (point)))))))
+
+    (defun eww-browse-gnus-url ()
+      (interactive)
+      (eww (get-text-property (point) 'gnus-string)))
+
+    (use-package gnus-art
+      :bind (:map gnus-article-mode-map
+                  ("v" . eww-browse-gnus-url)
+                  ("V" . push-button)))
   #+end_src
 * GPG setup
 
@@ -1085,7 +1094,18 @@
 ** E-mail
 *** Reading: GNUS
 
-    For variable pitch, find the hook and use ~(set-buffer-variable-pitch 'gnus-header-name 'gnus-header-subject 'gnus-header-content 'gnus-header-from)~.
+    I used to use Gnus for both mails and news. These days I use notmuch mail for news, and elfeed for most of my RSS needs.
+
+    This leaves Gnus with news. I am also experimenting with RSS using Gwene. I may also return to pure rss using the approprate
+    backend.
+
+    Because of this, I am slowly phasing out the email configurations. I add agents to all my e-mail accounts (go to servers list
+    with `^`, and press `J a` on server line to enable agent. You can start gnus unplugged using `J j`
+
+    *Todo*: For variable pitch, find the hook and use
+    : (set-buffer-variable-pitch 'gnus-header-name 'gnus-header-subject
+    :                            'gnus-header-content 'gnus-header-from)
+    Fonts are mostly OK for now, but I will change it if I want more variable pitch fonts.
 
     #+begin_src emacs-lisp :noweb yes
       (use-package gnus
@@ -1093,6 +1113,7 @@
         :config
         <<gnus-config-support>>
         (custom-set-variables '(gnus-select-method '(nntp "news.easynews.com"))
+                              '(gnus-check-new-newsgroups nil)
                               '(gnus-posting-styles '(((message-news-p)
                                                        (name "Vedat Hallac")
                                                        (address "vedat.hallac@mail.invalid"))
@@ -1101,19 +1122,13 @@
                                                        (address "dys.wowace@gmail.com"))
                                                       ("gmail-android"
                                                        (name "Vedat Hallac")
-                                                       (address "vedat@android.ciyiz.biz"))
-                                                      ("gmail-pia"
-                                                       (name "Vedat Hallaç")
-                                                       (address "vedat.hallac@pia-team.com"))
-                                                      ("ms-piasys"
-                                                       (name "Vedat Hallaç")
-                                                       (address "vedat.hallac@pia-systems.com"))))
-                              `(gnus-secondary-select-methods '((nntp "news.gmane.io")
-                                                                ,(mk-gnus-select-method "gmail-1" "imap.gmail.com")
+                                                       (address "vedat@android.ciyiz.biz"))))
+                              `(gnus-secondary-select-methods '((nntp "news.gmane.io"
+                                                                      (gnus-check-new-newsgroups nil))
                                                                 ,(mk-gnus-select-method "gmail-2" "imap.gmail.com")
-                                                                ,(mk-gnus-select-method "gmail-android" "imap.gmail.com")
-                                                                ,(mk-gnus-select-method "gmail-pia" "imap.gmail.com")))
+                                                                ,(mk-gnus-select-method "gmail-android" "imap.gmail.com")))
                               '(gnus-use-adaptive-scoring '(word line))
+                              '(gnus-activate-level 3)
                               '(gnus-score-expiry-days 60)
                               '(gnus-default-adaptive-score-alist '((gnus-unread-mark)
                                                                     (gnus-ticked-mark (from 40))

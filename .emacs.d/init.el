@@ -246,6 +246,15 @@
               ("v" . (lambda () (interactive) (eww (w3m-anchor (point)))))
               ("V" . (lambda () (interactive) (w3m-view-url-with-browse-url (w3m-anchor (point)))))))
 
+(defun eww-browse-gnus-url ()
+  (interactive)
+  (eww (get-text-property (point) 'gnus-string)))
+
+(use-package gnus-art
+  :bind (:map gnus-article-mode-map
+              ("v" . eww-browse-gnus-url)
+              ("V" . push-button)))
+
 (defun wg/kludge-gpg-agent ()
   (if (display-graphic-p)
       (setenv "DISPLAY" (terminal-name))
@@ -586,6 +595,7 @@ into real text."
              (gnus-ignored-newsgroups ,(or ignore-regexp
                                            "^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\”]\”[#’()]"))))
   (custom-set-variables '(gnus-select-method '(nntp "news.easynews.com"))
+                        '(gnus-check-new-newsgroups nil)
                         '(gnus-posting-styles '(((message-news-p)
                                                  (name "Vedat Hallac")
                                                  (address "vedat.hallac@mail.invalid"))
@@ -594,19 +604,13 @@ into real text."
                                                  (address "dys.wowace@gmail.com"))
                                                 ("gmail-android"
                                                  (name "Vedat Hallac")
-                                                 (address "vedat@android.ciyiz.biz"))
-                                                ("gmail-pia"
-                                                 (name "Vedat Hallaç")
-                                                 (address "vedat.hallac@pia-team.com"))
-                                                ("ms-piasys"
-                                                 (name "Vedat Hallaç")
-                                                 (address "vedat.hallac@pia-systems.com"))))
-                        `(gnus-secondary-select-methods '((nntp "news.gmane.io")
-                                                          ,(mk-gnus-select-method "gmail-1" "imap.gmail.com")
+                                                 (address "vedat@android.ciyiz.biz"))))
+                        `(gnus-secondary-select-methods '((nntp "news.gmane.io"
+                                                                (gnus-check-new-newsgroups nil))
                                                           ,(mk-gnus-select-method "gmail-2" "imap.gmail.com")
-                                                          ,(mk-gnus-select-method "gmail-android" "imap.gmail.com")
-                                                          ,(mk-gnus-select-method "gmail-pia" "imap.gmail.com")))
+                                                          ,(mk-gnus-select-method "gmail-android" "imap.gmail.com")))
                         '(gnus-use-adaptive-scoring '(word line))
+                        '(gnus-activate-level 3)
                         '(gnus-score-expiry-days 60)
                         '(gnus-default-adaptive-score-alist '((gnus-unread-mark)
                                                               (gnus-ticked-mark (from 40))
