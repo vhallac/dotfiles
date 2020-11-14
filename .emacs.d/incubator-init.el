@@ -193,13 +193,13 @@
   "Watch a video from URL
 
 Currently, we use MPV/youtube-dl to watch the video. I use 'best' format, because the youtube-dl default sometimes loses the video stream."
-  (async-shell-command (format "mpv --ytdl --ytdl-format=best '%s'" url)))
+  (async-shell-command (format "mpv '%s'" url)))
 
 (defun vh/listen-youtube-from-url (url)
   "Listen to the audio of a youtube video from URL
 
 Currently, we use youtube-dl and mpv to listen to the video"
-  (async-shell-command (concat "/bin/sh -c "(format "mpv --ytdl --ytdl-format=bestaudio '%s'" url))))
+  (async-shell-command (concat "/bin/sh -c "(format "mpv --ytdl --ytdl-format=bestaudio --vo=null '%s'" url))))
 
 (defun elfeed-view-mpv (&optional use-generic-p)
   "Youtube-feed link"
