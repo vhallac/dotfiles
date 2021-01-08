@@ -444,15 +444,12 @@
                   ("v" . eww-browse-shr-url)
                   ("V" . eww-browse-external)))
 
-    (use-package elfeed
-      :ensure t
+    (use-package elfeed :ensure t
       :bind (:map elfeed-show-mode-map
                   ("v" . eww-browse-shr-url)
                   ("V" . eww-browse-external)))
 
-    (use-package w3m
-      :defer t
-      :ensure t
+    (use-package w3m :ensure t :defer
       :bind (:map w3m-link-map
                   ("v" . (lambda () (interactive) (eww (w3m-anchor (point)))))
                   ("V" . (lambda () (interactive) (w3m-view-url-with-browse-url (w3m-anchor (point)))))))
@@ -498,8 +495,7 @@
                                                (cdr elt)))))
             (setcdr elt (push param filtered-params))))))
 
-    (use-package tramp
-      :ensure t
+    (use-package tramp :ensure t
       :config
       (vh/tramp-add-or-change-param "sudo" '(tramp-session-timeout 600))
       (vh/tramp-add-or-change-param "ssh" `(tramp-session-timeout ,(* 5 60 60))))
@@ -649,16 +645,14 @@
     I like the control undo-tree povides.
 
     #+begin_src emacs-lisp
-      (use-package undo-tree
-        :ensure t
+      (use-package undo-tree :ensure t
         :init
         (global-undo-tree-mode))
     #+end_src
 *** Marking
     #+begin_src emacs-lisp
-      (use-package expand-region
+      (use-package expand-region :ensure t
         :after hydra
-        :ensure t
         :bind (("C-c v" . hydra-expand-region/body))
         :init
         (defhydra hydra-expand-region (:pre (activate-mark)
@@ -697,8 +691,7 @@
      convenience.
 
      #+begin_src emacs-lisp
-       (use-package hydra
-         :ensure t)
+       (use-package hydra :ensure t)
      #+end_src
 ** Dired
    Not a lot of customizations here... yet.
@@ -775,8 +768,7 @@
    Emacs window session manager - sort of a pager for emacs
 
    #+begin_src emacs-lisp :noweb yes :tangle no
-     (use-package elscreen
-       :ensure t
+     (use-package elscreen :ensure t
        :demand
        :custom (elscreen-display-tab nil)
        :config
@@ -790,8 +782,7 @@
    I am disabling for now. It looks like using multiple frames is good enough for me.
 
    #+begin_src emacs-lisp :noweb yes :tangle no
-     (use-package eyebrowse
-       :ensure t
+     (use-package eyebrowse :ensure t
        :demand
        :init
        (eyebrowse-mode)
@@ -808,8 +799,7 @@
    pressing =q=.
 
    #+begin_src emacs-lisp
-     (use-package browse-kill-ring
-       :ensure t
+     (use-package browse-kill-ring :ensure t
        :config (browse-kill-ring-default-keybindings))
    #+end_src
 
@@ -819,8 +809,7 @@
    a visual explanation of the mode.
 
    #+begin_src emacs-lisp
-     (use-package paredit
-       :ensure t
+     (use-package paredit :ensure t
        :init
        (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
        (add-hook 'lisp-mode-hook #'enable-paredit-mode)
@@ -832,8 +821,7 @@
    Easy travel between windows.
 
    #+begin_src emacs-lisp
-     (use-package ace-window
-       :ensure t
+     (use-package ace-window :ensure t
        :bind (( "C-x o" . ace-window))
        :custom (aw-scope 'visible))
    #+end_src
@@ -843,8 +831,7 @@
    Avy is an excellent package to jump around in visible areas or buffer quickly.
 
    #+begin_src emacs-lisp
-     (use-package avy
-       :ensure t
+     (use-package avy :ensure t
        :bind (("M-g j" . avy-goto-char-timer)
               ("M-g w" . avy-goto-subword-1)
               ("M-g l" . avy-goto-line)
@@ -866,8 +853,7 @@
  Dumb-jump is an almost zero-config pacakge that finds the definition of keyword under cursor.
 
     #+begin_src emacs-lisp
-      (use-package dumb-jump
-        :ensure t
+      (use-package dumb-jump :ensure t
         :bind (("M-g d" . dumb-jump-go)
                ("M-g D" . dumb-jump-go-other-window)
                ("M-g b" . dumb-jump-back)))
@@ -879,8 +865,7 @@
    buffers, and allows you to select one using the buffer's assigned letter.
 
    #+begin_src emacs-lisp
-     (use-package ace-jump-buffer
-       :ensure t
+     (use-package ace-jump-buffer :ensure t
        :bind (("C-c b b"   . ace-jump-buffer)
               ("C-c b 4 b" . ace-jump-buffer-other-window)
               ("C-c b p"   . ace-jump-projectile-buffers)))
@@ -891,8 +876,7 @@
    transparently decrypt files ending with =.gpg= extension.
 
    #+begin_src emacs-lisp
-     (use-package epg
-       :ensure t
+     (use-package epg :ensure t
        :config
        (let ((gpg-prg "/usr/bin/gpg2"))
          (when (file-executable-p gpg-prg)
@@ -908,8 +892,7 @@
 ** Dired
 
    #+begin_src emacs-lisp
-     (use-package dired
-       :defer
+     (use-package dired :defer
        :custom (dired-dwim-target t)
        :hook  (dired-mode . (lambda ()
                             (make-local-variable 'coding-system-for-read)
@@ -940,9 +923,7 @@
     strikes a good balance between size and functionality.
 
     #+begin_src emacs-lisp :tangle no
-      (use-package ivy
-        :ensure t
-        :pin melpa
+      (use-package ivy :ensure t :pin melpa
         :demand
         :custom ((ivy-use-virtual-buffers t)
                  (ivy-count-format "(%d/%d) "))
@@ -950,12 +931,10 @@
         (ivy-mode)
         (ivy-set-occur 'ivy-switch-buffer 'ivy-switch-buffer-occur))
 
-      (use-package ivy-hydra
-        :requires ivy
-        :ensure t)
+      (use-package ivy-hydra   :ensure t
+        :requires ivy)
 
-      (use-package swiper
-        :ensure t
+      (use-package swiper :ensure t
         :requires ivy
         :bind ("C-s" . swiper)
         :config
@@ -963,8 +942,7 @@
         (setq search-default-mode nil)
         (ivy-set-occur 'swiper 'swiper-occur))
 
-      (use-package counsel
-        :ensure t
+      (use-package counsel :ensure t
         :bind (("M-g h" . counsel-org-agenda-headlines)
                ("M-g i" . counsel-imenu))
         :config
@@ -1028,8 +1006,7 @@
     #+end_src
 ** Multiple Cursors
    #+begin_src emacs-lisp
-     (use-package multiple-cursors
-       :ensure t
+     (use-package multiple-cursors :ensure t
        :bind ( ("C-c m l" . mc/edit-lines)
                ("C-c m m" . mc/mark-more-like-this-extended)
                ("C-c m p" . mc/mark-previous-word-like-this)
@@ -1042,42 +1019,34 @@
                ("C-c m w" . mc/mark-all-symbols-like-this-in-defun)))
 
      ;; I sometimes use this, too
-     (use-package iedit
-       :ensure t)
+     (use-package iedit :ensure t)
    #+end_src
 ** Magit
    #+begin_src emacs-lisp
-     (use-package magit
-       :defer 5
-       :ensure t
+     (use-package magit :ensure t :defer 5
        :bind (("C-c g" . magit-status))
        :init
-       (use-package git-commit
-         :ensure t
-         :defer t))
+       (use-package git-commit :ensure t :defer))
    #+end_src
 ** TODO Auto complete
 
    I need to work on this, and maybe enable it globally.
 
    #+begin_src emacs-lisp
-     (use-package auto-complete
-       :ensure t
+     (use-package auto-complete :ensure t
        :config
        (setq-default ac-sources (push 'ac-source-yasnippet ac-sources)))
    #+end_src
 ** TODO Yasnippet
    #+begin_src emacs-lisp
-     (use-package yasnippet
-       :ensure t
+     (use-package yasnippet :ensure t
        :commands (yas-minor-mode yas-global-mode yas-reload-all))
    #+end_src
 ** Which-key
    Show keyboard shotrtcuts following the keys already pressed.
 
    #+begin_src emacs-lisp
-     (use-package which-key
-       :ensure t
+     (use-package which-key :ensure t
        :config
        (which-key-mode))
    #+end_src
@@ -1153,8 +1122,7 @@
 
         (add-hook 'gnus-article-prepare-hook #'gnus-article-large-shr-fonts))
 
-      (use-package mm-decode
-        :defer
+      (use-package mm-decode :defer
         :custom ((mm-text-html-renderer 'shr)
                  (mm-inline-text-html-with-images t)
                  (mm-w3m-safe-url-regexp nil)
@@ -1211,8 +1179,7 @@
                                                (and exists domain)
                                                orig))))
 
-      (use-package notmuch
-        :ensure t
+      (use-package notmuch :ensure t
         :commands (vh/notmuch-show-delete-thread notmuch-mua-new-mail)
         :bind (("C-c n" . vh/hydra-notmuch-global/body)
                :map notmuch-show-mode-map
@@ -1277,12 +1244,11 @@
 
     #+begin_src emacs-lisp :noweb yes
       <<mail-compose-functions>>
-      (use-package message
+      (use-package message :defer
         :bind (:map message-mode-map
                     ("C-c o" . vh/message-edit-body-as-org)
                     ("C-c h" . vh/message-org-to-html)
                     ("C-c s" . vh/insert-pia-html-sig))
-        :defer
         :custom ((message-alternative-emails (regexp-opt '("vedathallac@gmail.com"
                                                            "vedat.hallac@gmail.com"
                                                            "dys.wowace@gmail.com"
@@ -1384,8 +1350,7 @@
      #+end_src
 *** Sending mail
     #+begin_src emacs-lisp :noweb yes
-      (use-package smtpmail
-        :defer
+      (use-package smtpmail :defer
         :custom (mail-host-address "hallac.net")
         :config
         (setq smtp-accounts '( (ssl "vedathallac@gmail.com" "gmail-1" "smtp.googlemail.com" 587)
@@ -1398,9 +1363,10 @@
                                (ssl "vedat@wamo.io" "gmail-wamo" "smtp.googlemail.com" 587)))
         <<smtp-switch-helper>>)
 
+      (use-package smtp-openssl :ensure t)
+
       (use-package tls
-        :requires smtp-openssl
-        :defer
+        :requires smtp-openssl :defer
         :custom (tls-program `(,(concat
                                    (if (boundp 'openssl-prg)
                                        openssl-prg
@@ -1409,8 +1375,6 @@
         :config
         (require 'smtp-openssl))
 
-      (use-package smtp-openssl
-        :ensure t)
     #+end_src
 **** Multiple SMTP servers support
      :PROPERTIES:
@@ -1478,9 +1442,7 @@
      #+end_src
 *** Contacts
     #+begin_src emacs-lisp
-      (use-package bbdb
-        :ensure t
-        :defer
+      (use-package bbdb :ensure t :defer
         :custom ((bbdb-update-records-p 'query)
                  (bbdb-mua-update-interactive-p '(search . query))
                  ;; Uncommenting the following allows me to auto-capture e-mails into BBDB
@@ -1506,8 +1468,7 @@
 ** DISABLED Projectile
 
    #+begin_src emacs-lisp :tangle no
-          (use-package projectile
-            :ensure t
+     (use-package projectile :ensure t
        :custom ((projectile-project-root-files-functions '(projectile-root-top-down
                                                                          projectile-root-bottom-up
                                                                          projectile-root-top-down-recurring))
@@ -1532,8 +1493,7 @@
            (projectile-mode 1)))
        (advice-add 'cd :filter-return #'cd-disable-projectile-mode-for-remote))
 
-          (use-package counsel-projectile
-            :ensure t
+     (use-package counsel-projectile :ensure t
        :after projectile
        :config
        (counsel-projectile-mode))
@@ -1842,7 +1802,9 @@
       <<java-styles>>
       (add-hook 'java-mode-hook (lambda ()
                                   (subword-mode)
-                                  (c-set-style "java-custom")))
+                                  (c-toggle-auto-newline 1)
+                                  (setq c-cleanup-list 'set-from-style)
+                                  (c-set-style "java-google")))
     #+end_src
 
 
@@ -1865,6 +1827,57 @@
                                                  (block-close . c-snug-do-while)))))
 
 
+       (c-add-style "java-google"
+                    '("java"
+                      (c-tab-always-indent        . t)
+                      (c-basic-offset . 2)
+                      (c-ignore-auto-fill . nil)
+                      (c-comment-only-line-offset . (0 . 0))
+                      (c-hanging-braces-alist     . ((class-open after)
+                                                     (inexpr-class-open after)
+                                                     (inexpr-class-close before)
+                                                     (defun-open after)
+                                                     (inline-open after)
+                                                     (substatement-open after)
+                                                     (block-close . c-snug-do-while)
+                                                     (brace-list-open)))
+                      (c-hanging-colons-alist     . ((member-init-intro before)
+                                                     (inher-intro)
+                                                     (case-label after)
+                                                     (label after)
+                                                     (access-label after)))
+                      (c-cleanup-list             . (scope-operator
+                                                     brace-else-brace
+                                                     brace-elseif-brace
+                                                     brace-catch-brace
+                                                     empty-defun-braces
+                                                     defun-close-semi))
+                      (c-offsets-alist . ((knr-argdecl-intro . 5)
+                                          (arglist-intro . +)
+                                          (arglist-close . c-lineup-close-paren)
+                                          (inclass . +)
+                                          (member-init-intro . +)
+                                          (statement-block-intro . +)
+                                          (defun-block-intro . +)
+                                          (substatement-open . 0)
+                                          (label . 0)
+                                          (statement-case-open . +)
+                                          (statement-case-intro . +)
+                                          (case-label . 0)
+                                          (statement-cont . c-lineup-math)
+                                          (inline-open . 0)
+                                          (brace-list-open . +)
+                                          (topmost-intro-cont . 0)
+                                          (c . 1) ; "c" for continue of comment, not "c
+                                               ; programming language"
+                                          ))
+                      (c-special-indent-hook . c-gnu-impose-minimum)
+                      (c-block-comment-prefix . "lgf: ")
+                      (c-comment-prefix-regexp . ((awk-mode . "#+(lgf: )?")
+                                                  (other ."lgf: \\|//+\\|\\**")))
+                      ;; go to this file and test if c block comments works
+                      ;; [[file:./patches/comments-test.c]]
+                      (c-echo-syntactic-information-p . t)))
      #+end_src
 **** DISABLED Eclim
 
@@ -1905,8 +1918,7 @@
     's/\x1b\[[0-9;]*m//g'~ to strip color.
 
     #+begin_src emacs-lisp
-      (use-package csharp-mode
-        :ensure t
+      (use-package csharp-mode :ensure t
         :commands (csharp-mode)
         :mode ("\\.cs" . csharp-mode)
         :hook (csharp-mode . vh/csharp-mode-func)
@@ -1947,8 +1959,7 @@
 
     Advanced editing requires Omnisharp mode
     #+begin_src emacs-lisp
-      (use-package omnisharp
-        :ensure t
+      (use-package omnisharp :ensure t
         :commands (omnisharp-mode)
         :hook (csharp-mode . vh/omnisharp-csharp-func)
         :bind* (:map omnisharp-mode-map
@@ -2018,8 +2029,7 @@
     functions I use were adapted from [[https://gist.github.com/bahmanm/c11c94d2158eb1113879][this github gist]].
 
     #+begin_src emacs-lisp
-      (use-package mvn
-        :ensure t
+      (use-package mvn :ensure t
         :after cc-mode
         :commands (mvn-test-defun mvntest-class)
         :bind (:map java-mode-map
@@ -2075,8 +2085,7 @@
 *** Groovy
 
     #+begin_src emacs-lisp
-      (use-package groovy-mode
-        :ensure t
+      (use-package groovy-mode :ensure t
         :commands groovy-mode
         :mode ("\\.gradle$" . groovy-mode))
     #+end_src
@@ -2131,26 +2140,22 @@
             ))
         (advice-add 'projectile-test-prefix :around #'vh/projectile-test-prefix))
 
-      (use-package inf-ruby
-        :ensure t)
+      (use-package inf-ruby :ensure t)
 
-      (use-package rake
-        :ensure t
+      (use-package rake :ensure t
         :after projectile
         :config
         (projectile-register-project-type 'ruby '("Rakefile")
                                           :compile "rake"
                                           :test "rake test"))
 
-      (use-package rbenv
-        :ensure t
+      (use-package rbenv :ensure t
         :config
         (let ((path (getenv "PATH")))
           (when (not (string-match-p "\\.rbenv/shims" path))
             (setenv "PATH" (concat path path-separator (expand-file-name "~/.rbenv/shims"))))))
 
-      (use-package bundler
-        :ensure t)
+      (use-package bundler :ensure t)
     #+end_src
 
 **** DISABLED On Rails
@@ -2244,15 +2249,13 @@
     #+end_src
 **** Virtual Environments
      #+begin_src emacs-lisp
-       (use-package virtualenv
-         :ensure t
+       (use-package virtualenv :ensure t
          :commands virtualenv-activate
          :config (defvar virtualenv-use-ipython nil))
      #+end_src
 *** Javascript
     #+begin_src emacs-lisp
-      (use-package js2-mode
-        :ensure t
+      (use-package js2-mode :ensure t
         :requires yasnippet
         :mode ("\\.js\\'" . js2-mode)
         :custom (js2-indent-switch-body t)
@@ -2264,8 +2267,7 @@
     #+end_src
 *** Lua
     #+begin_src emacs-lisp
-      (use-package lua-mode
-        :ensure t
+      (use-package lua-mode :ensure t
         :commands lua-mode
         :hook  (lua-mode . (lambda ()
                              (setq lua-electric-mode nil
@@ -2276,8 +2278,7 @@
     #+end_src
 *** Golang
     #+begin_src emacs-lisp
-      (use-package go-mode
-        :ensure t)
+      (use-package go-mode :ensure t)
     #+end_src
 *** C-Like languages (/cc-mode/)
 
@@ -2307,8 +2308,7 @@
     #+end_src
 *** Flycheck
     #+begin_src emacs-lisp :noweb yes
-      (use-package flycheck
-        :ensure t
+      (use-package flycheck :ensure t
         :bind (:map flycheck-mode-map ("C-c ! !" . org-time-stamp-inactive))
         :init
         (global-flycheck-mode)
@@ -2357,8 +2357,7 @@
 *** Haskell
 
     #+begin_src emacs-lisp
-      (use-package haskell-mode
-        :ensure t
+      (use-package haskell-mode :ensure t
         :custom ((flycheck-ghc-args "-dynamic")
                  (haskell-compile-command "ghc -dynamic -Wall -ferror-spans -fforce-recomp -c %s")))
     #+end_src
@@ -2423,13 +2422,12 @@
 
    #+begin_src emacs-lisp :noweb yes
      <<org-support-funcs>>
-     (use-package org :ensure org-plus-contrib
+     (use-package org :ensure org-plus-contrib :defer
        :hook (org-mode . (lambda ()
                            (auto-fill-mode)))
        :bind (("C-c b o"   . org-switchb)
               ("C-c b 4 o" . org-switch-to-buffer-other-window)
               ("C-c l"     . org-store-link))
-       :defer
        :init
        (defun vh/revert-org-insert-heading-arg-behavior (&optional old-function arg
                                                                    invisible-ok top &rest future-args)
@@ -2625,9 +2623,8 @@
     #+end_src
 *** Org-babel
     #+begin_src emacs-lisp
-      (use-package ob-core                         ;org-babel
+      (use-package ob-core :defer
         :after org
-        :defer
         :config
         (custom-set-variables '(org-babel-min-lines-for-block-output 999)
                               '(org-babel-results-keyword "results"))
@@ -2722,9 +2719,8 @@
 *** Habit tracking
 
     #+begin_src emacs-lisp
-      (use-package org-habit
+      (use-package org-habit :defer
         :after org-agenda
-        :defer
         :config
         (custom-set-variables '(org-habit-graph-column 80)
                               '(org-habit-show-habits-only-for-today nil)))
@@ -2750,8 +2746,7 @@
      (use-package org
        :hook ((org-mode . (lambda () (set-buffer-variable-pitch 'org-table 'org-code 'org-block 'org-meta-line)))))
 
-     (use-package org-superstar
-       :ensure t
+     (use-package org-superstar :ensure t
        :hook ((org-mode . org-superstar-mode))
        :config
        (custom-set-variables '(org-superstar-remove-leading-stars nil)
@@ -2813,8 +2808,7 @@
     #+end_src
 ** Diary
    #+begin_src emacs-lisp
-     (use-package diary-lib
-       :defer
+     (use-package diary-lib :defer
        :config
        (add-hook 'diary-list-entries-hook 'diary-sort-entries t)
        (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
@@ -2825,8 +2819,7 @@
    Accounting from within emacs.
 
    #+begin_src emacs-lisp
-     (use-package ledger-mode
-       :ensure t
+     (use-package ledger-mode :ensure t
        :commands ledger-mode
        :config
        (add-hook 'ledger-mode-hook (lambda ()
@@ -2850,22 +2843,19 @@
    (including the S3 archive location), and an interesting blog post is [[http://jsomers.net/blog/dictionary][here]].
 
    #+begin_src emacs-lisp
-     (use-package sdcv-mode
-       :defer
+     (use-package sdcv-mode :defer
        :bind ( ("C-c C-d" . sdcv-search)))
    #+end_src
 ** Edit grep/occur buffers
    It is useful for mass editing.
 
    #+begin_src emacs-lisp
-     (use-package wgrep
-       :ensure t)
+     (use-package wgrep :ensure t)
    #+end_src
 ** Docker
 
    #+begin_src emacs-lisp
-     (use-package dockerfile-mode
-       :ensure t)
+     (use-package dockerfile-mode :ensure t)
    #+end_src
 ** Non-text viewing and processing
    PDF reading and annotating
@@ -2873,9 +2863,7 @@
 
    Loading takes 1.5 seconds if not deferred.
    #+begin_src emacs-lisp
-      (use-package pdf-tools
-        :ensure t
-        :defer t
+      (use-package pdf-tools :ensure t :defer
         :config
         (custom-set-variables '(pdf-info-epdfinfo-program "/usr/bin/epdfinfo")))
    #+end_src
@@ -2883,16 +2871,14 @@
    EPUB reading (org links missing)
    #+begin_src emacs-lisp
      (use-package nov
-       :mode ("\\.epub\\'" . nov-mode)
-       :ensure t)
+       :mode ("\\.epub\\'" . nov-mode) :ensure t)
    #+end_src
 ** News and Entertainment
 
    My favorite RSS reader. Contains small hooks for case insensitive searching.
 
    #+begin_src emacs-lisp
-     (use-package elfeed-org
-       :ensure t
+     (use-package elfeed-org :ensure t
        :config
        (elfeed-org)
        (custom-set-variables '(rmh-elfeed-org-files '("~/org/feeds.org"))))
@@ -2918,8 +2904,7 @@
            (elfeed-search-tag-all 'junk))
          (elfeed-search-untag-all 'unread)))
 
-     (use-package elfeed
-       :ensure t
+     (use-package elfeed :ensure t
        :bind (:map elfeed-show-mode-map
                    ("<tab>" . shr-next-link)
                    :map elfeed-search-mode-map
@@ -2936,8 +2921,7 @@
    I also check hackernews.
 
    #+begin_src emacs-lisp
-     (use-package hackernews
-       :ensure t)
+     (use-package hackernews :ensure t)
    #+end_src
 ** Browse web inside editor
    Small tweaks for eww and w3m.
@@ -2946,8 +2930,7 @@
    removed fontifications altogether. I am removing until I know for sure it improves readability.
 
    #+begin_src emacs-lisp
-     (use-package eww
-       :ensure t
+     (use-package eww :ensure t
        :config
        (customize-set-variable 'eww-search-prefix "https://startpage.com/do/search?prf=95fa00857b1c3634f33a56a3f0f7e96b&query="))
 
@@ -2957,9 +2940,7 @@
              shr-use-fonts t
              shr-width 120))
 
-     (use-package w3m
-       :defer t
-       :ensure t
+     (use-package w3m :ensure t :defer
        :init                                 ; shouldn't this be :config? Check with gnus
        (custom-set-variables '(w3m-use-tab-line nil)))
 
