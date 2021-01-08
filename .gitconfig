@@ -40,8 +40,8 @@
 	smtpserverport = 587
 [gui]
 	gcwarning = false
-	fontui = -family \"Noto Sans\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0
-	fontdiff = -family \"DejaVu Sans Mono\" -size 11 -weight normal -slant roman -underline 0 -overstrike 0
+	fontui = -family \"Noto Sans\" -size 8 -weight normal -slant roman -underline 0 -overstrike 0
+	fontdiff = -family \"DejaVu Sans Mono\" -size 8 -weight normal -slant roman -underline 0 -overstrike 0
 	diffopts = -w
 	encoding = utf-8
 [diff]
