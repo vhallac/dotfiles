@@ -395,3 +395,12 @@ This variant allows overriding project directory."
 (set-fontset-font t 'symbol "Noto Color Emoji")
 
 (customize-set-variable 'display-line-numbers-type 'visual)
+
+;; Let Gnus know Gmail search syntax
+(add-hook 'gnus-started-hook
+          (lambda ()
+            (add-to-list 'nnir-imap-search-arguments '("gmail" . "X-GM-RAW"))))
+
+;; `gnus-group-make-nnir-group' use Gmail search syntax *by default*.
+;; You can press `G G` instead `C-u G G` instead.
+(setq nnir-imap-default-search-key "gmail")
