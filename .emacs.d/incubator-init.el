@@ -391,8 +391,6 @@ This variant allows overriding project directory."
     ("0" (face-remap-reset-base 'variable-pitch) "Reset variable-pitch (?)" :exit t)
     ("a" hydra-zoom-all/body "Zoom all fonts")))
 
-(set-fontset-font t 'symbol "Symbola")
-(set-fontset-font t 'symbol "Noto Color Emoji")
 
 (customize-set-variable 'display-line-numbers-type 'visual)
 
