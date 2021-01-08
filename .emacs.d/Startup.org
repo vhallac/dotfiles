@@ -317,6 +317,11 @@
        (put 'narrow-to-page 'disabled nil)
      #+end_src
 
+   - Open new buffers in dired:
+     #+begin_src emacs-lisp
+       (put 'dired-find-alternate-file 'disabled nil)
+     #+end_src
+
    - Editing environment:
      #+begin_src emacs-lisp
        (setq kill-do-not-save-duplicates t
@@ -693,12 +698,6 @@
      #+begin_src emacs-lisp
        (use-package hydra :ensure t)
      #+end_src
-** Dired
-   Not a lot of customizations here... yet.
-   #+begin_src emacs-lisp
-     (put 'dired-find-alternate-file 'disabled nil)
-   #+end_src
-
 ** Compile
 
    #+begin_src emacs-lisp
