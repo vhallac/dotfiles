@@ -14,7 +14,7 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (setq custom-file "~/.emacs.d/customizations.el")
-;; I don't want any customizations to linger. Anything interesting in this file
+;; I don't want any customizations to longer. Anything interesting in this file
 ;; should be moved to the appropriate section in startup.
 ;; (load-file custom-file)
 
@@ -177,9 +177,8 @@
 (custom-set-variables '(pop-up-windows t))
 
 (use-package uniquify
-  :config
-  (custom-set-variables '(uniquify-buffer-name-style 'post-forward)
-                        '(uniquify-separator ":")))
+  :custom ((uniquify-buffer-name-style 'post-forward)
+           (uniquify-separator ":")))
 
 ;; There are no scrollbars. I want to see location.
 (setq line-number-mode t
@@ -233,15 +232,12 @@
               ("v" . eww-browse-shr-url)
               ("V" . eww-browse-external)))
 
-(use-package elfeed
-  :ensure t
+(use-package elfeed :ensure t
   :bind (:map elfeed-show-mode-map
               ("v" . eww-browse-shr-url)
               ("V" . eww-browse-external)))
 
-(use-package w3m
-  :defer t
-  :ensure t
+(use-package w3m :ensure t :defer
   :bind (:map w3m-link-map
               ("v" . (lambda () (interactive) (eww (w3m-anchor (point)))))
               ("V" . (lambda () (interactive) (w3m-view-url-with-browse-url (w3m-anchor (point)))))))
@@ -270,34 +266,30 @@
                                            (cdr elt)))))
         (setcdr elt (push param filtered-params))))))
 
-(use-package tramp
-  :ensure t
+(use-package tramp :ensure t
   :config
   (vh/tramp-add-or-change-param "sudo" '(tramp-session-timeout 600))
   (vh/tramp-add-or-change-param "ssh" `(tramp-session-timeout ,(* 5 60 60))))
 
 (use-package tramp-sh
+  :custom ((tramp-ssh-controlmaster-options (concat
+                                             "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+                                             "-o ControlMaster=auto -o ControlPersist=15m"))
+           (tramp-use-ssh-controlmaster-options t)
+           (tramp-completion-reread-directory-timeout nil))
   :config
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-  (customize-set-variable 'tramp-ssh-controlmaster-options
-   (concat
-    "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
-    "-o ControlMaster=auto -o ControlPersist=15m"))
-
-  (customize-set-variable 'tramp-use-ssh-controlmaster-options t)
-
-  (customize-set-variable
-   'tramp-completion-reread-directory-timeout nil))
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 (use-package eshell
   :bind ("C-c s" . eshell)
+  :custom  ((eshell-scroll-to-bottom-on-input 'all)
+            (eshell-error-if-no-glob t)
+            (eshell-hist-ignoredups t)
+            (eshell-save-history-on-exit t)
+            ;; Not sure about this (eshell-prefer-lisp-functions nil)
+            (eshell-destroy-buffer-when-process-dies t)
+            (eshell-expand-input-functions '(eshell-expand-history-references)))
   :config
-  (custom-set-variables '(eshell-scroll-to-bottom-on-input 'all)
-                        '(eshell-error-if-no-glob t)
-                        '(eshell-hist-ignoredups t)
-                        '(eshell-save-history-on-exit t)
-                        ;; Not sure about this (eshell-prefer-lisp-functions nil)
-                        '(eshell-destroy-buffer-when-process-dies t))
   (setenv "PAGER" "cat")
   (defvar zakame/ansi-escapes-re
     (rx (or ?\233 (and ?\e ?\[))
@@ -314,8 +306,7 @@
   (add-hook 'eshell-mode-hook
             (lambda ()
               (add-to-list 'eshell-output-filter-functions
-                           'zakame/eshell-nuke-ansi-escapes t))
-            ))
+                           'zakame/eshell-nuke-ansi-escapes t))))
 
 (use-package shell
   :bind ("C-c S" . shell))
@@ -365,35 +356,31 @@ into real text."
       (shell-command (concat "touch " personal-dictionary)))))
 
 (use-package midnight
+  :custom ((clean-buffer-list-delay-special 900) ;; kill buffers after 15 minutes
+           ;; kill everything, (leaves unsaved buffers alone) ...
+           (clean-buffer-list-kill-regexps '("^.*$"))
+           ;; ... except these
+           (clean-buffer-list-kill-never-buffer-names '("*Messages*" "*cmd*" "*scratch*"
+                                                        "*w3m*" "*w3m-cache*"
+                                                        "*Group*" "*eshell*"))
+           (clean-buffer-list-kill-never-regexps '("^\\*EMMS Playlist\\*.*$"
+                                                   "^\\*Article "
+                                                   "^\\*Summary "
+                                                   ".*\\.org")))
   :config
   ;; run clean-buffer-list every 2 hours
   (defvar clean-buffer-list-timer (run-at-time t 7200 'clean-buffer-list)
     "Stores clean-buffer-list timer if there is one.
 
      You can disable clean-buffer-list by (cancel-timer clean-buffer-list-timer).")
-       ;; kill buffers if they were last disabled more than 15 minutes ago
-       (custom-set-variables '(clean-buffer-list-delay-special 900)
-                             ;; kill everything, clean-buffer-list is very intelligent at not killing
-                             ;; unsaved buffer.
-                             '(clean-buffer-list-kill-regexps '("^.*$"))
+)
 
-                             ;; keep these buffers untouched
-                             '(clean-buffer-list-kill-never-buffer-names '("*Messages*" "*cmd*" "*scratch*"
-                                                                           "*w3m*" "*w3m-cache*"
-                                                                           "*Group*" "*eshell*"))
-                             '(clean-buffer-list-kill-never-regexps '("^\\*EMMS Playlist\\*.*$"
-                                                                      "^\\*Article "
-                                                                      "^\\*Summary "
-                                                                      ".*\\.org"))))
-
-(use-package undo-tree
-  :ensure t
+(use-package undo-tree :ensure t
   :init
   (global-undo-tree-mode))
 
-(use-package expand-region
+(use-package expand-region :ensure t
   :after hydra
-  :ensure t
   :bind (("C-c v" . hydra-expand-region/body))
   :init
   (defhydra hydra-expand-region (:pre (activate-mark)
@@ -420,32 +407,26 @@ into real text."
 
 (bind-key "C-c C-v" #'vh/expand-region-to-lines)
 
-(use-package hydra
-  :ensure t)
+(use-package hydra :ensure t)
 
 (put 'dired-find-alternate-file 'disabled nil)
 
 (custom-set-variables '(compilation-scroll-output t))
 
-(use-package browse-kill-ring
-  :ensure t
+(use-package browse-kill-ring :ensure t
   :config (browse-kill-ring-default-keybindings))
 
-(use-package paredit
-  :ensure t
+(use-package paredit :ensure t
   :init
   (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
   (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode))
 
-(use-package ace-window
-  :ensure t
+(use-package ace-window :ensure t
   :bind (( "C-x o" . ace-window))
-  :config
-  (custom-set-variables '(aw-scope 'visible)))
+  :custom (aw-scope 'visible))
 
-(use-package avy
-  :ensure t
+(use-package avy :ensure t
   :bind (("M-g j" . avy-goto-char-timer)
          ("M-g w" . avy-goto-subword-1)
          ("M-g l" . avy-goto-line)
@@ -459,20 +440,17 @@ into real text."
 (use-package imenu :demand
   :bind ("M-g i" . imenu))
 
-(use-package dumb-jump
-  :ensure t
+(use-package dumb-jump :ensure t
   :bind (("M-g d" . dumb-jump-go)
          ("M-g D" . dumb-jump-go-other-window)
          ("M-g b" . dumb-jump-back)))
 
-(use-package ace-jump-buffer
-  :ensure t
+(use-package ace-jump-buffer :ensure t
   :bind (("C-c b b"   . ace-jump-buffer)
          ("C-c b 4 b" . ace-jump-buffer-other-window)
          ("C-c b p"   . ace-jump-projectile-buffers)))
 
-(use-package epg
-  :ensure t
+(use-package epg :ensure t
   :config
   (let ((gpg-prg "/usr/bin/gpg2"))
     (when (file-executable-p gpg-prg)
@@ -485,23 +463,21 @@ into real text."
     (add-to-list 'auth-sources
                  '(:source "~/.emacs.d/.secrets/authinfo.gpg" :host t :protocol t))))
 
-(use-package dired
-  :defer
-  :config
-  (custom-set-variables '(dired-dwim-target t))
-  (add-hook 'dired-mode-hook
-            (lambda ()
-              (make-local-variable 'coding-system-for-read)
-              (setq coding-system-for-read 'utf-8))))
+(use-package dired :defer
+  :custom (dired-dwim-target t)
+  :hook  (dired-mode . (lambda ()
+                       (make-local-variable 'coding-system-for-read)
+                       (setq coding-system-for-read 'utf-8))))
 
 (use-package erc
   :commands erc
+  :custom ((erc-dcc-get-default-directory "~/erc_dcc")
+           (erc-dcc-mode t)
+           (erc-dcc-verbose t)
+           (erc-modules '(autojoin button completion dcc fill irccontrols
+                                   list match menu move-to-prompt netsplit networks
+                                   noncommands readonly ring stamp track)))
   :config
-  (custom-set-variables '(erc-dcc-get-default-directory "~/erc_dcc")
-                        '(erc-dcc-mode t)
-                        '(erc-dcc-verbose t)
-                        '(erc-modules '(autojoin button completion dcc fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring stamp track)))
-
   ;; If the DCC download directory is missing, create it.
   (if (not (file-exists-p erc-dcc-get-default-directory))
       (make-directory erc-dcc-get-default-directory t)))
@@ -537,8 +513,7 @@ into real text."
   :config
   (setq completion-styles '(partial-completion substring initials flex emacs22)))
 
-(use-package multiple-cursors
-  :ensure t
+(use-package multiple-cursors :ensure t
   :bind ( ("C-c m l" . mc/edit-lines)
           ("C-c m m" . mc/mark-more-like-this-extended)
           ("C-c m p" . mc/mark-previous-word-like-this)
@@ -551,75 +526,67 @@ into real text."
           ("C-c m w" . mc/mark-all-symbols-like-this-in-defun)))
 
 ;; I sometimes use this, too
-(use-package iedit
-  :ensure t)
+(use-package iedit :ensure t)
 
-(use-package magit
-  :defer 5
-  :ensure t
+(use-package magit :ensure t :defer 5
   :bind (("C-c g" . magit-status))
   :init
-  (use-package git-commit
-    :ensure t
-    :defer t))
+  (use-package git-commit :ensure t :defer))
 
-(use-package auto-complete
-  :ensure t
+(use-package auto-complete :ensure t
   :config
   (setq-default ac-sources (push 'ac-source-yasnippet ac-sources)))
 
-(use-package yasnippet
-  :ensure t
+(use-package yasnippet :ensure t
   :commands (yas-minor-mode yas-global-mode yas-reload-all))
 
-(use-package which-key
-  :ensure t
+(use-package which-key :ensure t
   :config
   (which-key-mode))
 
+(defun mk-gnus-select-method (alias addr &optional port ignore-regexp)
+  "Construct an entry for `gnus-secondary-select-methods' variable.
+
+ALIAS is the server alias. ADDR and PORT specify the server to
+connect to. The optional variable IGNORE_REGEXP is copied to
+gnus-ignored-newsgroups. It defaults to \"^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\”]\”[#’()]\""
+  `(nnimap ,alias
+           (nnimap-address ,addr)
+           (nnimap-server-port ,(or port 993))
+           (nnimap-stream tls)
+           (nnimap-list-pattern ("INBOX" "*"))
+           (nnimap-expunge-on-close always)
+           (gnus-check-new-newsgroups nil)
+           (gnus-ignored-newsgroups ,(or ignore-regexp
+                                         "^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\”]\”[#’()]"))))
 (use-package gnus
   :commands gnus
+  :custom ((gnus-select-method '(nntp "news.easynews.com"))
+           (gnus-check-new-newsgroups nil)
+           (gnus-posting-styles '(((message-news-p)
+                                   (name "Vedat Hallac")
+                                   (address "vedat.hallac@mail.invalid"))
+                                  ("gmail-2"
+                                   (name "Dys@Bloodfeather")
+                                   (address "dys.wowace@gmail.com"))
+                                  ("gmail-android"
+                                   (name "Vedat Hallac")
+                                   (address "vedat@android.ciyiz.biz"))))
+           (gnus-secondary-select-methods `((nntp "news.gmane.io"
+                                                  (gnus-check-new-newsgroups nil))
+                                            ,(mk-gnus-select-method "gmail-2" "imap.gmail.com")
+                                            ,(mk-gnus-select-method "gmail-android" "imap.gmail.com")))
+           (gnus-use-adaptive-scoring '(word line))
+           (gnus-activate-level 3)
+           (gnus-score-expiry-days 60)
+           (gnus-default-adaptive-score-alist '((gnus-unread-mark)
+                                                (gnus-ticked-mark (from 40))
+                                                (gnus-dormant-mark (from 50))
+                                                (gnus-saved-mark (from 200) (subject 50))
+                                                (gnus-del-mark (from -20) (subject -50))
+                                                (gnus-read-mark (from 20) (subject 10))
+                                                (gnus-killed-mark (from -10) (subject -30)))))
   :config
-  (defun mk-gnus-select-method (alias addr &optional port ignore-regexp)
-    "Construct an entry for `gnus-secondary-select-methods' variable.
-  
-  ALIAS is the server alias. ADDR and PORT specify the server to
-  connect to. The optional variable IGNORE_REGEXP is copied to
-  gnus-ignored-newsgroups. It defaults to \"^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\”]\”[#’()]\""
-    `(nnimap ,alias
-             (nnimap-address ,addr)
-             (nnimap-server-port ,(or port 993))
-             (nnimap-stream tls)
-             (nnimap-list-pattern ("INBOX" "*"))
-             (nnimap-expunge-on-close always)
-             (gnus-check-new-newsgroups nil)
-             (gnus-ignored-newsgroups ,(or ignore-regexp
-                                           "^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\”]\”[#’()]"))))
-  (custom-set-variables '(gnus-select-method '(nntp "news.easynews.com"))
-                        '(gnus-check-new-newsgroups nil)
-                        '(gnus-posting-styles '(((message-news-p)
-                                                 (name "Vedat Hallac")
-                                                 (address "vedat.hallac@mail.invalid"))
-                                                ("gmail-2"
-                                                 (name "Dys@Bloodfeather")
-                                                 (address "dys.wowace@gmail.com"))
-                                                ("gmail-android"
-                                                 (name "Vedat Hallac")
-                                                 (address "vedat@android.ciyiz.biz"))))
-                        `(gnus-secondary-select-methods '((nntp "news.gmane.io"
-                                                                (gnus-check-new-newsgroups nil))
-                                                          ,(mk-gnus-select-method "gmail-2" "imap.gmail.com")
-                                                          ,(mk-gnus-select-method "gmail-android" "imap.gmail.com")))
-                        '(gnus-use-adaptive-scoring '(word line))
-                        '(gnus-activate-level 3)
-                        '(gnus-score-expiry-days 60)
-                        '(gnus-default-adaptive-score-alist '((gnus-unread-mark)
-                                                              (gnus-ticked-mark (from 40))
-                                                              (gnus-dormant-mark (from 50))
-                                                              (gnus-saved-mark (from 200) (subject 50))
-                                                              (gnus-del-mark (from -20) (subject -50))
-                                                              (gnus-read-mark (from 20) (subject 10))
-                                                              (gnus-killed-mark (from -10) (subject -30)))))
   (setq gnus-topic-line-format "%i[ %0{%(%n (new: %A)%)%} ]\n"
         mail-self-blind t                     ; Add me to Bcc:
         mail-user-agent 'gnus-user-agent      ; Allow Gcc:
@@ -646,14 +613,12 @@ into real text."
 
   (add-hook 'gnus-article-prepare-hook #'gnus-article-large-shr-fonts))
 
-(use-package mm-decode
-  :defer
-  :config
-  (custom-set-variables '(mm-text-html-renderer 'shr)
-                        '(mm-inline-text-html-with-images t)
-                        '(mm-w3m-safe-url-regexp nil)
-                        '(mm-inline-large-images t)
-                        '(mm-coding-system-priorities '(utf-8))))
+(use-package mm-decode :defer
+  :custom ((mm-text-html-renderer 'shr)
+           (mm-inline-text-html-with-images t)
+           (mm-w3m-safe-url-regexp nil)
+           (mm-inline-large-images t)
+           (mm-coding-system-priorities '(utf-8))))
 
 (defun vh/notmuch-show-delete-thread ()
   (interactive "")
@@ -678,8 +643,7 @@ into real text."
                                          (and exists domain)
                                          orig))))
 
-(use-package notmuch
-  :ensure t
+(use-package notmuch :ensure t
   :commands (vh/notmuch-show-delete-thread notmuch-mua-new-mail)
   :bind (("C-c n" . vh/hydra-notmuch-global/body)
          :map notmuch-show-mode-map
@@ -693,39 +657,38 @@ into real text."
     ("s" (notmuch-search) "Search mail")
     ("z" (notmuch-tree) "Search Mail (tree view)")
     ("j" (notmuch-jump-search) "Search with saved queries "))
-  (custom-set-variables '(notmuch-saved-searches
-                          (quote
-                           ((:name "inbox.personal" :query "tag:inbox and tag:personal" :key "im")
-                            (:name "inbox.work" :query "tag:inbox and tag:pia" :key "ip")
-                            (:name "unread.personal" :query "tag:unread and tag:personal" :key "um")
-                            (:name "unread.work.pia" :query "tag:unread and tag:pia" :key "up")
-                            (:name "unread.work.qbit" :query "tag:unread and tag:qbit" :key "uq")
-                            (:name "unread.work.wamo" :query "tag:unread and tag:wamo" :key "uw")
-                            (:name "flagged" :query "tag:flagged" :key "f")
-                            (:name "flagged-tree" :search-type tree :query "tag:flagged" :key "F")
-                            (:name "sent" :query "tag:sent" :key "t")
-                            (:name "drafts" :query "tag:draft" :key "dr")
-                            (:name "today" :query "dag:unread and date:today" :key "dt")
-                            (:name "last week" :query "date:\"this week\"" :key "dw")
-                            (:name "last week" :query "date:\"this month\"" :key "dm")
-                            (:name "all mail" :query "*" :key "a")
-                            (:name "info" :query "tag:info" :key "i")
-                            (:name "recent" :query "tag:unread and (date:yesterday or date:today)" :key "ur" :search-type tree)))))
+  :custom ((notmuch-saved-searches
+            '((:name "inbox.personal" :query "tag:inbox and tag:personal" :key "im")
+              (:name "inbox.work" :query "tag:inbox and tag:pia" :key "ip")
+              (:name "unread.personal" :query "tag:unread and tag:personal" :key "um")
+              (:name "unread.work.pia" :query "tag:unread and tag:pia" :key "up")
+              (:name "unread.work.qbit" :query "tag:unread and tag:qbit" :key "uq")
+              (:name "unread.work.wamo" :query "tag:unread and tag:wamo" :key "uw")
+              (:name "flagged" :query "tag:flagged" :key "f")
+              (:name "flagged-tree" :search-type tree :query "tag:flagged" :key "F")
+              (:name "sent" :query "tag:sent" :key "t")
+              (:name "drafts" :query "tag:draft" :key "dr")
+              (:name "today" :query "dag:unread and date:today" :key "dt")
+              (:name "last week" :query "date:\"this week\"" :key "dw")
+              (:name "last week" :query "date:\"this month\"" :key "dm")
+              (:name "all mail" :query "*" :key "a")
+              (:name "info" :query "tag:info" :key "i")
+              (:name "recent" :query "tag:unread and (date:yesterday or date:today)" :key "ur" :search-type tree)))
+
+           (notmuch-archive-tags '("-inbox" "+archived"))
+           (notmuch-always-prompt-for-sender t)
+           (notmuch-identities '("Vedat Hallaç <vedat.hallac@pia-team.com>"
+                                 "Vedat Hallaç <vedath@7island.com>"
+                                 "Vedat Hallaç <vedat@hallac.net>"
+                                 "Vedat Hallaç <vedat.hallac@pia-systems.com>"
+                                 "Vedat Hallaç <vedat@wamo.io>"))
+           (mm-text-html-renderer 'shr)
+           (notmuch-address-use-company nil)
+           (notmuch-command (expand-file-name "~/bin/remote-notmuch.sh")))
   :config
   ;; allow linking to mail from org-mode files
   (require 'ol-notmuch)
-  (setq notmuch-command (expand-file-name "~/bin/remote-notmuch.sh"))
-  (custom-set-variables
-   '(notmuch-archive-tags '("-inbox" "+archived"))
-   '(notmuch-always-prompt-for-sender t)
-   '(notmuch-identities (quote
-                         ("Vedat Hallaç <vedat.hallac@pia-team.com>"
-                          "Vedat Hallaç <vedath@7island.com>"
-                          "Vedat Hallaç <vedat@hallac.net>"
-                          "Vedat Hallaç <vedat.hallac@pia-systems.com>"
-                          "Vedat Hallaç <vedat@wamo.io>")))
-   '(mm-text-html-renderer 'shr)
-   '(notmuch-address-use-company nil))
+
   ;; Mark deleted messages unread for fast delete
   (setcar (cdr (assoc "d" notmuch-tagging-keys)) '("+deleted" "-inbox" "-unread"))
   (push '("lf" ("+financial" "-inbox") "Financial") notmuch-tagging-keys)
@@ -741,68 +704,65 @@ into real text."
 
   (setq notmuch-address-selection-function #'vh/notmuch-address-selection-function))
 
-(use-package message
+(defun vh/message-edit-body-as-org ()
+  "Edit the body of the message in org-mode.
+
+When I need to send an e-mail in HTML mode, I can easily edit in org-mode, then export using vh/message-org-to-html"
+  (interactive)
+  (let ((old-mode major-mode)
+        (body-start (save-excursion
+                      (message-goto-body)
+                      (point))))
+    (narrow-to-region body-start (point-max))
+    ;; (setq vh-message-last-mode major-mode)
+    (org-mode)
+    (set (make-local-variable 'vh/message-last-mode) old-mode))
+  (add-hook 'org-ctrl-c-ctrl-c-final-hook 'vh/message-back-to-message))
+
+(defun vh/message-back-to-message ()
+  "You don't need to call this usually. Just hitting 'C-c C-c' should take you out"
+  (interactive)
+  (when (and (boundp 'vh/message-last-mode)
+             vh/message-last-mode)
+    (widen)
+    (funcall vh/message-last-mode)
+    (setq vh/message-last-mode nil)
+    (remove-hook 'org-ctrl-c-ctrl-c-final-hook 'vh/message-back-to-message)
+    t))
+
+(defun vh/message-org-to-html (arg)
+  (interactive "P")
+  (message-goto-body)
+  (save-restriction
+    (narrow-to-region (point) (point-max))
+    (let* ((org-html-postamble (if arg nil
+                                 vh/pia-html-sig))
+           (text (org-export-as 'html)))
+      (kill-region (point-min) (point-max))
+      (mml-generate-mime "related")
+      (mml-insert-multipart "alternative")
+      (mml-insert-part "text/plain")
+      (yank)
+      (mml-insert-part "text/html")
+      (insert (concat text "\n")))))
+(use-package message :defer
   :bind (:map message-mode-map
               ("C-c o" . vh/message-edit-body-as-org)
               ("C-c h" . vh/message-org-to-html)
               ("C-c s" . vh/insert-pia-html-sig))
-  :defer
+  :custom ((message-alternative-emails (regexp-opt '("vedathallac@gmail.com"
+                                                     "vedat.hallac@gmail.com"
+                                                     "dys.wowace@gmail.com"
+                                                     "vedat@android.ciyiz.biz"
+                                                     "vedat@oyun.cuyuz.biz"
+                                                     "vedathallac@yandex.com"
+                                                     "vedat@hallac.net"
+                                                     "vedath@7island.com"
+                                                     "vedat.hallac@pia-team.com"
+                                                     "vedat.hallac@pia-systems.com"
+                                                     "vedat@wamo.io")))
+           (send-mail-function 'smtpmail-send-it))
   :config
-  (custom-set-variables '(message-alternative-emails (regexp-opt '("vedathallac@gmail.com"
-                                                                   "vedat.hallac@gmail.com"
-                                                                   "dys.wowace@gmail.com"
-                                                                   "vedat@android.ciyiz.biz"
-                                                                   "vedat@oyun.cuyuz.biz"
-                                                                   "vedathallac@yandex.com"
-                                                                   "vedat@hallac.net"
-                                                                   "vedath@7island.com"
-                                                                   "vedat.hallac@pia-team.com"
-                                                                   "vedat.hallac@pia-systems.com"
-                                                                   "vedat@wamo.io")))
-                        '(send-mail-function 'smtpmail-send-it))
-
-  (defun vh/message-edit-body-as-org ()
-    "Edit the body of the message in org-mode.
-  
-  When I need to send an e-mail in HTML mode, I can easily edit in org-mode, then export using vh/message-org-to-html"
-    (interactive)
-    (let ((old-mode major-mode)
-          (body-start (save-excursion
-                        (message-goto-body)
-                        (point))))
-      (narrow-to-region body-start (point-max))
-      ;; (setq vh-message-last-mode major-mode)
-      (org-mode)
-      (set (make-local-variable 'vh/message-last-mode) old-mode))
-    (add-hook 'org-ctrl-c-ctrl-c-final-hook 'vh/message-back-to-message))
-  
-  (defun vh/message-back-to-message ()
-    "You don't need to call this usually. Just hitting 'C-c C-c' should take you out"
-    (interactive)
-    (when (and (boundp 'vh/message-last-mode)
-               vh/message-last-mode)
-      (widen)
-      (funcall vh/message-last-mode)
-      (setq vh/message-last-mode nil)
-      (remove-hook 'org-ctrl-c-ctrl-c-final-hook 'vh/message-back-to-message)
-      t))
-  
-  (defun vh/message-org-to-html (arg)
-    (interactive "P")
-    (message-goto-body)
-    (save-restriction
-      (narrow-to-region (point) (point-max))
-      (let* ((org-html-postamble (if arg nil
-                                   vh/pia-html-sig))
-             (text (org-export-as 'html)))
-        (kill-region (point-min) (point-max))
-        (mml-generate-mime "related")
-        (mml-insert-multipart "alternative")
-        (mml-insert-part "text/plain")
-        (yank)
-        (mml-insert-part "text/html")
-        (insert (concat text "\n")))))
-
   (require 'smtpmail)
   (when (require 'bbdb nil t)
     (bbdb-initialize 'message)
@@ -811,12 +771,9 @@ into real text."
     (setq bbdb-mua-pop-up nil
           bbdb-complete-mail-allow-cycling t)))
 
-(use-package smtpmail
-  :defer
+(use-package smtpmail :defer
+  :custom (mail-host-address "hallac.net")
   :config
-
-  (custom-set-variables '(mail-host-address "hallac.net"))
-
   (setq smtp-accounts '( (ssl "vedathallac@gmail.com" "gmail-1" "smtp.googlemail.com" 587)
                          (ssl "dys.wowace@gmail.com" "gmail-2" "smtp.googlemail.com" 587)
                          (ssl "vedat@android.ciyiz.biz" "gmail-android" "smtp.googlemail.com" 587)
@@ -826,8 +783,7 @@ into real text."
                          (ssl "vedath@7island.com" "gmail-qbit" "smtp.googlemail.com" 587)
                          (ssl "vedat@wamo.io" "gmail-wamo" "smtp.googlemail.com" 587)))
   (use-package gnutls
-    :config
-    (custom-set-variables '(gnutls-min-prime-bits 1024)))
+    :custom (gnutls-min-prime-bits 1024))
   
   ;;; This only works for emacs 24 and (hopefully) above
   (defun set-smtp-common (alias server port &optional user password)
@@ -880,41 +836,35 @@ into real text."
         (change-smtp))
       ad-do-it)))
 
+(use-package smtp-openssl :ensure t)
+
 (use-package tls
-  :requires smtp-openssl
-  :defer
+  :requires smtp-openssl :defer
+  :custom (tls-program `(,(concat
+                             (if (boundp 'openssl-prg)
+                                 openssl-prg
+                               "openssl")
+                             " s_client -connect %h:%p -no_ssl2 -ign_eof")))
   :config
-  (custom-set-variables '(tls-program `(,(concat
-                                          (if (boundp 'openssl-prg)
-                                              openssl-prg
-                                            "openssl")
-                                          " s_client -connect %h:%p -no_ssl2 -ign_eof"))))
   (require 'smtp-openssl))
 
-(use-package smtp-openssl
-  :ensure t)
+(use-package bbdb :ensure t :defer
+  :custom ((bbdb-update-records-p 'query)
+           (bbdb-mua-update-interactive-p '(search . query))
+           ;; Uncommenting the following allows me to auto-capture e-mails into BBDB
+           ;; (bbdb-accept-message-alist '( ("From" . "@pia-team\.com")
+           ;;                                ("From" . "@\\(?:milleni\\|turkcell\\)\.com\.tr")))
 
-(use-package bbdb
-  :ensure t
-  :defer
+           ;; use %uB for names in gnus-summary-line-format configuration
+           (bbdb-mua-summary-unify-format-letter "B"))
   :config
-  (custom-set-variables '(bbdb-update-records-p 'query)
-                        '(bbdb-mua-update-interactive-p '(search . query))
-
-                        ;; Uncommenting the following allows me to auto-capture e-mails into BBDB
-                        ;; '(bbdb-accept-message-alist '( ("From" . "@pia-team\.com")
-                        ;;                                ("From" . "@\\(?:milleni\\|turkcell\\)\.com\.tr")))
-
-                        ;; use %uB for names in gnus-summary-line-format configuration
-                        '(bbdb-mua-summary-unify-format-letter "B") )
   (setq bbdb/gnus-score-default 10))
 
 (use-package notmuch-forget
   :init
   (with-eval-after-load "notmuch-address" (notmuch-forget-install)))
 
-(use-package csharp-mode
-  :ensure t
+(use-package csharp-mode :ensure t
   :commands (csharp-mode)
   :mode ("\\.cs" . csharp-mode)
   :hook (csharp-mode . vh/csharp-mode-func)
@@ -952,8 +902,7 @@ The command will invoke the specified subcommand in the project directory"
   (vh/define-dotnet-command "test")
   (vh/define-dotnet-command "restore"))
 
-(use-package omnisharp
-  :ensure t
+(use-package omnisharp :ensure t
   :commands (omnisharp-mode)
   :hook (csharp-mode . vh/omnisharp-csharp-func)
   :bind* (:map omnisharp-mode-map
@@ -969,8 +918,7 @@ The command will invoke the specified subcommand in the project directory"
                ("C-c . g i" . #'omnisharp-find-implementations)
                ("C-c . C-i" . #'omnisharp-auto-complete)
                )
-  :init
-  (custom-set-variables '(omnisharp-server-executable-path "~/.emacs.d/.cache/omnisharp/server/v1.34.5/run"))
+  :custom (omnisharp-server-executable-path "~/.emacs.d/.cache/omnisharp/server/v1.34.5/run")
   :config
   (defun vh/omnisharp-csharp-func ()
     (omnisharp-mode)
@@ -1012,8 +960,7 @@ The command will invoke the specified subcommand in the project directory"
                              "."
                              (vh/omnisharp--method-of stack))))))))))
 
-(use-package mvn
-  :ensure t
+(use-package mvn :ensure t
   :after cc-mode
   :commands (mvn-test-defun mvntest-class)
   :bind (:map java-mode-map
@@ -1066,8 +1013,7 @@ The command will invoke the specified subcommand in the project directory"
                             "mvn -Dtest=" class-name "#" test-case " test ")))
       (mvn-test (concat class-name (when test-case (concat "#" test-case)))))))
 
-(use-package groovy-mode
-  :ensure t
+(use-package groovy-mode :ensure t
   :commands groovy-mode
   :mode ("\\.gradle$" . groovy-mode))
 
@@ -1119,26 +1065,22 @@ The command will invoke the specified subcommand in the project directory"
       ))
   (advice-add 'projectile-test-prefix :around #'vh/projectile-test-prefix))
 
-(use-package inf-ruby
-  :ensure t)
+(use-package inf-ruby :ensure t)
 
-(use-package rake
-  :ensure t
+(use-package rake :ensure t
   :after projectile
   :config
   (projectile-register-project-type 'ruby '("Rakefile")
                                     :compile "rake"
                                     :test "rake test"))
 
-(use-package rbenv
-  :ensure t
+(use-package rbenv :ensure t
   :config
   (let ((path (getenv "PATH")))
     (when (not (string-match-p "\\.rbenv/shims" path))
       (setenv "PATH" (concat path path-separator (expand-file-name "~/.rbenv/shims"))))))
 
-(use-package bundler
-  :ensure t)
+(use-package bundler :ensure t)
 
 (use-package rspec-mode
   :disabled
@@ -1214,35 +1156,30 @@ The command will invoke the specified subcommand in the project directory"
 (use-package pymacs
   :commands pymacs-load)
 
-(use-package virtualenv
-  :ensure t
+(use-package virtualenv :ensure t
   :commands virtualenv-activate
   :config (defvar virtualenv-use-ipython nil))
 
-(use-package js2-mode
-  :ensure t
+(use-package js2-mode :ensure t
   :requires yasnippet
   :mode ("\\.js\\'" . js2-mode)
+  :custom (js2-indent-switch-body t)
   :config
   (yas-reload-all)
   (add-hook 'js2-mode-hook #'yas-minor-mode-on)
-  (custom-set-variables '(js2-indent-switch-body t))
   ;; This is for jasmine output. But it needs more work
   (add-to-list 'compilation-error-regexp-alist '("^\\W+at\\(.*\\)\\ (\\([^:]+\\):\\([0-9]+\\):\\([0-9]+\\)" 2 3 4)))
 
-(use-package lua-mode
-  :ensure t
+(use-package lua-mode :ensure t
   :commands lua-mode
-  :config
-  (add-hook 'lua-mode-hook #'(lambda ()
-                              (setq lua-electric-mode nil
-                                    lua-indent-level 4)
-                              ;; (choose-indent-type)
-                              (auto-fill-mode 1)
-                              (subword-mode 1))))
+  :hook  (lua-mode . (lambda ()
+                       (setq lua-electric-mode nil
+                             lua-indent-level 4)
+                       ;; (choose-indent-type)
+                       (auto-fill-mode 1)
+                       (subword-mode 1))))
 
-(use-package go-mode
-  :ensure t)
+(use-package go-mode :ensure t)
 
 (use-package cc-mode
   :bind (:map c-mode-map
@@ -1250,11 +1187,10 @@ The command will invoke the specified subcommand in the project directory"
               ("C-c C-v" . c-helper-find-include-file))
   
   
+  :custom ((c-echo-syntactic-information-p t)
+           (c-electric-pound-behavior '(alignleft))
+           (c-indent-comments-syntactically-p t))
   :config
-  ;; These are common settings for all cc modes
-  (custom-set-variables '(c-echo-syntactic-information-p t)
-                        '(c-electric-pound-behavior '(alignleft))
-                        '(c-indent-comments-syntactically-p t))
   (setq c-macro-shrink-window-flag t)
   (add-hook 'c-mode-common-hook (lambda ()
                                   (auto-fill-mode t)
@@ -1538,15 +1474,68 @@ The command will invoke the specified subcommand in the project directory"
                                             (block-close . c-snug-do-while)))))
   
   
+  (c-add-style "java-google"
+               '("java"
+                 (c-tab-always-indent        . t)
+                 (c-basic-offset . 2)
+                 (c-ignore-auto-fill . nil)
+                 (c-comment-only-line-offset . (0 . 0))
+                 (c-hanging-braces-alist     . ((class-open after)
+                                                (inexpr-class-open after)
+                                                (inexpr-class-close before)
+                                                (defun-open after)
+                                                (inline-open after)
+                                                (substatement-open after)
+                                                (block-close . c-snug-do-while)
+                                                (brace-list-open)))
+                 (c-hanging-colons-alist     . ((member-init-intro before)
+                                                (inher-intro)
+                                                (case-label after)
+                                                (label after)
+                                                (access-label after)))
+                 (c-cleanup-list             . (scope-operator
+                                                brace-else-brace
+                                                brace-elseif-brace
+                                                brace-catch-brace
+                                                empty-defun-braces
+                                                defun-close-semi))
+                 (c-offsets-alist . ((knr-argdecl-intro . 5)
+                                     (arglist-intro . +)
+                                     (arglist-close . c-lineup-close-paren)
+                                     (inclass . +)
+                                     (member-init-intro . +)
+                                     (statement-block-intro . +)
+                                     (defun-block-intro . +)
+                                     (substatement-open . 0)
+                                     (label . 0)
+                                     (statement-case-open . +)
+                                     (statement-case-intro . +)
+                                     (case-label . 0)
+                                     (statement-cont . c-lineup-math)
+                                     (inline-open . 0)
+                                     (brace-list-open . +)
+                                     (topmost-intro-cont . 0)
+                                     (c . 1) ; "c" for continue of comment, not "c
+                                          ; programming language"
+                                     ))
+                 (c-special-indent-hook . c-gnu-impose-minimum)
+                 (c-block-comment-prefix . "lgf: ")
+                 (c-comment-prefix-regexp . ((awk-mode . "#+(lgf: )?")
+                                             (other ."lgf: \\|//+\\|\\**")))
+                 ;; go to this file and test if c block comments works
+                 ;; [[file:./patches/comments-test.c]]
+                 (c-echo-syntactic-information-p . t)))
   (add-hook 'java-mode-hook (lambda ()
                               (subword-mode)
-                              (c-set-style "java-custom"))))
+                              (c-toggle-auto-newline 1)
+                              (setq c-cleanup-list 'set-from-style)
+                              (c-set-style "java-google"))))
 
-(use-package flycheck
-  :ensure t
+(use-package flycheck :ensure t
   :bind (:map flycheck-mode-map ("C-c ! !" . org-time-stamp-inactive))
   :init
   (global-flycheck-mode)
+  :custom (flycheck-temp-prefix "#flycheck")
   :config
   (add-hook 'js2-mode-hook (lambda nil
                              (add-to-list 'flycheck-disabled-checkers 'javascript-jshint)))
@@ -1554,8 +1543,7 @@ The command will invoke the specified subcommand in the project directory"
   (custom-set-variables '(flycheck-javascript-eslint-executable "/usr/local/bin/eslint"))
   (custom-set-variables '(flycheck-emacs-lisp-load-path 'inherit))
   (add-hook 'emacs-lisp-mode-hook (lambda nil
-                                    (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc)))
-  (custom-set-variables '(flycheck-temp-prefix "#flycheck")))
+                                    (add-to-list 'flycheck-disabled-checkers 'emacs-lisp-checkdoc))))
 
 (let* ((flycheck-java-dir "~/.emacs.d/elisp/thirdparty/flycheck-java")
        (bin-dir "~/.emacs.d/bin")
@@ -1568,11 +1556,9 @@ The command will invoke the specified subcommand in the project directory"
       :config
       (setq flycheck-java-ecj-jar-path ecj-jar-file))))
 
-(use-package haskell-mode
-  :ensure t
-  :config
-  (setq flycheck-ghc-args "-dynamic")
-  (custom-set-variables '(haskell-compile-command "ghc -dynamic -Wall -ferror-spans -fforce-recomp -c %s")))
+(use-package haskell-mode :ensure t
+  :custom ((flycheck-ghc-args "-dynamic")
+           (haskell-compile-command "ghc -dynamic -Wall -ferror-spans -fforce-recomp -c %s")))
 
 (defun yaml-outline-level ()
     "Return the outline level based on the indentation, hardcoded at 2 spaces."
@@ -1615,15 +1601,12 @@ The command will invoke the specified subcommand in the project directory"
                (add-to-list 'rng-schema-locating-files
                             "~/.emacs.d/nxml-schemas/libvirt/schemas.xml"))))
 
-(use-package org
-  :ensure org-plus-contrib
+(use-package org :ensure org-plus-contrib :defer
   :hook (org-mode . (lambda ()
                       (auto-fill-mode)))
   :bind (("C-c b o"   . org-switchb)
          ("C-c b 4 o" . org-switch-to-buffer-other-window)
          ("C-c l"     . org-store-link))
-
-  :defer
   :init
   (defun vh/revert-org-insert-heading-arg-behavior (&optional old-function arg
                                                               invisible-ok top &rest future-args)
@@ -1640,30 +1623,28 @@ immediately after current heading."
       (apply old-function arg invisible-ok top future-args)))
 
   (advice-add #'org-insert-heading :around #'vh/revert-org-insert-heading-arg-behavior)
+  :custom ((org-hide-leading-stars t)
+           (org-log-done 'time)
+           (org-log-reschedule 'note)
+           (org-log-redeadline 'note)
+           (org-log-into-drawer "LOGBOOK")
+           (org-return-follows-link t)
+           (org-special-ctrl-a/e t)
+           (org-treat-S-cursor-todo-selection-as-state-change nil)
+           ;; Column view and estimates
+           (org-columns-default-format "%80ITEM(Task) %7TODO(To Do) %10Effort(Estim){:} %10CLOCKSUM{+}")
+           (org-global-properties '(("Effort_ALL" . "0:0 0:10 0:30 1:00 2:00 3:00 4:00 8:00")))
+           (org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+           ;; Mark a task as DONE when archiving)
+           (org-archive-mark-done nil)
+           (org-src-fontify-natively t)
+           (org-time-clocksum-use-effort-durations t)
+           (org-M-RET-may-split-line '((default . nil)))
+           (org-tags-column 0))
   :config
-  (setq org-hide-leading-stars t
-        org-log-done 'time
-        org-log-reschedule 'note
-        org-log-redeadline 'note
-        org-log-into-drawer "LOGBOOK"
-        org-return-follows-link t
-        org-special-ctrl-a/e t
-        org-treat-S-cursor-todo-selection-as-state-change nil
-        ;; Column view and estimates
-        org-columns-default-format "%80ITEM(Task) %7TODO(To Do) %10Effort(Estim){:} %10CLOCKSUM{+}"
-        org-global-properties '(("Effort_ALL" . "0:0 0:10 0:30 1:00 2:00 3:00 4:00 8:00"))
-        org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)
-        ;; Mark a task as DONE when archiving
-        org-archive-mark-done nil
-        org-src-fontify-natively t
-        org-time-clocksum-use-effort-durations t
-        org-M-RET-may-split-line '((default . nil)))
-  (custom-set-variables '(org-tags-column 0))
   (unbind-key "C-c ;" org-mode-map)
   (unbind-key "C-c C-x C-s" org-mode-map)
-  (add-to-list 'org-modules 'org-habit)
-  
-  )
+  (add-to-list 'org-modules 'org-habit))
 
 (use-package org-agenda
   :after org
@@ -1800,9 +1781,8 @@ immediately after current heading."
                                                       "/*]]>*/-->"
                                                       "</style>"))))
 
-(use-package ob-core                         ;org-babel
+(use-package ob-core :defer
   :after org
-  :defer
   :config
   (custom-set-variables '(org-babel-min-lines-for-block-output 999)
                         '(org-babel-results-keyword "results"))
@@ -1877,9 +1857,8 @@ immediately after current heading."
 
   )
 
-(use-package org-habit
+(use-package org-habit :defer
   :after org-agenda
-  :defer
   :config
   (custom-set-variables '(org-habit-graph-column 80)
                         '(org-habit-show-habits-only-for-today nil)))
@@ -1894,8 +1873,7 @@ immediately after current heading."
 (use-package org
   :hook ((org-mode . (lambda () (set-buffer-variable-pitch 'org-table 'org-code 'org-block 'org-meta-line)))))
 
-(use-package org-superstar
-  :ensure t
+(use-package org-superstar :ensure t
   :hook ((org-mode . org-superstar-mode))
   :config
   (custom-set-variables '(org-superstar-remove-leading-stars nil)
@@ -1921,15 +1899,13 @@ immediately after current heading."
   (org-clock-persistence-insinuate)
   (org-clock-load))
 
-(use-package diary-lib
-  :defer
+(use-package diary-lib :defer
   :config
   (add-hook 'diary-list-entries-hook 'diary-sort-entries t)
   (add-hook 'diary-list-entries-hook 'diary-include-other-diary-files)
   (add-hook 'diary-mark-entries-hook 'diary-mark-included-diary-files))
 
-(use-package ledger-mode
-  :ensure t
+(use-package ledger-mode :ensure t
   :commands ledger-mode
   :config
   (add-hook 'ledger-mode-hook (lambda ()
@@ -1943,28 +1919,21 @@ immediately after current heading."
     (when (looking-at "\n\n\n")
       (delete-char 2))))
 
-(use-package sdcv-mode
-  :defer
+(use-package sdcv-mode :defer
   :bind ( ("C-c C-d" . sdcv-search)))
 
-(use-package wgrep
-  :ensure t)
+(use-package wgrep :ensure t)
 
-(use-package dockerfile-mode
-  :ensure t)
+(use-package dockerfile-mode :ensure t)
 
-(use-package pdf-tools
-  :ensure t
-  :defer t
+(use-package pdf-tools :ensure t :defer
   :config
   (custom-set-variables '(pdf-info-epdfinfo-program "/usr/bin/epdfinfo")))
 
 (use-package nov
-  :mode ("\\.epub\\'" . nov-mode)
-  :ensure t)
+  :mode ("\\.epub\\'" . nov-mode) :ensure t)
 
-(use-package elfeed-org
-  :ensure t
+(use-package elfeed-org :ensure t
   :config
   (elfeed-org)
   (custom-set-variables '(rmh-elfeed-org-files '("~/org/feeds.org"))))
@@ -1990,8 +1959,7 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
       (elfeed-search-tag-all 'junk))
     (elfeed-search-untag-all 'unread)))
 
-(use-package elfeed
-  :ensure t
+(use-package elfeed :ensure t
   :bind (:map elfeed-show-mode-map
               ("<tab>" . shr-next-link)
               :map elfeed-search-mode-map
@@ -2004,11 +1972,9 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
   (advice-add #'elfeed-search-filter :around #'elfeed-search-case-fold)
   (advice-add #'elfeed-search-compile-filter :around #'elfeed-search-compile-case-fold))
 
-(use-package hackernews
-  :ensure t)
+(use-package hackernews :ensure t)
 
-(use-package eww
-  :ensure t
+(use-package eww :ensure t
   :config
   (customize-set-variable 'eww-search-prefix "https://startpage.com/do/search?prf=95fa00857b1c3634f33a56a3f0f7e96b&query="))
 
@@ -2018,9 +1984,7 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
         shr-use-fonts t
         shr-width 120))
 
-(use-package w3m
-  :defer t
-  :ensure t
+(use-package w3m :ensure t :defer
   :init                                 ; shouldn't this be :config? Check with gnus
   (custom-set-variables '(w3m-use-tab-line nil)))
 
