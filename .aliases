@@ -83,3 +83,5 @@ alias repostat="repo forall -c 'git -P branch --format=\"%(refname:short) %(upst
 
 alias ytclip="mpv \`xsel -b\`"
 alias ytmclip="mpv --vo=null \`xsel -b\`"
+
+alias sddd='sudo dd bs=4M oflag=direct status=progress'
