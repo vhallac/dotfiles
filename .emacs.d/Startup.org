@@ -40,9 +40,7 @@
 * How to Use this file
 
   This file contains configuration script snippets organized by different type
-  of headings. In order to be able to keep things seperate, I will try to
-  minimize the use of package/variable customization using ~customize-group~ or
-  ~customize-variable~.
+  of headings.
 
   Each snippet is an org mode source block. Each block can be edited in a
   separate buffer by pressing =C-c '= (or =M-x org-edit-special=). In order to
@@ -58,7 +56,7 @@
 
   #+begin_src emacs-lisp
     (setq custom-file "~/.emacs.d/customizations.el")
-    ;; I don't want any customizations to linger. Anything interesting in this file
+    ;; I don't want any customizations to longer. Anything interesting in this file
     ;; should be moved to the appropriate section in startup.
     ;; (load-file custom-file)
   #+end_src
