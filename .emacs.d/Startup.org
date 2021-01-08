@@ -345,9 +345,8 @@
    - Generate unique buffer names:
      #+begin_src emacs-lisp
        (use-package uniquify
-         :config
-         (custom-set-variables '(uniquify-buffer-name-style 'post-forward)
-                               '(uniquify-separator ":")))
+         :custom ((uniquify-buffer-name-style 'post-forward)
+                  (uniquify-separator ":")))
      #+end_src
 ** Status Bar Setup
 
@@ -508,17 +507,13 @@
 
   #+begin_src emacs-lisp
     (use-package tramp-sh
+      :custom ((tramp-ssh-controlmaster-options (concat
+                                                 "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+                                                 "-o ControlMaster=auto -o ControlPersist=15m"))
+               (tramp-use-ssh-controlmaster-options t)
+               (tramp-completion-reread-directory-timeout nil))
       :config
-      (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-      (customize-set-variable 'tramp-ssh-controlmaster-options
-       (concat
-        "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
-        "-o ControlMaster=auto -o ControlPersist=15m"))
-
-      (customize-set-variable 'tramp-use-ssh-controlmaster-options t)
-
-      (customize-set-variable
-       'tramp-completion-reread-directory-timeout nil))
+      (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
   #+end_src
 
 * Misc Functions
@@ -528,13 +523,14 @@
    #+begin_src emacs-lisp
      (use-package eshell
        :bind ("C-c s" . eshell)
+       :custom  ((eshell-scroll-to-bottom-on-input 'all)
+                 (eshell-error-if-no-glob t)
+                 (eshell-hist-ignoredups t)
+                 (eshell-save-history-on-exit t)
+                 ;; Not sure about this (eshell-prefer-lisp-functions nil)
+                 (eshell-destroy-buffer-when-process-dies t)
+                 (eshell-expand-input-functions '(eshell-expand-history-references)))
        :config
-       (custom-set-variables '(eshell-scroll-to-bottom-on-input 'all)
-                             '(eshell-error-if-no-glob t)
-                             '(eshell-hist-ignoredups t)
-                             '(eshell-save-history-on-exit t)
-                             ;; Not sure about this (eshell-prefer-lisp-functions nil)
-                             '(eshell-destroy-buffer-when-process-dies t))
        (setenv "PAGER" "cat")
        (defvar zakame/ansi-escapes-re
          (rx (or ?\233 (and ?\e ?\[))
@@ -551,8 +547,7 @@
        (add-hook 'eshell-mode-hook
                  (lambda ()
                    (add-to-list 'eshell-output-filter-functions
-                                'zakame/eshell-nuke-ansi-escapes t))
-                 ))
+                                'zakame/eshell-nuke-ansi-escapes t))))
    #+end_src
 
 ** Shell
@@ -629,26 +624,24 @@
 
     #+begin_src emacs-lisp
       (use-package midnight
+        :custom ((clean-buffer-list-delay-special 900) ;; kill buffers after 15 minutes
+                 ;; kill everything, (leaves unsaved buffers alone) ...
+                 (clean-buffer-list-kill-regexps '("^.*$"))
+                 ;; ... except these
+                 (clean-buffer-list-kill-never-buffer-names '("*Messages*" "*cmd*" "*scratch*"
+                                                              "*w3m*" "*w3m-cache*"
+                                                              "*Group*" "*eshell*"))
+                 (clean-buffer-list-kill-never-regexps '("^\\*EMMS Playlist\\*.*$"
+                                                         "^\\*Article "
+                                                         "^\\*Summary "
+                                                         ".*\\.org")))
         :config
         ;; run clean-buffer-list every 2 hours
         (defvar clean-buffer-list-timer (run-at-time t 7200 'clean-buffer-list)
           "Stores clean-buffer-list timer if there is one.
 
            You can disable clean-buffer-list by (cancel-timer clean-buffer-list-timer).")
-             ;; kill buffers if they were last disabled more than 15 minutes ago
-             (custom-set-variables '(clean-buffer-list-delay-special 900)
-                                   ;; kill everything, clean-buffer-list is very intelligent at not killing
-                                   ;; unsaved buffer.
-                                   '(clean-buffer-list-kill-regexps '("^.*$"))
-
-                                   ;; keep these buffers untouched
-                                   '(clean-buffer-list-kill-never-buffer-names '("*Messages*" "*cmd*" "*scratch*"
-                                                                                 "*w3m*" "*w3m-cache*"
-                                                                                 "*Group*" "*eshell*"))
-                                   '(clean-buffer-list-kill-never-regexps '("^\\*EMMS Playlist\\*.*$"
-                                                                            "^\\*Article "
-                                                                            "^\\*Summary "
-                                                                            ".*\\.org"))))
+      )
     #+end_src
 
 ** Text Editing
@@ -785,9 +778,9 @@
      (use-package elscreen
        :ensure t
        :demand
+       :custom (elscreen-display-tab nil)
        :config
-       (elscreen-start)
-       (custom-set-variables '(elscreen-display-tab nil)))
+       (elscreen-start))
    #+end_src
 *** DISABLED eyebrowse
     CLOSED: [2020-09-23 Wed 09:51]
@@ -802,8 +795,7 @@
        :demand
        :init
        (eyebrowse-mode)
-       :config
-       (custom-set-variables '(eyebrowse-keymap-prefix (kbd "C-z"))))
+       :custom (eyebrowse-keymap-prefix (kbd "C-z")))
    #+end_src
 ** browse-kill-ring
 
@@ -843,8 +835,7 @@
      (use-package ace-window
        :ensure t
        :bind (( "C-x o" . ace-window))
-       :config
-       (custom-set-variables '(aw-scope 'visible)))
+       :custom (aw-scope 'visible))
    #+end_src
 
 ** Navigation
@@ -919,12 +910,10 @@
    #+begin_src emacs-lisp
      (use-package dired
        :defer
-       :config
-       (custom-set-variables '(dired-dwim-target t))
-       (add-hook 'dired-mode-hook
-                 (lambda ()
-                   (make-local-variable 'coding-system-for-read)
-                   (setq coding-system-for-read 'utf-8))))
+       :custom (dired-dwim-target t)
+       :hook  (dired-mode . (lambda ()
+                            (make-local-variable 'coding-system-for-read)
+                            (setq coding-system-for-read 'utf-8))))
    #+end_src
 ** ERC
    IRC is still alive. :)
@@ -932,12 +921,13 @@
    #+begin_src emacs-lisp
      (use-package erc
        :commands erc
+       :custom ((erc-dcc-get-default-directory "~/erc_dcc")
+                (erc-dcc-mode t)
+                (erc-dcc-verbose t)
+                (erc-modules '(autojoin button completion dcc fill irccontrols
+                                        list match menu move-to-prompt netsplit networks
+                                        noncommands readonly ring stamp track)))
        :config
-       (custom-set-variables '(erc-dcc-get-default-directory "~/erc_dcc")
-                             '(erc-dcc-mode t)
-                             '(erc-dcc-verbose t)
-                             '(erc-modules '(autojoin button completion dcc fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring stamp track)))
-
        ;; If the DCC download directory is missing, create it.
        (if (not (file-exists-p erc-dcc-get-default-directory))
            (make-directory erc-dcc-get-default-directory t)))
@@ -954,10 +944,10 @@
         :ensure t
         :pin melpa
         :demand
+        :custom ((ivy-use-virtual-buffers t)
+                 (ivy-count-format "(%d/%d) "))
         :config
         (ivy-mode)
-        (custom-set-variables '(ivy-use-virtual-buffers t)
-                              '(ivy-count-format "(%d/%d) "))
         (ivy-set-occur 'ivy-switch-buffer 'ivy-switch-buffer-occur))
 
       (use-package ivy-hydra
@@ -981,6 +971,7 @@
         ;; Assume utf-8 output from my counsel commands
         (defun vh/coding-system--counsel-cmd (&optional old-function &rest args)
           (let ((coding-system-for-read 'utf-8-unix))
+
             (apply old-function args)))
 
         ;; Patch counsel-ag only for now. Will extend as more problems show up
@@ -1107,35 +1098,35 @@
     Fonts are mostly OK for now, but I will change it if I want more variable pitch fonts.
 
     #+begin_src emacs-lisp :noweb yes
+      <<gnus-config-support>>
       (use-package gnus
         :commands gnus
+        :custom ((gnus-select-method '(nntp "news.easynews.com"))
+                 (gnus-check-new-newsgroups nil)
+                 (gnus-posting-styles '(((message-news-p)
+                                         (name "Vedat Hallac")
+                                         (address "vedat.hallac@mail.invalid"))
+                                        ("gmail-2"
+                                         (name "Dys@Bloodfeather")
+                                         (address "dys.wowace@gmail.com"))
+                                        ("gmail-android"
+                                         (name "Vedat Hallac")
+                                         (address "vedat@android.ciyiz.biz"))))
+                 (gnus-secondary-select-methods `((nntp "news.gmane.io"
+                                                        (gnus-check-new-newsgroups nil))
+                                                  ,(mk-gnus-select-method "gmail-2" "imap.gmail.com")
+                                                  ,(mk-gnus-select-method "gmail-android" "imap.gmail.com")))
+                 (gnus-use-adaptive-scoring '(word line))
+                 (gnus-activate-level 3)
+                 (gnus-score-expiry-days 60)
+                 (gnus-default-adaptive-score-alist '((gnus-unread-mark)
+                                                      (gnus-ticked-mark (from 40))
+                                                      (gnus-dormant-mark (from 50))
+                                                      (gnus-saved-mark (from 200) (subject 50))
+                                                      (gnus-del-mark (from -20) (subject -50))
+                                                      (gnus-read-mark (from 20) (subject 10))
+                                                      (gnus-killed-mark (from -10) (subject -30)))))
         :config
-        <<gnus-config-support>>
-        (custom-set-variables '(gnus-select-method '(nntp "news.easynews.com"))
-                              '(gnus-check-new-newsgroups nil)
-                              '(gnus-posting-styles '(((message-news-p)
-                                                       (name "Vedat Hallac")
-                                                       (address "vedat.hallac@mail.invalid"))
-                                                      ("gmail-2"
-                                                       (name "Dys@Bloodfeather")
-                                                       (address "dys.wowace@gmail.com"))
-                                                      ("gmail-android"
-                                                       (name "Vedat Hallac")
-                                                       (address "vedat@android.ciyiz.biz"))))
-                              `(gnus-secondary-select-methods '((nntp "news.gmane.io"
-                                                                      (gnus-check-new-newsgroups nil))
-                                                                ,(mk-gnus-select-method "gmail-2" "imap.gmail.com")
-                                                                ,(mk-gnus-select-method "gmail-android" "imap.gmail.com")))
-                              '(gnus-use-adaptive-scoring '(word line))
-                              '(gnus-activate-level 3)
-                              '(gnus-score-expiry-days 60)
-                              '(gnus-default-adaptive-score-alist '((gnus-unread-mark)
-                                                                    (gnus-ticked-mark (from 40))
-                                                                    (gnus-dormant-mark (from 50))
-                                                                    (gnus-saved-mark (from 200) (subject 50))
-                                                                    (gnus-del-mark (from -20) (subject -50))
-                                                                    (gnus-read-mark (from 20) (subject 10))
-                                                                    (gnus-killed-mark (from -10) (subject -30)))))
         (setq gnus-topic-line-format "%i[ %0{%(%n (new: %A)%)%} ]\n"
               mail-self-blind t                     ; Add me to Bcc:
               mail-user-agent 'gnus-user-agent      ; Allow Gcc:
@@ -1164,12 +1155,11 @@
 
       (use-package mm-decode
         :defer
-        :config
-        (custom-set-variables '(mm-text-html-renderer 'shr)
-                              '(mm-inline-text-html-with-images t)
-                              '(mm-w3m-safe-url-regexp nil)
-                              '(mm-inline-large-images t)
-                              '(mm-coding-system-priorities '(utf-8))))
+        :custom ((mm-text-html-renderer 'shr)
+                 (mm-inline-text-html-with-images t)
+                 (mm-w3m-safe-url-regexp nil)
+                 (mm-inline-large-images t)
+                 (mm-coding-system-priorities '(utf-8))))
     #+end_src
 **** Configuration support functions
      #+name: gnus-config-support
@@ -1236,39 +1226,38 @@
           ("s" (notmuch-search) "Search mail")
           ("z" (notmuch-tree) "Search Mail (tree view)")
           ("j" (notmuch-jump-search) "Search with saved queries "))
-        (custom-set-variables '(notmuch-saved-searches
-                                (quote
-                                 ((:name "inbox.personal" :query "tag:inbox and tag:personal" :key "im")
-                                  (:name "inbox.work" :query "tag:inbox and tag:pia" :key "ip")
-                                  (:name "unread.personal" :query "tag:unread and tag:personal" :key "um")
-                                  (:name "unread.work.pia" :query "tag:unread and tag:pia" :key "up")
-                                  (:name "unread.work.qbit" :query "tag:unread and tag:qbit" :key "uq")
-                                  (:name "unread.work.wamo" :query "tag:unread and tag:wamo" :key "uw")
-                                  (:name "flagged" :query "tag:flagged" :key "f")
-                                  (:name "flagged-tree" :search-type tree :query "tag:flagged" :key "F")
-                                  (:name "sent" :query "tag:sent" :key "t")
-                                  (:name "drafts" :query "tag:draft" :key "dr")
-                                  (:name "today" :query "dag:unread and date:today" :key "dt")
-                                  (:name "last week" :query "date:\"this week\"" :key "dw")
-                                  (:name "last week" :query "date:\"this month\"" :key "dm")
-                                  (:name "all mail" :query "*" :key "a")
-                                  (:name "info" :query "tag:info" :key "i")
-                                  (:name "recent" :query "tag:unread and (date:yesterday or date:today)" :key "ur" :search-type tree)))))
+        :custom ((notmuch-saved-searches
+                  '((:name "inbox.personal" :query "tag:inbox and tag:personal" :key "im")
+                    (:name "inbox.work" :query "tag:inbox and tag:pia" :key "ip")
+                    (:name "unread.personal" :query "tag:unread and tag:personal" :key "um")
+                    (:name "unread.work.pia" :query "tag:unread and tag:pia" :key "up")
+                    (:name "unread.work.qbit" :query "tag:unread and tag:qbit" :key "uq")
+                    (:name "unread.work.wamo" :query "tag:unread and tag:wamo" :key "uw")
+                    (:name "flagged" :query "tag:flagged" :key "f")
+                    (:name "flagged-tree" :search-type tree :query "tag:flagged" :key "F")
+                    (:name "sent" :query "tag:sent" :key "t")
+                    (:name "drafts" :query "tag:draft" :key "dr")
+                    (:name "today" :query "dag:unread and date:today" :key "dt")
+                    (:name "last week" :query "date:\"this week\"" :key "dw")
+                    (:name "last week" :query "date:\"this month\"" :key "dm")
+                    (:name "all mail" :query "*" :key "a")
+                    (:name "info" :query "tag:info" :key "i")
+                    (:name "recent" :query "tag:unread and (date:yesterday or date:today)" :key "ur" :search-type tree)))
+
+                 (notmuch-archive-tags '("-inbox" "+archived"))
+                 (notmuch-always-prompt-for-sender t)
+                 (notmuch-identities '("Vedat Hallaç <vedat.hallac@pia-team.com>"
+                                       "Vedat Hallaç <vedath@7island.com>"
+                                       "Vedat Hallaç <vedat@hallac.net>"
+                                       "Vedat Hallaç <vedat.hallac@pia-systems.com>"
+                                       "Vedat Hallaç <vedat@wamo.io>"))
+                 (mm-text-html-renderer 'shr)
+                 (notmuch-address-use-company nil)
+                 (notmuch-command (expand-file-name "~/bin/remote-notmuch.sh")))
         :config
         ;; allow linking to mail from org-mode files
         (require 'ol-notmuch)
-        (setq notmuch-command (expand-file-name "~/bin/remote-notmuch.sh"))
-        (custom-set-variables
-         '(notmuch-archive-tags '("-inbox" "+archived"))
-         '(notmuch-always-prompt-for-sender t)
-         '(notmuch-identities (quote
-                               ("Vedat Hallaç <vedat.hallac@pia-team.com>"
-                                "Vedat Hallaç <vedath@7island.com>"
-                                "Vedat Hallaç <vedat@hallac.net>"
-                                "Vedat Hallaç <vedat.hallac@pia-systems.com>"
-                                "Vedat Hallaç <vedat@wamo.io>")))
-         '(mm-text-html-renderer 'shr)
-         '(notmuch-address-use-company nil))
+
         ;; Mark deleted messages unread for fast delete
         (setcar (cdr (assoc "d" notmuch-tagging-keys)) '("+deleted" "-inbox" "-unread"))
         (push '("lf" ("+financial" "-inbox") "Financial") notmuch-tagging-keys)
@@ -1287,28 +1276,26 @@
 *** Composing messages
 
     #+begin_src emacs-lisp :noweb yes
+      <<mail-compose-functions>>
       (use-package message
         :bind (:map message-mode-map
                     ("C-c o" . vh/message-edit-body-as-org)
                     ("C-c h" . vh/message-org-to-html)
                     ("C-c s" . vh/insert-pia-html-sig))
         :defer
+        :custom ((message-alternative-emails (regexp-opt '("vedathallac@gmail.com"
+                                                           "vedat.hallac@gmail.com"
+                                                           "dys.wowace@gmail.com"
+                                                           "vedat@android.ciyiz.biz"
+                                                           "vedat@oyun.cuyuz.biz"
+                                                           "vedathallac@yandex.com"
+                                                           "vedat@hallac.net"
+                                                           "vedath@7island.com"
+                                                           "vedat.hallac@pia-team.com"
+                                                           "vedat.hallac@pia-systems.com"
+                                                           "vedat@wamo.io")))
+                 (send-mail-function 'smtpmail-send-it))
         :config
-        (custom-set-variables '(message-alternative-emails (regexp-opt '("vedathallac@gmail.com"
-                                                                         "vedat.hallac@gmail.com"
-                                                                         "dys.wowace@gmail.com"
-                                                                         "vedat@android.ciyiz.biz"
-                                                                         "vedat@oyun.cuyuz.biz"
-                                                                         "vedathallac@yandex.com"
-                                                                         "vedat@hallac.net"
-                                                                         "vedath@7island.com"
-                                                                         "vedat.hallac@pia-team.com"
-                                                                         "vedat.hallac@pia-systems.com"
-                                                                         "vedat@wamo.io")))
-                              '(send-mail-function 'smtpmail-send-it))
-
-        <<mail-compose-functions>>
-
         (require 'smtpmail)
         (when (require 'bbdb nil t)
           (bbdb-initialize 'message)
@@ -1399,10 +1386,8 @@
     #+begin_src emacs-lisp :noweb yes
       (use-package smtpmail
         :defer
+        :custom (mail-host-address "hallac.net")
         :config
-
-        (custom-set-variables '(mail-host-address "hallac.net"))
-
         (setq smtp-accounts '( (ssl "vedathallac@gmail.com" "gmail-1" "smtp.googlemail.com" 587)
                                (ssl "dys.wowace@gmail.com" "gmail-2" "smtp.googlemail.com" 587)
                                (ssl "vedat@android.ciyiz.biz" "gmail-android" "smtp.googlemail.com" 587)
@@ -1416,12 +1401,12 @@
       (use-package tls
         :requires smtp-openssl
         :defer
+        :custom (tls-program `(,(concat
+                                   (if (boundp 'openssl-prg)
+                                       openssl-prg
+                                     "openssl")
+                                   " s_client -connect %h:%p -no_ssl2 -ign_eof")))
         :config
-        (custom-set-variables '(tls-program `(,(concat
-                                                (if (boundp 'openssl-prg)
-                                                    openssl-prg
-                                                  "openssl")
-                                                " s_client -connect %h:%p -no_ssl2 -ign_eof"))))
         (require 'smtp-openssl))
 
       (use-package smtp-openssl
@@ -1438,8 +1423,7 @@
      #+name: smtp-switch-helper
      #+begin_src emacs-lisp
        (use-package gnutls
-         :config
-         (custom-set-variables '(gnutls-min-prime-bits 1024)))
+         :custom (gnutls-min-prime-bits 1024))
 
        ;;; This only works for emacs 24 and (hopefully) above
        (defun set-smtp-common (alias server port &optional user password)
@@ -1497,19 +1481,16 @@
       (use-package bbdb
         :ensure t
         :defer
+        :custom ((bbdb-update-records-p 'query)
+                 (bbdb-mua-update-interactive-p '(search . query))
+                 ;; Uncommenting the following allows me to auto-capture e-mails into BBDB
+                 ;; (bbdb-accept-message-alist '( ("From" . "@pia-team\.com")
+                 ;;                                ("From" . "@\\(?:milleni\\|turkcell\\)\.com\.tr")))
+
+                 ;; use %uB for names in gnus-summary-line-format configuration
+                 (bbdb-mua-summary-unify-format-letter "B"))
         :config
-        (custom-set-variables '(bbdb-update-records-p 'query)
-                              '(bbdb-mua-update-interactive-p '(search . query))
-
-                              ;; Uncommenting the following allows me to auto-capture e-mails into BBDB
-                              ;; '(bbdb-accept-message-alist '( ("From" . "@pia-team\.com")
-                              ;;                                ("From" . "@\\(?:milleni\\|turkcell\\)\.com\.tr")))
-
-                              ;; use %uB for names in gnus-summary-line-format configuration
-                              '(bbdb-mua-summary-unify-format-letter "B") )
         (setq bbdb/gnus-score-default 10))
-
-
     #+end_src
 
     I am currently using notmuch for sending emails. Auto complete wortks great for me, but accumulating all my emails over more that
@@ -1527,35 +1508,35 @@
    #+begin_src emacs-lisp :tangle no
           (use-package projectile
             :ensure t
-            :config
-            (projectile-register-project-type 'ant '("build.xml")
-                                              :compile "ant"
-                                              :test "ant test")
-            (add-to-list 'projectile-project-root-files "build.xml")
-            (projectile-register-project-type 'nodejs '("package.json")
-                                              :compile "npm --no-color build"
-                                              :test "npm --no-color test")
-            (mapc (lambda (x) (add-to-list 'projectile-globally-ignored-directories x))
-                  (list "node_modules" "target" "bower_components"))
+       :custom ((projectile-project-root-files-functions '(projectile-root-top-down
+                                                                         projectile-root-bottom-up
+                                                                         projectile-root-top-down-recurring))
+                (projectile-enable-caching t))
+       :config
+       (projectile-register-project-type 'ant '("build.xml")
+                                         :compile "ant"
+                                         :test "ant test")
+       (add-to-list 'projectile-project-root-files "build.xml")
+       (projectile-register-project-type 'nodejs '("package.json")
+                                         :compile "npm --no-color build"
+                                         :test "npm --no-color test")
+       (mapc (lambda (x) (add-to-list 'projectile-globally-ignored-directories x))
+             (list "node_modules" "target" "bower_components"))
 
-            (custom-set-variables '(projectile-project-root-files-functions '(projectile-root-top-down
-                                                                              projectile-root-bottom-up
-                                                                              projectile-root-top-down-recurring))
-                                  '(projectile-enable-caching t))
-            (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-            (projectile-global-mode)
+       (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+       (projectile-global-mode)
 
-            (defun cd-disable-projectile-mode-for-remote (current-dir)
-              (if (and (functionp 'projectile-mode) (file-remote-p current-dir))
-                  (projectile-mode 0)
-                (projectile-mode 1)))
-            (advice-add 'cd :filter-return #'cd-disable-projectile-mode-for-remote))
+       (defun cd-disable-projectile-mode-for-remote (current-dir)
+         (if (and (functionp 'projectile-mode) (file-remote-p current-dir))
+             (projectile-mode 0)
+           (projectile-mode 1)))
+       (advice-add 'cd :filter-return #'cd-disable-projectile-mode-for-remote))
 
           (use-package counsel-projectile
             :ensure t
-            :after projectile
-            :config
-            (counsel-projectile-mode))
+       :after projectile
+       :config
+       (counsel-projectile-mode))
    #+end_src
 ** Programming Languages
 *** C
@@ -1983,8 +1964,7 @@
                      ("C-c . g i" . #'omnisharp-find-implementations)
                      ("C-c . C-i" . #'omnisharp-auto-complete)
                      )
-        :init
-        (custom-set-variables '(omnisharp-server-executable-path "~/.emacs.d/.cache/omnisharp/server/v1.34.5/run"))
+        :custom (omnisharp-server-executable-path "~/.emacs.d/.cache/omnisharp/server/v1.34.5/run")
         :config
         (defun vh/omnisharp-csharp-func ()
           (omnisharp-mode)
@@ -2275,10 +2255,10 @@
         :ensure t
         :requires yasnippet
         :mode ("\\.js\\'" . js2-mode)
+        :custom (js2-indent-switch-body t)
         :config
         (yas-reload-all)
         (add-hook 'js2-mode-hook #'yas-minor-mode-on)
-        (custom-set-variables '(js2-indent-switch-body t))
         ;; This is for jasmine output. But it needs more work
         (add-to-list 'compilation-error-regexp-alist '("^\\W+at\\(.*\\)\\ (\\([^:]+\\):\\([0-9]+\\):\\([0-9]+\\)" 2 3 4)))
     #+end_src
@@ -2287,13 +2267,12 @@
       (use-package lua-mode
         :ensure t
         :commands lua-mode
-        :config
-        (add-hook 'lua-mode-hook #'(lambda ()
-                                    (setq lua-electric-mode nil
-                                          lua-indent-level 4)
-                                    ;; (choose-indent-type)
-                                    (auto-fill-mode 1)
-                                    (subword-mode 1))))
+        :hook  (lua-mode . (lambda ()
+                             (setq lua-electric-mode nil
+                                   lua-indent-level 4)
+                             ;; (choose-indent-type)
+                             (auto-fill-mode 1)
+                             (subword-mode 1))))
     #+end_src
 *** Golang
     #+begin_src emacs-lisp
@@ -2315,11 +2294,10 @@
       (use-package cc-mode
         <<c-bindings>>
         <<java-bindigs>>
+        :custom ((c-echo-syntactic-information-p t)
+                 (c-electric-pound-behavior '(alignleft))
+                 (c-indent-comments-syntactically-p t))
         :config
-        ;; These are common settings for all cc modes
-        (custom-set-variables '(c-echo-syntactic-information-p t)
-                              '(c-electric-pound-behavior '(alignleft))
-                              '(c-indent-comments-syntactically-p t))
         (setq c-macro-shrink-window-flag t)
         (add-hook 'c-mode-common-hook (lambda ()
                                         (auto-fill-mode t)
@@ -2334,10 +2312,10 @@
         :bind (:map flycheck-mode-map ("C-c ! !" . org-time-stamp-inactive))
         :init
         (global-flycheck-mode)
+        :custom (flycheck-temp-prefix "#flycheck")
         :config
         <<flycheck-config-js>>
-        <<flycheck-config-elisp>>
-        (custom-set-variables '(flycheck-temp-prefix "#flycheck")))
+        <<flycheck-config-elisp>>)
     #+end_src
 **** Javascript
      I use =eslint= instead of =jshint= in flycheck.
@@ -2381,9 +2359,8 @@
     #+begin_src emacs-lisp
       (use-package haskell-mode
         :ensure t
-        :config
-        (setq flycheck-ghc-args "-dynamic")
-        (custom-set-variables '(haskell-compile-command "ghc -dynamic -Wall -ferror-spans -fforce-recomp -c %s")))
+        :custom ((flycheck-ghc-args "-dynamic")
+                 (haskell-compile-command "ghc -dynamic -Wall -ferror-spans -fforce-recomp -c %s")))
     #+end_src
 ** YAML
    #+begin_src emacs-lisp
@@ -2445,14 +2422,13 @@
    I explicitly pull in the org-plus-contrib package available from the org-mode archive.
 
    #+begin_src emacs-lisp :noweb yes
-     (use-package org
-       :ensure org-plus-contrib
+     <<org-support-funcs>>
+     (use-package org :ensure org-plus-contrib
        :hook (org-mode . (lambda ()
                            (auto-fill-mode)))
        :bind (("C-c b o"   . org-switchb)
               ("C-c b 4 o" . org-switch-to-buffer-other-window)
               ("C-c l"     . org-store-link))
-
        :defer
        :init
        (defun vh/revert-org-insert-heading-arg-behavior (&optional old-function arg
@@ -2470,30 +2446,28 @@
            (apply old-function arg invisible-ok top future-args)))
 
        (advice-add #'org-insert-heading :around #'vh/revert-org-insert-heading-arg-behavior)
+       :custom ((org-hide-leading-stars t)
+                (org-log-done 'time)
+                (org-log-reschedule 'note)
+                (org-log-redeadline 'note)
+                (org-log-into-drawer "LOGBOOK")
+                (org-return-follows-link t)
+                (org-special-ctrl-a/e t)
+                (org-treat-S-cursor-todo-selection-as-state-change nil)
+                ;; Column view and estimates
+                (org-columns-default-format "%80ITEM(Task) %7TODO(To Do) %10Effort(Estim){:} %10CLOCKSUM{+}")
+                (org-global-properties '(("Effort_ALL" . "0:0 0:10 0:30 1:00 2:00 3:00 4:00 8:00")))
+                (org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t))
+                ;; Mark a task as DONE when archiving)
+                (org-archive-mark-done nil)
+                (org-src-fontify-natively t)
+                (org-time-clocksum-use-effort-durations t)
+                (org-M-RET-may-split-line '((default . nil)))
+                (org-tags-column 0))
        :config
-       (setq org-hide-leading-stars t
-             org-log-done 'time
-             org-log-reschedule 'note
-             org-log-redeadline 'note
-             org-log-into-drawer "LOGBOOK"
-             org-return-follows-link t
-             org-special-ctrl-a/e t
-             org-treat-S-cursor-todo-selection-as-state-change nil
-             ;; Column view and estimates
-             org-columns-default-format "%80ITEM(Task) %7TODO(To Do) %10Effort(Estim){:} %10CLOCKSUM{+}"
-             org-global-properties '(("Effort_ALL" . "0:0 0:10 0:30 1:00 2:00 3:00 4:00 8:00"))
-             org-time-clocksum-format '(:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)
-             ;; Mark a task as DONE when archiving
-             org-archive-mark-done nil
-             org-src-fontify-natively t
-             org-time-clocksum-use-effort-durations t
-             org-M-RET-may-split-line '((default . nil)))
-       (custom-set-variables '(org-tags-column 0))
        (unbind-key "C-c ;" org-mode-map)
        (unbind-key "C-c C-x C-s" org-mode-map)
-       (add-to-list 'org-modules 'org-habit)
-       <<org-support-funcs>>
-       )
+       (add-to-list 'org-modules 'org-habit))
    #+end_src
 *** Agenda setup
     Notes:

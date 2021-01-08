@@ -18,11 +18,10 @@
   :mode "\\.puml$"
   :init
   (setq plantuml-exec-mode 'jar)
+  :custom ((plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+           (plantuml-default-exec-mode 'jar)
+           (org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar"))
   :config
-  (custom-set-variables '(plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
-                        '(plantuml-default-exec-mode 'jar)
-                        '(org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
-                        )
   (with-eval-after-load 'org
     (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))))
 
@@ -48,8 +47,8 @@
 (use-package markdown-mode
   :ensure t
   :hook (markdown-mode . set-buffer-variable-pitch)
-  :config
-  (custom-set-variables '(markdown-command "/usr/bin/markdown_py -q -x plantuml_markdown 2>/dev/null" )))
+  :custom
+  (markdown-command "/usr/bin/markdown_py -q -x plantuml_markdown 2>/dev/null" ))
 
 (defun mbork/diff-last-two-kills ()
   "Put the last two kills to temporary buffers and diff them."
@@ -182,12 +181,15 @@
   :hook (org-mode . notdeft-note-mode)
   :commands (notdeft)
   :bind ("C-c d d" . notdeft)
+  :custom ((notdeft-directories '("~/Documents/notes"))
+           (notdeft-extension "org")
+           (notdeft-secondary-extensions '("txt")))
   :config
-  (customize-set-value 'notdeft-directories '("~/Documents/notes"))
-  (customize-set-value 'notdeft-extension "org")
-  (customize-set-value 'notdeft-secondary-extensions '("txt"))
-  (require 'notdeft-org)
-  (customize-set-value 'notdeft-xapian-program (expand-file-name (concat user-emacs-directory "external/notdeft/xapian/notdeft-xapian"))))
+  (let ((notdeft-program (expand-file-name
+                          (concat user-emacs-directory
+                                  "external/notdeft/xapian/notdeft-xapian"))))
+    (use-package notdeft-org
+      :custom (notdeft-xapian-program notdeft-program))))
 
 (defun vh/view-video-from-url (url)
   "Watch a video from URL
@@ -345,8 +347,7 @@ Currently, we use youtube-dl and mpv to listen to the video"
 (use-package elpher :ensure t)
 
 (use-package bongo :ensure t
-  :config
-  (customize-set-variable 'bongo-enabled-backends '(mpv mpg123 vlc mplayer speexdec)))
+  :custom (bongo-enabled-backends '(mpv mpg123 vlc mplayer speexdec)))
 
 ;;; This is interesting.
 (defun er-reinstall-package (pkg)
