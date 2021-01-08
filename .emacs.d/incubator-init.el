@@ -323,7 +323,19 @@ Currently, we use youtube-dl and mpv to listen to the video"
 (define-key icomplete-minibuffer-map (kbd "C-|") #'vh/style-rot)
 
 (use-package rg :ensure t
+  :bind (:map isearch-mode-map
+              ("M-s r" .  #'rg-isearch-menu))
+  :custom (rg-use-transient-menu nil)
   :config
+  (rg-define-search rg-dwim-project-dir
+    "Search for thing at point in files matching the current file under the project root directory.
+
+This variant allows overriding project directory."
+  :query point
+  :format literal
+  :files current
+  :dir (or (and (boundp 'rg-override-project-root) rg-override-project-root) "project"))
+
   (rg-enable-default-bindings "\C-cf"))
 
 (use-package url-util :demand
