@@ -482,24 +482,6 @@ into real text."
   (if (not (file-exists-p erc-dcc-get-default-directory))
       (make-directory erc-dcc-get-default-directory t)))
 
-(use-package ido-vertical-mode
-  :disabled)
-
-(use-package flx-ido
-  :disabled)
-
-(use-package ido
-  :disabled
-  :config
-  (ido-vertical-mode)
-  (flx-ido-mode))
-
-(use-package helm
-  :disabled
-  :bind ( ("C-x C-f" . helm-find-files)
-          ("C-x b" . helm-buffers-list)
-          ("M-x"  . helm-M-x)))
-
 (use-package icomplete :demand
   :config
   (setq icomplete-separator " ▪ ")
@@ -1081,27 +1063,6 @@ The command will invoke the specified subcommand in the project directory"
       (setenv "PATH" (concat path path-separator (expand-file-name "~/.rbenv/shims"))))))
 
 (use-package bundler :ensure t)
-
-(use-package rspec-mode
-  :disabled
-  :commands rspec-mode
-  :config
-  (autoload 'ruby-electric-mode "ruby-electric.el")
-
-  (add-hook 'rspec-mode-hook (lambda ()
-                               ;;(require 'rinari)
-                               ;;(require 'ruby-compilation-rspec)
-                               (require 'auto-complete-config)
-                               ;;(ruby-electric-mode t)
-                               (auto-complete-mode t)
-                               ;; Auto-complete fixups
-                               (make-local-variable 'ac-ignores)
-                               (add-to-list 'ac-ignores "end"))))
-
-(use-package rhtml-mode
-  :disabled
-  :commands rhtml-mode
-  :mode ("\\.html\\.erb\\'" . rhtml-mode))
 
 (use-package lisp-mode
   :after paredit

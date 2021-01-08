@@ -1,0 +1,330 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/vedat/.emacs.d/Startup.org
+
+
+* Session / desktop management
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-01-08 Fri 06:53
+  :ARCHIVE_FILE: ~/.emacs.d/Startup.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: Startup
+  :END:
+  I used to use multiple desktop or sessions a lot in my workflow. But after switching them off, I realized that using multiple
+  frames and jumping around in buffers was enough.
+
+  I may need to use some sort of window configuration save / restore at some point, but I suspect I will start with
+  ~window-configuration-to-register~ if the day comes.
+** DISABLED escreen
+
+  This is one of my favorites: emacs window session manager. It provides
+  something similar to a window manager virtual desktops.
+
+  #+begin_src emacs-lisp :noweb yes :tangle no
+    (use-package escreen
+      :disabled
+      :demand
+      :bind (:map escreen-map
+                  ("l"  . escreen-display-screens)
+                  ("\\" . toggle-input-method))
+
+      :config
+      <<vh-escreen>>
+      (escreen-install)
+      (add-hook 'escreen-goto-screen-hook #'escreen-display-screens))
+  #+end_src
+
+  And some helper files
+
+  #+name: vh-escreen
+  #+begin_src emacs-lisp :tangle no
+    (defun vh-find-escreen-data-by-number (number)
+      (car (delq nil
+                 (mapcar (lambda (x) (and (= (car x) number) x))
+                         (escreen-configuration-alist)))))
+
+    (defun vh-escreen-buffer-name (number)
+      "Extract the buffer name for the given screen number"
+      (let* ((screen-data (vh-find-escreen-data-by-number number))
+             (data-map (escreen-configuration-data-map screen-data)))
+        (escreen-configuration-data-map-critical-buffer-name
+         (escreen-configuration-data-map-critical (car data-map)))))
+
+
+    (defun escreen-display-screens ()
+      "Display list of defined screens with an emphasis on the active one."
+      (interactive)
+      (let ((escreens (escreen-get-active-screen-numbers))
+            (screen-msg ""))
+
+        (dolist (s escreens)
+          (setq screen-msg
+                (concat screen-msg
+                        (let ((display-str (concat (number-to-string s) ":" (vh-escreen-buffer-name s))))
+                          (if (= (escreen-current-screen-number) s)
+                              (propertize display-str 'face 'bold-italic)
+                            display-str))
+                        " ")))
+        (message "escreen: %s" screen-msg)))
+  #+end_src
+** DISABLED elscreen
+   CLOSED: [2020-09-23 Wed 09:51]
+  Emacs window session manager - sort of a pager for emacs
+
+  #+begin_src emacs-lisp :noweb yes :tangle no
+    (use-package elscreen :ensure t
+      :demand
+      :custom (elscreen-display-tab nil)
+      :config
+      (elscreen-start))
+  #+end_src
+** DISABLED eyebrowse
+   CLOSED: [2020-09-23 Wed 09:51]
+
+  Emacs session manager. I use this for virtual "desktops" or window configurations.
+
+  I am disabling for now. It looks like using multiple frames is good enough for me.
+
+  #+begin_src emacs-lisp :noweb yes :tangle no
+    (use-package eyebrowse :ensure t
+      :demand
+      :init
+      (eyebrowse-mode)
+      :custom (eyebrowse-keymap-prefix (kbd "C-z")))
+  #+end_src
+
+* DISABLED Ivy and friends
+  CLOSED: [2020-09-23 Wed 09:31]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-01-08 Fri 06:54
+  :ARCHIVE_FILE: ~/.emacs.d/Startup.org
+  :ARCHIVE_OLPATH: Packages/Mini buffer input and completion
+  :ARCHIVE_CATEGORY: Startup
+  :ARCHIVE_TODO: DISABLED
+  :END:
+  Abo abo has created a really useful module for completing input that
+  strikes a good balance between size and functionality.
+
+  #+begin_src emacs-lisp :tangle no
+    (use-package ivy :ensure t :pin melpa
+      :demand
+      :custom ((ivy-use-virtual-buffers t)
+               (ivy-count-format "(%d/%d) "))
+      :config
+      (ivy-mode)
+      (ivy-set-occur 'ivy-switch-buffer 'ivy-switch-buffer-occur))
+
+    (use-package ivy-hydra   :ensure t
+      :requires ivy)
+
+    (use-package swiper :ensure t
+      :requires ivy
+      :bind ("C-s" . swiper)
+      :config
+      ;; This is an emacs25.x feature - for folding characters into native ASCII
+      (setq search-default-mode nil)
+      (ivy-set-occur 'swiper 'swiper-occur))
+
+    (use-package counsel :ensure t
+      :bind (("M-g h" . counsel-org-agenda-headlines)
+             ("M-g i" . counsel-imenu))
+      :config
+      ;; Assume utf-8 output from my counsel commands
+      (defun vh/coding-system--counsel-cmd (&optional old-function &rest args)
+        (let ((coding-system-for-read 'utf-8-unix))
+
+          (apply old-function args)))
+
+      ;; Patch counsel-ag only for now. Will extend as more problems show up
+      (advice-add #'counsel-ag :around #'vh/coding-system--counsel-cmd))
+  #+end_src
+
+* DISABLED IDO mode
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-01-08 Fri 06:55
+  :ARCHIVE_FILE: ~/.emacs.d/Startup.org
+  :ARCHIVE_OLPATH: Packages/Mini buffer input and completion
+  :ARCHIVE_CATEGORY: Startup
+  :ARCHIVE_TODO: DISABLED
+  :END:
+
+  My first minibuffer helper. I am using ivy these days.
+
+  #+begin_src emacs-lisp
+    (use-package ido-vertical-mode
+      :disabled)
+
+    (use-package flx-ido
+      :disabled)
+
+    (use-package ido
+      :disabled
+      :config
+      (ido-vertical-mode)
+      (flx-ido-mode))
+  #+end_src
+
+* DISABLED Helm
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-01-08 Fri 06:55
+  :ARCHIVE_FILE: ~/.emacs.d/Startup.org
+  :ARCHIVE_OLPATH: Packages/Mini buffer input and completion
+  :ARCHIVE_CATEGORY: Startup
+  :ARCHIVE_TODO: DISABLED
+  :END:
+
+  For a short period, I've switched from /ido/ to /helm/. /Ivy/ is better for me.
+
+  #+begin_src emacs-lisp
+    (use-package helm
+      :disabled
+      :bind ( ("C-x C-f" . helm-find-files)
+              ("C-x b" . helm-buffers-list)
+              ("M-x"  . helm-M-x)))
+  #+end_src
+
+* DISABLED Projectile
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-01-08 Fri 06:55
+  :ARCHIVE_FILE: ~/.emacs.d/Startup.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: Startup
+  :ARCHIVE_TODO: DISABLED
+  :END:
+
+  #+begin_src emacs-lisp :tangle no
+    (use-package projectile :ensure t
+      :custom ((projectile-project-root-files-functions '(projectile-root-top-down
+                                                                        projectile-root-bottom-up
+                                                                        projectile-root-top-down-recurring))
+               (projectile-enable-caching t))
+      :config
+      (projectile-register-project-type 'ant '("build.xml")
+                                        :compile "ant"
+                                        :test "ant test")
+      (add-to-list 'projectile-project-root-files "build.xml")
+      (projectile-register-project-type 'nodejs '("package.json")
+                                        :compile "npm --no-color build"
+                                        :test "npm --no-color test")
+      (mapc (lambda (x) (add-to-list 'projectile-globally-ignored-directories x))
+            (list "node_modules" "target" "bower_components"))
+
+      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+      (projectile-global-mode)
+
+      (defun cd-disable-projectile-mode-for-remote (current-dir)
+        (if (and (functionp 'projectile-mode) (file-remote-p current-dir))
+            (projectile-mode 0)
+          (projectile-mode 1)))
+      (advice-add 'cd :filter-return #'cd-disable-projectile-mode-for-remote))
+
+    (use-package counsel-projectile :ensure t
+      :after projectile
+      :config
+      (counsel-projectile-mode))
+  #+end_src
+
+* DISABLED Eclim
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-01-08 Fri 06:55
+  :ARCHIVE_FILE: ~/.emacs.d/Startup.org
+  :ARCHIVE_OLPATH: Packages/Programming Languages/Java
+  :ARCHIVE_CATEGORY: Startup
+  :ARCHIVE_TODO: DISABLED
+  :END:
+
+  Eclipse in emacs. This package uses a plugin to communicate with eclipse, and get it to do the heavy lifting.
+
+  I had limited success with it.
+
+  #+begin_src emacs-lisp
+    (use-package eclim
+      :disabled
+      :commands (eclim-manage-projects global-eclim-mode)
+      :config
+      (setq eclim-auto-save t 		; Need to save before analyzing class
+            help-at-pt-display-when-idle t
+            eclim-executable (concat eclipse-dir "eclim"))
+
+      (help-at-pt-set-timer)
+
+      (add-hook 'eclim-mode-hook
+                (lambda ()
+                  (require 'auto-complete-config)
+                  (ac-config-default)
+                  (add-to-list 'ac-sources 'ac-source-eclim)))) ; ac-source-emacs-eclim is also available
+
+    (use-package eclimd
+      :disabled
+      :commands start-eclimd
+      :config (setq eclimd-executable (concat eclipse-dir "eclimd")
+                    eclimd-default-workspace "~/work"))
+
+
+  #+end_src
+
+* DISABLED On Rails
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-01-08 Fri 06:55
+  :ARCHIVE_FILE: ~/.emacs.d/Startup.org
+  :ARCHIVE_OLPATH: Packages/Programming Languages/Ruby
+  :ARCHIVE_CATEGORY: Startup
+  :ARCHIVE_TODO: DISABLED
+  :END:
+  #+begin_src emacs-lisp
+    (use-package rspec-mode
+      :disabled
+      :commands rspec-mode
+      :config
+      (autoload 'ruby-electric-mode "ruby-electric.el")
+
+      (add-hook 'rspec-mode-hook (lambda ()
+                                   ;;(require 'rinari)
+                                   ;;(require 'ruby-compilation-rspec)
+                                   (require 'auto-complete-config)
+                                   ;;(ruby-electric-mode t)
+                                   (auto-complete-mode t)
+                                   ;; Auto-complete fixups
+                                   (make-local-variable 'ac-ignores)
+                                   (add-to-list 'ac-ignores "end"))))
+
+    (use-package rhtml-mode
+      :disabled
+      :commands rhtml-mode
+      :mode ("\\.html\\.erb\\'" . rhtml-mode))
+  #+end_src
+
+* DISABLED Quantified self
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-01-08 Fri 06:55
+  :ARCHIVE_FILE: ~/.emacs.d/Startup.org
+  :ARCHIVE_OLPATH: Packages/Org mode
+  :ARCHIVE_CATEGORY: Startup
+  :ARCHIVE_TODO: DISABLED
+  :END:
+  I've abandoned planning, but I will come back to it with a different
+  workflow that works for me. I don't want to lose my previous work in the
+  meantime.
+
+  #+begin_src emacs-lisp :tangle no
+    (use-package quantified
+      :commands (quantified-text quantified-track quantified-share-org-subtree quantified-summarize-time)
+      :config
+      ;; Load my passwords so that I can login to quantified awesome
+      (require 'secrets))
+  #+end_src
+
+* DISABLED Org-mobile
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2021-01-08 Fri 06:55
+  :ARCHIVE_FILE: ~/.emacs.d/Startup.org
+  :ARCHIVE_OLPATH: Packages/Org mode
+  :ARCHIVE_CATEGORY: Startup
+  :ARCHIVE_TODO: DISABLED
+  :END:
+  #+begin_src emacs-lisp :tangle no
+    (use-package org-mobile
+      :commands (org-mobile-push org-mobile-pull)
+      :config (setq org-mobile-directory "~/outgoing/mobileorg"))
+  #+end_src
