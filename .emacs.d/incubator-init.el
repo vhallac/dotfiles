@@ -308,8 +308,8 @@ Currently, we use youtube-dl and mpv to listen to the video"
 (bind-key "C-l" #'recenter-or-lock)
 
 (use-package rg :ensure t
-  :bind (:map isearch-mode-map
-              ("M-s r" .  #'rg-isearch-menu))
+  :bind (("C-c f S" . rg-save-search)   ; moved from C-c f s
+         ("C-c f s" . #'rg-isearch-menu))
   :custom (rg-use-transient-menu nil)
   :config
   (rg-define-search rg-dwim-project-dir
