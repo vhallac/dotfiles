@@ -2,7 +2,7 @@
 #+STARTUP: overview
 #+OPTIONS: toc:4 h:4
 #+PROPERTY: header-args :tangle init.el
-#+TODO: | DISABLED
+#+TODO: MAYBE | DISABLED
 #+TODO: TODO | DONE
 
 * Overview
