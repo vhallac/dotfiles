@@ -467,6 +467,11 @@
       :bind (:map gnus-article-mode-map
                   ("v" . eww-browse-gnus-url)
                   ("V" . push-button)))
+
+    (use-package find-func :demand
+      :bind (("C-h C-f" . #'find-function)  ;; Replaces view-emacs-FAQ
+             ("C-h C-v" . #'find-variable)
+             ("C-h C-k")))
   #+end_src
 * GPG setup
 
