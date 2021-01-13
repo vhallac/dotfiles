@@ -160,6 +160,8 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 
+(put 'dired-find-alternate-file 'disabled nil)
+
 (setq kill-do-not-save-duplicates t
       next-line-add-newlines nil
       require-final-newline t
@@ -250,6 +252,11 @@
   :bind (:map gnus-article-mode-map
               ("v" . eww-browse-gnus-url)
               ("V" . push-button)))
+
+(use-package find-func :demand
+  :bind (("C-h C-f" . #'find-function)  ;; Replaces view-emacs-FAQ
+         ("C-h C-v" . #'find-variable)
+         ("C-h C-k")))
 
 (defun wg/kludge-gpg-agent ()
   (if (display-graphic-p)
@@ -409,8 +416,6 @@ into real text."
 
 (use-package hydra :ensure t)
 
-(put 'dired-find-alternate-file 'disabled nil)
-
 (custom-set-variables '(compilation-scroll-output t))
 
 (use-package browse-kill-ring :ensure t
@@ -482,18 +487,111 @@ into real text."
   (if (not (file-exists-p erc-dcc-get-default-directory))
       (make-directory erc-dcc-get-default-directory t)))
 
-(use-package icomplete :demand
-  :config
-  (setq icomplete-separator " ▪ ")
-  (setq icomplete-prospects-height 1)
-  (fido-mode -1)
-  (icomplete-mode 1)
-  (setq read-buffer-completion-ignore-case t)
-  (setq read-file-name-completion-ignore-case t))
+(use-package minibuffer
+  :custom ((completion-styles '(orderless partial-completion))
+           (completion-show-help nil))
+  :bind (:map minibuffer-local-completion-map
+              ("SPC" . nil)
+              ("M-1" . (lambda (&optional arg) (interactive "p") (vh/select-completion 1 (not (= arg 4)))))
+              ("M-2" . (lambda (&optional arg) (interactive "p") (vh/select-completion 2 (not (= arg 4)))))
+              ("M-3" . (lambda (&optional arg) (interactive "p") (vh/select-completion 3 (not (= arg 4)))))
+              ("M-v" . (lambda () (interactive) (vh/show-completions t)))
+              ("C-n" . vh/completion:first)
+              ("C-p" . vh/completion:last)
+              :map completion-list-mode-map
+              ("C-n" . vh/completion:next)
+              ("C-p" . vh/completion:prev)
+              :map completion-in-region-mode-map
+              ("M-1" . (lambda (&optional arg) (interactive) (vh/select-completion 1 t)))
+              ("M-2" . (lambda (&optional arg) (interactive) (vh/select-completion 2 t)))
+              ("M-3" . (lambda (&optional arg) (interactive) (vh/select-completion 3 t)))
+              ("C-n" . vh/completion:first)
+              ("C-p" . vh/completion:last))
 
-(use-package minibuffer :demand
   :config
-  (setq completion-styles '(partial-completion substring initials flex emacs22)))
+  (defun vh/focus-minibuffer ()
+    (interactive)
+    (let ((minibuffer (active-minibuffer-window)))
+      (when minibuffer
+        (select-window minibuffer))))
+
+  ;; NOTE: This will stop completion-in-region-mode. You need to restart it. I am closing the completion buffer
+  ;; to p[rovide a hint that this is required.
+  ;; The way mode can be reestablish is to advice completion-in-region to store the parameters,
+  ;; and call it the same way at the end of this function when buffer is not a minibuffer (hint: minibufferp)
+  (defun vh/focus-original-buffer ()
+    (let ((buffer (or completion-reference-buffer (active-minibuffer-window)))
+          (window (selected-window)))
+      (when buffer
+        (select-window (display-buffer buffer)))
+      (unless (minibufferp buffer)
+        (delete-window window))))
+
+  (defun vh/show-completions (&optional focus)
+    (when (not (get-buffer-window "*Completions*")) (minibuffer-completion-help))
+    (when focus (select-window (display-buffer "*Completions*"))))
+
+  (defun vh/select-completion (n &optional select)
+    (vh/show-completions)
+    (let ((selection (progn (switch-to-completions)
+                            (goto-char 0)
+                            (next-completion n)
+                            (current-word t))))
+      (when (or selection ())
+        (if select
+            (choose-completion)
+          (vh/focus-minibuffer)
+          (move-beginning-of-line nil)
+          (kill-line)
+          (insert selection)))))
+
+  (defun vh/completion:first ()
+    (interactive)
+    (vh/show-completions t)
+    (goto-char (point-min))
+    (vh/completion:next))
+
+  (defun vh/completion:next ()
+    (interactive)
+    (next-completion 1)
+    (when (eq (point) (point-max))
+      (goto-char (point-at-bol))
+      (vh/focus-original-buffer)))
+
+  (defun vh/completion:last ()
+    (interactive)
+    (vh/show-completions t)
+    (goto-char (point-max))
+    (vh/completion:prev))
+
+  (defun vh/completion:prev ()
+    (interactive)
+    (previous-completion 1)
+    (when (eq (point) (point-min))
+      (vh/focus-original-buffer))))
+
+(use-package marginalia :ensure t
+  :config
+  ;; This will stay here until marginalia fixes overflows in buffers
+  (advice-add #'minibuffer-completion-help :after (lambda (&rest args)
+                                             (with-current-buffer "*Completions*"
+                                               (when (not truncate-lines)
+                                                 (toggle-truncate-lines 1)))))
+  (marginalia-mode 1))
+
+(use-package orderless :ensure t
+  :custom ((orderless-component-separator "[ +]")
+           (orderless-matching-styles '(orderless-strict-initialism
+                                        orderless-regexp
+                                        orderless-prefixes
+                                        orderless-literal
+                                        orderless-flex))
+           (orderless-style-dispatchers '(vh/orderless-flex-dispatcher)))
+  :config
+  (defun vh/orderless-flex-dispatcher (pattern _index _total)
+    "flex style dispatcher using ! as postfix for orderless"
+    (when (string-suffix-p "!" pattern)
+      `(orderless-flex . ,(substring pattern 0 -1)))))
 
 (use-package multiple-cursors :ensure t
   :bind ( ("C-c m l" . mc/edit-lines)
