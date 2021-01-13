@@ -307,21 +307,6 @@ Currently, we use youtube-dl and mpv to listen to the video"
 
 (bind-key "C-l" #'recenter-or-lock)
 
-(use-package god-mode :ensure t
-  :bind (:map global-map
-              ("<escape>" . #'god-local-mode)
-              :map god-local-mode-map
-              ("i" . #'god-local-mode)
-              ("." . #'repeat)))
-
-(defun vh/style-rot ()
-  (interactive)
-  (let ((styles (cons (car (last completion-styles)) (butlast completion-styles))))
-    (setq completion-styles styles))
-  (message (symbol-name (car completion-styles))))
-
-(define-key icomplete-minibuffer-map (kbd "C-|") #'vh/style-rot)
-
 (use-package rg :ensure t
   :bind (:map isearch-mode-map
               ("M-s r" .  #'rg-isearch-menu))
@@ -391,8 +376,6 @@ This variant allows overriding project directory."
     ("0" (face-remap-reset-base 'variable-pitch) "Reset variable-pitch (?)" :exit t)
     ("a" hydra-zoom-all/body "Zoom all fonts")))
 
-
-(customize-set-variable 'display-line-numbers-type 'visual)
 
 ;; Let Gnus know Gmail search syntax
 (add-hook 'gnus-started-hook
