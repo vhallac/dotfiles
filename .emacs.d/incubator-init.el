@@ -385,3 +385,52 @@ This variant allows overriding project directory."
 ;; `gnus-group-make-nnir-group' use Gmail search syntax *by default*.
 ;; You can press `G G` instead `C-u G G` instead.
 (setq nnir-imap-default-search-key "gmail")
+
+(use-package embark :ensure t
+  :after minibuffer
+  :bind (("C-," . embark-act)
+         :map minibuffer-local-completion-map
+         ("C-." . embark-act-noexit)
+         ("C->" . embark-become)
+         ("C-o" . embark-collect-snapshot)
+         ("C-n" . vh/embark-collect-completions:goto-first)
+         ("C-p" . vh/embark-collect-completions:goto-last)
+         ("TAB" . vh/embark-collect-completions-maybe)
+         ("M-v" . vh/embark-collect-completions:focus)
+         :map embark-symbol-map
+         ("." . embark-find-definition)
+         :map embark-collect-mode-map
+         ("C-o" . embark-collect-snapshot)
+         ("C-n" . (lambda () (interactive) (vh/embark-collect-move 'forward)))
+         ("C-p" . (lambda () (interactive) (vh/embark-collect-move 'backward))))
+  :config
+  (defun vh/embark-collect-completions-maybe ()
+    (interactive)
+    (unless embark-collect-linked-buffer
+      (embark-collect-completions)))
+
+  (defun vh/embark-collect-completions:focus ()
+    (interactive)
+    (vh/embark-collect-completions-maybe)
+    (switch-to-buffer embark-collect-linked-buffer))
+
+  (defun vh/embark-collect-completions:goto-first ()
+    (interactive)
+    (vh/embark-collect-completions:focus)
+    (goto-char 0))
+
+  (defun vh/embark-collect-completions:goto-last ()
+    (interactive)
+    (vh/embark-collect-completions:focus)
+    (goto-char (point-max))
+    (vh/embark-collect:prev))
+
+  (defun vh/embark-collect-move (dir)
+    (let ((dir-sign (if (eq dir 'forward) 1 -1)))
+      (pcase embark-collect-view
+        ('grid (unless (forward-button dir-sign nil nil t)
+                 (vh/focus-minibuffer)))
+        ('list (unless (forward-button (* dir-sign 2) nil nil t)
+                 (vh/focus-minibuffer)))))))
+;; TODO
+;; M-1..M-5 => naked: copy from live; C-u: default act from live
