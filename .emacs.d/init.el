@@ -743,7 +743,6 @@ gnus-ignored-newsgroups. It defaults to \"^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\�
               (:name "unread.personal" :query "tag:unread and tag:personal" :key "um")
               (:name "unread.work.pia" :query "tag:unread and tag:pia" :key "up")
               (:name "unread.work.qbit" :query "tag:unread and tag:qbit" :key "uq")
-              (:name "unread.work.wamo" :query "tag:unread and tag:wamo" :key "uw")
               (:name "flagged" :query "tag:flagged" :key "f")
               (:name "flagged-tree" :search-type tree :query "tag:flagged" :key "F")
               (:name "sent" :query "tag:sent" :key "t")
@@ -760,8 +759,7 @@ gnus-ignored-newsgroups. It defaults to \"^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\�
            (notmuch-identities '("Vedat Hallaç <vedat.hallac@pia-team.com>"
                                  "Vedat Hallaç <vedath@7island.com>"
                                  "Vedat Hallaç <vedat@hallac.net>"
-                                 "Vedat Hallaç <vedat.hallac@pia-systems.com>"
-                                 "Vedat Hallaç <vedat@wamo.io>"))
+                                 "Vedat Hallaç <vedat.hallac@pia-systems.com>"))
            (mm-text-html-renderer 'shr)
            (notmuch-address-use-company nil)
            (notmuch-command (expand-file-name "~/bin/remote-notmuch.sh")))
@@ -839,8 +837,7 @@ When I need to send an e-mail in HTML mode, I can easily edit in org-mode, then 
                                                      "vedat@hallac.net"
                                                      "vedath@7island.com"
                                                      "vedat.hallac@pia-team.com"
-                                                     "vedat.hallac@pia-systems.com"
-                                                     "vedat@wamo.io")))
+                                                     "vedat.hallac@pia-systems.com")))
            (send-mail-function 'smtpmail-send-it))
   :config
   (require 'smtpmail)
@@ -860,8 +857,7 @@ When I need to send an e-mail in HTML mode, I can easily edit in org-mode, then 
                          (ssl "vedat.hallac@pia-team.com" "gmail-pia" "smtp.googlemail.com" 587)
                          (ssl "vedat.hallac@pia-systems.com" "ms-piasys" "smtp.office365.com" 587)
                          (ssl "vedat@hallac.net" "hallac-net" "smtp.yandex.com" 587)
-                         (ssl "vedath@7island.com" "gmail-qbit" "smtp.googlemail.com" 587)
-                         (ssl "vedat@wamo.io" "gmail-wamo" "smtp.googlemail.com" 587)))
+                         (ssl "vedath@7island.com" "gmail-qbit" "smtp.googlemail.com" 587)))
   (use-package gnutls
     :custom (gnutls-min-prime-bits 1024))
   
