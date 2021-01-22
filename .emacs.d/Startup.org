@@ -405,7 +405,7 @@
    I need some additional face definitions for certain modes.
 
    #+begin_src emacs-lisp
-     (defconst browse-font-large-font-size 95)
+     (defconst browse-font-large-font-size 105)
 
      (defface large-variable-pitch `((t (:inherit 'variable-pitch :height ,browse-font-large-font-size)))
        "Font for less eye strain during prolonged reading"

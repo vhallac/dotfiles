@@ -206,7 +206,7 @@
                                  (run-hook-with-args 'after-make-frame-functions
                                                      (selected-frame)))))
 
-(defconst browse-font-large-font-size 95)
+(defconst browse-font-large-font-size 105)
 
 (defface large-variable-pitch `((t (:inherit 'variable-pitch :height ,browse-font-large-font-size)))
   "Font for less eye strain during prolonged reading"
