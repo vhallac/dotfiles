@@ -172,7 +172,8 @@
    or not recent enough.
 
    #+begin_src emacs-lisp
-     (defconst upgrade-builtins-min-versions '((tramp . (2 4))))
+     (defconst upgrade-builtins-min-versions '((tramp . (2 4))
+                                               (project . (0 5 3))))
 
      (dolist (elt upgrade-builtins-min-versions)
        (let ((pkg (car elt))
@@ -810,15 +811,22 @@
          (add-to-list 'auth-sources
                       '(:source "~/.emacs.d/.secrets/authinfo.gpg" :host t :protocol t))))
    #+end_src
-** Dired
+** Directories and files
+*** Dired
 
-   #+begin_src emacs-lisp
-     (use-package dired :defer
-       :custom (dired-dwim-target t)
-       :hook  (dired-mode . (lambda ()
-                            (make-local-variable 'coding-system-for-read)
-                            (setq coding-system-for-read 'utf-8))))
-   #+end_src
+    #+begin_src emacs-lisp
+      (use-package dired :defer
+        :custom (dired-dwim-target t)
+        :hook  (dired-mode . (lambda ()
+                             (make-local-variable 'coding-system-for-read)
+                             (setq coding-system-for-read 'utf-8))))
+    #+end_src
+*** Project
+    This is part of emacs 28. For now, I rely on [[Minimum versions of built-in packages]] to pick it up from ELPA.
+
+    #+begin_src emacs-lisp
+      (use-package project :ensure t :pin manual)
+    #+end_src
 ** ERC
    IRC is still alive. :)
 

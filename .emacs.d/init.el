@@ -61,7 +61,8 @@
 ;; (custom-set-variables '(use-package-verbose t)
 ;;                       '(use-package-always-ensure t))
 
-(defconst upgrade-builtins-min-versions '((tramp . (2 4))))
+(defconst upgrade-builtins-min-versions '((tramp . (2 4))
+                                          (project . (0 5 3))))
 
 (dolist (elt upgrade-builtins-min-versions)
   (let ((pkg (car elt))
@@ -473,6 +474,8 @@ into real text."
   :hook  (dired-mode . (lambda ()
                        (make-local-variable 'coding-system-for-read)
                        (setq coding-system-for-read 'utf-8))))
+
+(use-package project :ensure t :pin manual)
 
 (use-package erc
   :commands erc
