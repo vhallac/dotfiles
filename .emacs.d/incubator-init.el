@@ -129,30 +129,6 @@
 
 (add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
 
-(defun maybe-enable-org-roam ()
-  (when (string-prefix-p (expand-file-name org-roam-directory) default-directory)
-    (org-roam-mode)))
-
-(use-package org-roam
-  :ensure t
-  :hook
-  (org-mode . maybe-enable-org-roam)
-  :bind (:map org-roam-mode-map
-              (("C-c r l" . org-roam)
-               ("C-c r f" . org-roam-find-file)
-               ("C-c r I" . org-roam-jump-to-index)
-               ("C-c r b" . org-roam-switch-to-buffer)
-               ("C-c r g" . org-roam-graph))
-              :map org-mode-map
-              (("C-c r i" . org-roam-insert)))
-  :custom
-  (org-roam-directory "~/Documents/notes/"))
-
-(use-package company-org-roam
-  :ensure t
-  :config
-  (push 'company-org-roam company-backends))
-
 (defun vh/import-git (package url &optional compile-command force)
   (let* ((ext-dir (concat user-emacs-directory "external"))
          (package-dir (concat (file-name-as-directory ext-dir) package)))
