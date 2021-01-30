@@ -428,10 +428,6 @@ into real text."
   (add-hook 'lisp-mode-hook #'enable-paredit-mode)
   (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode))
 
-(use-package ace-window :ensure t
-  :bind (( "C-x o" . ace-window))
-  :custom (aw-scope 'visible))
-
 (use-package avy :ensure t
   :bind (("M-g j" . avy-goto-char-timer)
          ("M-g w" . avy-goto-subword-1)

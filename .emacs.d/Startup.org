@@ -738,16 +738,6 @@
        (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode))
    #+end_src
 
-** ace-window
-
-   Easy travel between windows.
-
-   #+begin_src emacs-lisp
-     (use-package ace-window :ensure t
-       :bind (( "C-x o" . ace-window))
-       :custom (aw-scope 'visible))
-   #+end_src
-
 ** Navigation
 
    Avy is an excellent package to jump around in visible areas or buffer quickly.
