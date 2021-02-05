@@ -374,3 +374,65 @@ This variant allows overriding project directory."
                        future-args)))
 
 (advice-add #'eww--dwim-expand-url :around 'vh/eww-url-remap)
+
+(use-package go-mode :demand
+  :bind (:map go-mode-map
+              ("C-c . d d" . #'vh/go-doc)
+              ("C-c . d p" . #'vh/lookup-golang-pkg)
+              ("C-c . d s" . #'vh/search-go-pkg)
+              ("C-c . c" . (lambda () (interactive) (compile "go build")))
+              ("C-c . t" . #'vh/go-test-package)
+              ("C-c . T" . #'vh/go-test-module)
+              ("C-c . i m" . #'vh/insert-current-module-for-import))
+  :config
+  ;; TODO: define a thing for go chained symbols (pick up log.Println instead of log or Println alone)
+  (defun vh/go-doc (symbol)
+    "Get documentation of symbol SYMBOL using `go doc`."
+    (interactive "sSymbol name: ")
+    (when (string-empty-p symbol) (setq symbol (thing-at-point 'word t)))
+    (shell-command (concat "go doc "  symbol)))
+
+  (defun vh/lookup-golang-pkg (pkg)
+    "Lookup package documentation.
+
+This is useful for quickly obtaining information about internal packages"
+    (interactive "sPackage name: ")
+    (eww (concat "https://golang.org/pkg/" pkg)))
+
+  (defun vh/search-go-pkg (keywords)
+    "Search packages for keywords.
+
+This function searches a database of packages for the keywords provided.
+The argument KEYWORDS is a space separated list of terms to search for."
+    (interactive "sSearch for: ")
+    (eww (concat "https://pkg.go.dev/search?q=" (replace-regexp-in-string " " "+" keywords))))
+
+  (defun vh/go-project-root ()
+    "Detect the root of the current go project, and return it."
+    (when (functionp 'project-root)
+      (project-root (project-current))))
+
+  (defun vh/go-test-package (arg)
+    (interactive "p")
+    (let ((checkrace (eq arg 4)))
+      (compile (concat "go test" (when checkrace " -race")))))
+
+  (defun vh/go-test-module ()
+    "Test the entire project"
+    (interactive)
+    (compile (concat "go test " (vh/go-project-root) "...")))
+
+  (defun vh/insert-current-module-for-import ()
+    "Extract go module name from go.mod, and use it"
+    (interactive)
+    (let ((modname (with-temp-buffer
+             (let ((gomod (expand-file-name "go.mod" (vh/go-project-root))))
+               (when (file-readable-p gomod)
+                 (insert-file gomod)
+                 (goto-char (point-min))
+                 (when (search-forward-regexp "module \\(.*\\)$" nil t 1)
+                   (match-string 1))
+                 )))))
+      (when modname (progn (push-mark)
+                           (insert (format "\"%s/\"" modname))
+                           (backward-char 1))))))
