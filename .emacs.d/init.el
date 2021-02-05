@@ -716,11 +716,10 @@ gnus-ignored-newsgroups. It defaults to \"^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\â€
                                  (lambda (x)  (string-match domain x))
                                  collection))
                       t)))
-    ;; I am doing something nasty - orig is the string we search for
     (notmuch-address-selection-function prompt collection
                                         (or
                                          (and exists domain)
-                                         orig))))
+                                         initial-input))))
 
 (use-package notmuch :ensure t
   :commands (vh/notmuch-show-delete-thread notmuch-mua-new-mail)
