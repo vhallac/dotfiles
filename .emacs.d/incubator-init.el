@@ -366,3 +366,11 @@ This variant allows overriding project directory."
 ;; `gnus-group-make-nnir-group' use Gmail search syntax *by default*.
 ;; You can press `G G` instead `C-u G G` instead.
 (setq nnir-imap-default-search-key "gmail")
+
+;; Thank god it's emacs! Replace twitter with nitter.
+(defun vh/eww-url-remap (old-function url &rest future-args)
+  (apply old-function (cons
+                       (replace-regexp-in-string "https?://twitter.com" "https://nitter.net" url)
+                       future-args)))
+
+(advice-add #'eww--dwim-expand-url :around 'vh/eww-url-remap)
