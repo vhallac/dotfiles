@@ -50,6 +50,11 @@
   :custom
   (markdown-command "/usr/bin/markdown_py -q -x plantuml_markdown 2>/dev/null" ))
 
+(use-package recentf
+  :bind (("C-c f f" . #'recentf-open-files))
+  :config
+  (recentf-mode 1))
+
 (defun mbork/diff-last-two-kills ()
   "Put the last two kills to temporary buffers and diff them."
   (interactive)
