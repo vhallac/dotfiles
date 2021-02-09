@@ -370,7 +370,7 @@ This variant allows overriding project directory."
 ;; Thank god it's emacs! Replace twitter with nitter.
 (defun vh/eww-url-remap (old-function url &rest future-args)
   (apply old-function (cons
-                       (replace-regexp-in-string "https?://twitter.com" "https://nitter.net" url)
+                       (replace-regexp-in-string "https?://twitter.com" "https://nitter.42l.fr" url)
                        future-args)))
 
 (advice-add #'eww--dwim-expand-url :around 'vh/eww-url-remap)
