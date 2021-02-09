@@ -399,13 +399,17 @@ This is useful for quickly obtaining information about internal packages"
     (interactive "sPackage name: ")
     (eww (concat "https://golang.org/pkg/" pkg)))
 
-  (defun vh/search-go-pkg (keywords)
+  (defun vh/search-go-pkg (arg keywords)
     "Search packages for keywords.
 
 This function searches a database of packages for the keywords provided.
 The argument KEYWORDS is a space separated list of terms to search for."
-    (interactive "sSearch for: ")
-    (eww (concat "https://pkg.go.dev/search?q=" (replace-regexp-in-string " " "+" keywords))))
+    (interactive "p\nsSearch for: ")
+    (let ((template (if (and arg (= arg 4))
+                        "https://pkg.go.dev/search?q=%s"
+                      "https://golang.org/search?q=%s"))
+          (terms (replace-regexp-in-string " " "+" keywords)))
+      (eww (format template terms ))))
 
   (defun vh/go-project-root ()
     "Detect the root of the current go project, and return it."
