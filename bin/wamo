@@ -1,0 +1,11 @@
+#!/bin/sh
+export ENV=${1:-dev}
+UENV=`echo ${ENV} | tr "[a-z]" "[A-Z]"`
+if [ -z "INNER" ]; then exec env INNER=t $SHELL -i $0; fi
+unset INNER
+export JAVA_HOME=/usr/lib/jvm/java-15-openjdk
+WDIR=~/work/wamo/core/${ENV}
+cd ${WDIR}
+export PATH=${JAVA_HOME}/bin:${PATH}:~/work/wamo/core/bin:${WDIR}/bin
+export GIT_SSH_COMMAND="ssh -i ~/.ssh/obsidian_ed25519 -F /dev/null -o ControlMaster=auto -o ControlPersist=15m -o ControlPath=/home/vedat/t/ssh-master/%h@%p:%r"
+exec env RPS1="[WCR-${UENV}] " $SHELL

@@ -1,0 +1,11 @@
+#!/bin/sh
+export ENV=${1:-dev}
+UENV=`echo ${ENV} | tr "[a-z]" "[A-Z]"`
+if [ -z "INNER" ]; then exec env INNER=t $SHELL -i $0; fi
+unset INNER
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
+cd ~/work/PiA/NSM/${ENV}/src
+export MAVEN_OPTS="-Dmaven.repo.local=${HOME}/m2/nsm-${ENV}/repository"
+export GIT_SSH_COMMAND="ssh -i ~/.ssh/obsidian_ecdsa -F /dev/null"
+export PATH=${PATH}:~/work/PiA/NSM/bin
+exec env RPS1="[NSM-${UENV}] " $SHELL
