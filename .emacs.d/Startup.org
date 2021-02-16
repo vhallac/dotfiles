@@ -766,9 +766,9 @@
 
     #+begin_src emacs-lisp
       (use-package dumb-jump :ensure t
-        :bind (("M-g d" . dumb-jump-go)
-               ("M-g D" . dumb-jump-go-other-window)
-               ("M-g b" . dumb-jump-back)))
+        :bind (("M-g d" . xref-find-definitions)
+               ("M-g D" . xref-find-definitions-other-window)
+               ("M-g b" . xref-pop-marker-stack)))
     #+end_src
 
 ** ace-jump-buffer
