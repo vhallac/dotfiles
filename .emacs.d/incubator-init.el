@@ -281,13 +281,6 @@ PATH is the default directory of the shells."
 (customize-set-variable 'display-fill-column-indicator-character ?¦)
 (global-display-fill-column-indicator-mode)
 
-(use-package origami :ensure t
-  :bind (:map origami-mode-map
-              ("C-c f f" . origami-toggle-node)
-              ("C-c f a" . origami-toggle-all-nodes)
-              ))
-
-
 ;; Looks like this has been fixed.
 ;; (defun vh/kill-tramps ()
 ;;   "Kill all tramp buffers (by buffer name).
