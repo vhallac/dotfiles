@@ -328,14 +328,23 @@
        (setq kill-do-not-save-duplicates t
              next-line-add-newlines nil
              require-final-newline t
-             sentence-end-double-space nil
              tab-always-indent 'complete)
+     #+end_src
 
-       ;; These become buffer local when set, so I use setq-default
+     These variables become buffer local when set, so I use setq-default.
+
+     #+begin_src emacs-lisp
        (setq-default tab-width 4
                      fill-column 80
                      indent-tabs-mode nil
                      case-fold-search nil)
+     #+end_src
+
+     Emacs sentence aware commands assume sentences end with double spaces by default. I do not use this convention, so it is a good
+     idea to tell emacs not to expect two spaces.
+
+     #+begin_src emacs-lisp
+       (setq sentence-end-double-space nil)
      #+end_src
 
    - Enable syntax highlighting:
