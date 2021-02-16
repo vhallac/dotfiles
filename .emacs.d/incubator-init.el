@@ -1,4 +1,4 @@
-(use-package impatient-mode
+ (use-package impatient-mode
   :ensure t
   :commands (impatient-mode)
   :hook (impatient-mode . vh/impatient-mode-func)
@@ -249,13 +249,33 @@ Currently, we use youtube-dl and mpv to listen to the video"
 
 (global-set-key (kbd "C-c C-g") #'sync-indirect-buffer-points)
 
-(defun cassidy-sh ()
-  (interactive)
-  (let ((default-directory "/ssh:vedat@cassidy:~")
-        (current-prefix-arg '(4))
-        (explicit-shell-file-name "zsh"))
-    (shell)))
+(defun vh/mk-shell (command path eshell-p)
+  "Create a an interactive command that will start a shell or an eshell in the specified directory.
 
+COMMAND is the base name of the function. Created funnction's
+name depends on ESHELL-P: if it is true, name is COMMAND-esh,
+otherwise it is COMMAND-sh.
+
+PATH is the default directory of the shell."
+  `(defalias ',(intern (concat (symbol-name command) (if eshell-p "-esh" "-sh")))
+     (lambda ()
+       (interactive)
+       (let ((default-directory ,path))
+         ,(if eshell-p '(eshell) '(shell))))
+     ,(format "Start a %s in directory %s" (if eshell-p "eshell" "shell") path)))
+
+(defmacro vh/def-ssh (command path)
+  "Define a pair of interactive commands to start shell and eshell under the given path.
+
+COMMAND is the base name. The commands are named COMMAND-sh and COMMAND-esh for shell and eshell.
+
+PATH is the default directory of the shells."
+  `(progn ,(vh/mk-shell command path nil)
+          ,(vh/mk-shell command path t)))
+
+(vh/def-ssh cassidy "/ssh:vedat@cassidy:")
+
+(vh/def-ssh theborg "/ssh:vedat@cassidy|ssh:vedat@192.168.50.10:")
 
 (setq-default fill-column 132)
 (customize-set-variable 'display-fill-column-indicator-character ?¦)
