@@ -166,14 +166,14 @@
 (setq kill-do-not-save-duplicates t
       next-line-add-newlines nil
       require-final-newline t
-      sentence-end-double-space nil
       tab-always-indent 'complete)
 
-;; These become buffer local when set, so I use setq-default
 (setq-default tab-width 4
               fill-column 80
               indent-tabs-mode nil
               case-fold-search nil)
+
+(setq sentence-end-double-space nil)
 
 (global-font-lock-mode 1)
 
@@ -443,9 +443,9 @@ into real text."
   :bind ("M-g i" . imenu))
 
 (use-package dumb-jump :ensure t
-  :bind (("M-g d" . dumb-jump-go)
-         ("M-g D" . dumb-jump-go-other-window)
-         ("M-g b" . dumb-jump-back)))
+  :bind (("M-g d" . xref-find-definitions)
+         ("M-g D" . xref-find-definitions-other-window)
+         ("M-g b" . xref-pop-marker-stack)))
 
 (use-package ace-jump-buffer :ensure t
   :bind (("C-c b b"   . ace-jump-buffer)
@@ -1169,22 +1169,6 @@ The command will invoke the specified subcommand in the project directory"
 (use-package scheme
   :commands scheme-mode
   :mode ("\\.s\\(s\\|c[mh]\\)$" . scheme-mode))
-
-(use-package slime
-  :disabled
-  :config
-  (add-to-list 'lisp-mode-hook 'slime-mode)
-
-  (slime-setup)
-  (add-to-list slime-lisp-implementations `((sbcl ("sbcl"))
-                                            (cmucl ("lisp"))
-                                            (openmcl ("openmcl"))
-                                            (s48 ("scheme48") :init slime48-init-command)
-                                            (s48-large ("scheme48" "-h" "80000000")
-                                                       :init slime48-init-command)
-                                            (abcl ("abcl"))))
-  ;;  (setq inferior-lisp-program "sbcl")
-  )
 
 (use-package python
   :commands python-mode
