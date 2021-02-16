@@ -440,3 +440,6 @@ The argument KEYWORDS is a space separated list of terms to search for."
       (when modname (progn (push-mark)
                            (insert (format "\"%s/\"" modname))
                            (backward-char 1))))))
+
+(use-package sly :ensure t
+  :custom ((inferior-lisp-program  "sbcl")))
