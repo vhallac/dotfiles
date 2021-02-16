@@ -11,6 +11,7 @@
         (imp-set-user-filter (lambda (content)
                                (let ((data (with-current-buffer content (buffer-string))))
                                  (princ data (current-buffer))))))))
+
 (use-package plantuml-mode
   :bind (:map plantuml-mode-map
               ("C-c C-p b" . plantuml-preview-buffer)
