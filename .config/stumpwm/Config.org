@@ -73,15 +73,34 @@
     (load "~/.sbclrc")
   #+end_src
 
-  For debugging swank (on port 4005) is used. Emacs has a corresponding setup.
+  For debugging swank (on port 4005) is used. Emacs has a corresponding setup. For now, I am getting rid of this. I switched to
+  ~sly~, and its corresponding setup is in ~slynk~ (see below for installation).
 
-  #+begin_src common-lisp
+  #+begin_src common-lisp :tangle no
     (ql:quickload :swank)
     (defcommand swank () ()
                 (swank:create-server
                  :dont-close t
                  :port swank::default-server-port))
 
+  #+end_src
+
+  I could go to my emacs dir, and find the integrated slynk instead of using a quickload. E.g.:
+
+  #+begin_src common-lisp :tangle no
+    (let ((slynk-dir (directory #P "~/.emacs.d/elpa/sly*/slynk/")))
+      (when slynk-dir
+        (push (car slynk-dir) ASDF:*CENTRAL-REGISTRY*)
+        (asdf:load-system :slynk)))
+  #+end_src
+
+  But I will be lazy,  and just rely on ~quicklisp~. I'll also define a command that will not keep the server around (unlike the
+  ~swank~ example above).
+
+  #+begin_src common-lisp
+    (ql:quickload :slynk)
+    (defcommand slynk () ()
+      (slynk:create-server))
   #+end_src
 
   The default prefix key, ~C-t~ is mostly OK, but it is used for creating tabs

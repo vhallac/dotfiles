@@ -15,11 +15,9 @@
 
 (load "~/.sbclrc")
 
-(ql:quickload :swank)
-(defcommand swank () ()
-            (swank:create-server
-             :dont-close t
-             :port swank::default-server-port))
+(ql:quickload :slynk)
+(defcommand slynk () ()
+  (slynk:create-server))
 
 (set-prefix-key (kbd "s-t"))
 
