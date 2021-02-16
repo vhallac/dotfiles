@@ -2113,9 +2113,14 @@
          :commands scheme-mode
          :mode ("\\.s\\(s\\|c[mh]\\)$" . scheme-mode))
      #+end_src
-**** Slime (Common Lisp)
+**** DISABLED Slime (Common Lisp)
+     CLOSED: [2021-02-15 Mon 17:51]
+     :LOGBOOK:
+     - Note taken on [2021-02-15 Mon 17:51] \\
+       Disabling for now. I may switch to sly.
+     :END:
 
-     #+begin_src emacs-lisp
+     #+begin_src emacs-lisp :tangle no
        (use-package slime
          :disabled
          :config
