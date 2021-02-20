@@ -249,6 +249,15 @@ Currently, we use youtube-dl and mpv to listen to the video"
 
 (global-set-key (kbd "C-c C-g") #'sync-indirect-buffer-points)
 
+(defun vh/mk-tramp-sudo-path (path)
+  (let (tp)
+    (if (not (tramp-tramp-file-p path))
+        (concat "/sudo:root@localhost:" (expand-file-name path))
+      (with-parsed-tramp-file-name path tp
+        (let ((sudo-localname-part (concat "|sudo:root@" tp-host ":" tp-localname))
+              (localname-part (concat ":" tp-localname "$")))
+          (replace-regexp-in-string localname-part sudo-localname-part path))))))
+
 (defun vh/mk-shell (command path eshell-p)
   "Create a an interactive command that will start a shell or an eshell in the specified directory.
 
@@ -258,11 +267,19 @@ otherwise it is COMMAND-sh.
 
 PATH is the default directory of the shell."
   `(defalias ',(intern (concat (symbol-name command) (if eshell-p "-esh" "-sh")))
-     (lambda ()
-       (interactive)
-       (let ((default-directory ,path))
-         ,(if eshell-p '(eshell) '(shell))))
-     ,(format "Start a %s in directory %s" (if eshell-p "eshell" "shell") path)))
+     (lambda (arg)
+       (interactive "P")
+       (let ((default-directory (if arg (vh/mk-tramp-sudo-path ,path) ,path))
+             (buffer-name (generate-new-buffer-name
+                           (concat "*" (when arg "root:")
+                                   ,(concat (symbol-name command)
+                                            (when eshell-p ":eshell") "*")))))
+         ,(if eshell-p '(let ((eshell-buffer-name buffer-name))
+                          (eshell t))
+            `(shell buffer-name))))
+     ,(format "Start a %s in directory %s
+
+When ARG is present, open a root shell using sudo" (if eshell-p "eshell" "shell") path)))
 
 (defmacro vh/def-ssh (command path)
   "Define a pair of interactive commands to start shell and eshell under the given path.
