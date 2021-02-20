@@ -415,6 +415,7 @@ This variant allows overriding project directory."
               ("C-c . t" . #'vh/go-test-package)
               ("C-c . T" . #'vh/go-test-module)
               ("C-c . i m" . #'vh/insert-current-module-for-import))
+  :hook (go-mode . (lambda () (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)))
   :config
   ;; TODO: define a thing for go chained symbols (pick up log.Println instead of log or Println alone)
   (defun vh/go-doc (symbol)
