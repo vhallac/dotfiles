@@ -475,3 +475,15 @@ The argument KEYWORDS is a space separated list of terms to search for."
 
 (use-package sly :ensure t
   :custom ((inferior-lisp-program  "sbcl")))
+
+(use-package midnight :ensure t
+  :hook  (midnight . vh/clean-vc-buffers)
+  :init
+  (defun vh/vc-rev-buffer-list ()
+    (delq nil (mapcar (lambda (b)
+                        (when (string-match "~[a-zA-Z0-9]+~$" (buffer-name b)) b))
+                      (buffer-list))))
+
+  (defun vh/clean-vc-buffers ()
+    (dolist (b (vh/vc-rev-buffer-list))
+      (kill-buffer b))))
