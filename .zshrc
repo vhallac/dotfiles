@@ -65,8 +65,12 @@ bindkey '^?' backward-delete-char
 export  PS1C=$'\n┌┬───\[%F{red}%D{%H:%M:%S}%f\]──\[%?\]—\[%F{green}%n@%m%f\]—\[%F{blue}%~%f\]\n└┴%# '
 export PS1NC=$'\n┌┬───\[%D{%H:%M:%S}\]──\[%?\]—\[%n@%m\]—\[%~\]\n└┴%# '
 if [ "$TERM" = "dumb" ]; then
-	export PS1=$PS1NC
-	unset zle_bracketed_paste
+    if [ -z "$INSIDE_EMACS" ]; then
+        export PS1=$PS1NC
+    else
+		export PS1="%m:%/ %# "
+	    unset zle_bracketed_paste
+    fi
 else
 	export PS1=$PS1C
 fi
