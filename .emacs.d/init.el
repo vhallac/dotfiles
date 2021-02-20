@@ -2012,8 +2012,8 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
 (use-package hackernews :ensure t)
 
 (use-package eww :ensure t
-  :config
-  (customize-set-variable 'eww-search-prefix "https://startpage.com/do/search?prf=95fa00857b1c3634f33a56a3f0f7e96b&query="))
+  :custom ((eww-search-prefix "https://startpage.com/do/search?prf=95fa00857b1c3634f33a56a3f0f7e96b&query=")
+           (browse-url-browser-function #'eww)))
 
 (use-package shr
   :config
