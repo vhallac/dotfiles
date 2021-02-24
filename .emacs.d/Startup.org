@@ -553,17 +553,34 @@
              (zero-or-more (char (?0 . ?\?)))
              (zero-or-more (char ?\s ?- ?\/))
              (char (?@ .?~))))
+
        (defun zakame/nuke-ansi-escapes (beg end)
          (save-excursion
            (goto-char beg)
            (while (re-search-forward zakame/ansi-escapes-re end t)
              (replace-match ""))))
+
        (defun zakame/eshell-nuke-ansi-escapes ()
          (zakame/nuke-ansi-escapes eshell-last-output-start eshell-last-output-end))
+
        (add-hook 'eshell-mode-hook
                  (lambda ()
                    (add-to-list 'eshell-output-filter-functions
-                                'zakame/eshell-nuke-ansi-escapes t))))
+                                'zakame/eshell-nuke-ansi-escapes t)))
+
+       (defun eshell-cd-filter (&rest args)
+         (let ((dir (car (flatten-tree args))))
+           (if (and dir (file-remote-p default-directory))
+               (cond ((and (not (eql 0 (string-match-p "//" dir)))
+                           (eql 0 (string-match-p "/" dir)))
+                      (with-parsed-tramp-file-name default-directory nil
+                        (list (tramp-make-tramp-file-name v dir))))
+                     ((eql 0 (string-match-p "//" dir))
+                      (list (substring dir 1)))
+                     (t args))
+             args)))
+
+       (advice-add #'eshell/cd :filter-args #'eshell-cd-filter))
    #+end_src
 
 ** Shell
