@@ -261,12 +261,10 @@ Currently, we use youtube-dl and mpv to listen to the video"
 (defun vh/mk-shell (command path eshell-p)
   "Create a an interactive command that will start a shell or an eshell in the specified directory.
 
-COMMAND is the base name of the function. Created funnction's
-name depends on ESHELL-P: if it is true, name is COMMAND-esh,
-otherwise it is COMMAND-sh.
-
-PATH is the default directory of the shell."
-  `(defalias ',(intern (concat (symbol-name command) (if eshell-p "-esh" "-sh")))
+COMMAND is the name of the function. PATH is the default
+directory of the shell. ESHELL-P controls whether a shell or an
+eshell should be started."
+  `(defalias ',command
      (lambda (arg)
        (interactive "P")
        (let ((default-directory (if arg (vh/mk-tramp-sudo-path ,path) ,path))
@@ -281,18 +279,34 @@ PATH is the default directory of the shell."
 
 When ARG is present, open a root shell using sudo" (if eshell-p "eshell" "shell") path)))
 
-(defmacro vh/def-ssh (command path)
+(setq vh/shell-launcher-keymap (make-sparse-keymap))
+(bind-key "s" #'shell vh/shell-launcher-keymap)
+(bind-key "C-c S" vh/shell-launcher-keymap)
+(setq vh/eshell-launcher-keymap (make-sparse-keymap))
+(bind-key "s" #'eshell vh/eshell-launcher-keymap)
+(bind-key "C-c s" vh/eshell-launcher-keymap)
+
+(defmacro vh/def-ssh (command path &optional key-name)
   "Define a pair of interactive commands to start shell and eshell under the given path.
 
 COMMAND is the base name. The commands are named COMMAND-sh and COMMAND-esh for shell and eshell.
 
-PATH is the default directory of the shells."
-  `(progn ,(vh/mk-shell command path nil)
-          ,(vh/mk-shell command path t)))
+PATH is the default directory of the shells.
 
-(vh/def-ssh cassidy "/ssh:vedat@cassidy:")
+KEY-NAME may be specified to bind the generated commands under
+vh/shell-launcher-keymap and vh/eshell-launcher-keymap maps."
+  (let ((shell-command (intern (concat (symbol-name command) "-sh")))
+        (eshell-command (intern (concat (symbol-name command) "-esh"))))
+    `(progn ,(vh/mk-shell shell-command path nil)
+            ,(vh/mk-shell eshell-command path t)
+            ,@(when key-name
+                (list
+                 `(bind-key ,key-name #',shell-command vh/shell-launcher-keymap)
+                 `(bind-key ,key-name #',eshell-command vh/eshell-launcher-keymap))))))
 
-(vh/def-ssh theborg "/ssh:vedat@cassidy|ssh:vedat@192.168.50.10:")
+(vh/def-ssh cassidy "/ssh:vedat@cassidy:" "c")
+
+(vh/def-ssh theborg "/ssh:vedat@cassidy|ssh:vedat@192.168.50.10:" "b")
 
 (setq-default fill-column 132)
 (customize-set-variable 'display-fill-column-indicator-character ?¦)
