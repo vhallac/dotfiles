@@ -240,11 +240,6 @@
               ("v" . eww-browse-shr-url)
               ("V" . eww-browse-external)))
 
-(use-package w3m :ensure t :defer
-  :bind (:map w3m-link-map
-              ("v" . (lambda () (interactive) (eww (w3m-anchor (point)))))
-              ("V" . (lambda () (interactive) (w3m-view-url-with-browse-url (w3m-anchor (point)))))))
-
 (defun eww-browse-gnus-url ()
   (interactive)
   (eww (get-text-property (point) 'gnus-string)))
@@ -386,7 +381,6 @@ into real text."
            (clean-buffer-list-kill-regexps '("^.*$"))
            ;; ... except these
            (clean-buffer-list-kill-never-buffer-names '("*Messages*" "*cmd*" "*scratch*"
-                                                        "*w3m*" "*w3m-cache*"
                                                         "*Group*" "*eshell*"))
            (clean-buffer-list-kill-never-regexps '("^\\*EMMS Playlist\\*.*$"
                                                    "^\\*Article "
@@ -712,7 +706,6 @@ gnus-ignored-newsgroups. It defaults to \"^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\â€
 (use-package mm-decode :defer
   :custom ((mm-text-html-renderer 'shr)
            (mm-inline-text-html-with-images t)
-           (mm-w3m-safe-url-regexp nil)
            (mm-inline-large-images t)
            (mm-coding-system-priorities '(utf-8))))
 
@@ -2037,10 +2030,6 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
   (setq shr-bullet "â€¢ "
         shr-use-fonts t
         shr-width 120))
-
-(use-package w3m :ensure t :defer
-  :init                                 ; shouldn't this be :config? Check with gnus
-  (custom-set-variables '(w3m-use-tab-line nil)))
 
 (use-package url-cookie
   :config

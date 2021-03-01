@@ -464,11 +464,6 @@
                   ("v" . eww-browse-shr-url)
                   ("V" . eww-browse-external)))
 
-    (use-package w3m :ensure t :defer
-      :bind (:map w3m-link-map
-                  ("v" . (lambda () (interactive) (eww (w3m-anchor (point)))))
-                  ("V" . (lambda () (interactive) (w3m-view-url-with-browse-url (w3m-anchor (point)))))))
-
     (defun eww-browse-gnus-url ()
       (interactive)
       (eww (get-text-property (point) 'gnus-string)))
@@ -662,7 +657,6 @@
                  (clean-buffer-list-kill-regexps '("^.*$"))
                  ;; ... except these
                  (clean-buffer-list-kill-never-buffer-names '("*Messages*" "*cmd*" "*scratch*"
-                                                              "*w3m*" "*w3m-cache*"
                                                               "*Group*" "*eshell*"))
                  (clean-buffer-list-kill-never-regexps '("^\\*EMMS Playlist\\*.*$"
                                                          "^\\*Article "
@@ -1146,7 +1140,6 @@
       (use-package mm-decode :defer
         :custom ((mm-text-html-renderer 'shr)
                  (mm-inline-text-html-with-images t)
-                 (mm-w3m-safe-url-regexp nil)
                  (mm-inline-large-images t)
                  (mm-coding-system-priorities '(utf-8))))
     #+end_src
@@ -2839,7 +2832,7 @@
      (use-package hackernews :ensure t)
    #+end_src
 ** Browse web inside editor
-   Small tweaks for eww and w3m.
+   Small tweaks for eww.
 
    I used to have ~shr-folding-mode~ set to ~t~, but I couldn't figure out what it does (except when I set it to ~'none~ - which
    removed fontifications altogether. I am removing until I know for sure it improves readability.
@@ -2854,10 +2847,6 @@
        (setq shr-bullet "• "
              shr-use-fonts t
              shr-width 120))
-
-     (use-package w3m :ensure t :defer
-       :init                                 ; shouldn't this be :config? Check with gnus
-       (custom-set-variables '(w3m-use-tab-line nil)))
 
      (use-package url-cookie
        :config
