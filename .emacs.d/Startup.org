@@ -318,6 +318,14 @@
        (put 'narrow-to-page 'disabled nil)
      #+end_src
 
+   - Allow work capitalization of region
+     #+begin_src emacs-lisp
+       (put 'downcase-region 'disabled nil)
+       (put 'upcase-region 'disabled nil)
+       (put 'capitalize-region 'disabled nil)
+     #+end_src
+
+
    - Open new buffers in dired:
      #+begin_src emacs-lisp
        (put 'dired-find-alternate-file 'disabled nil)

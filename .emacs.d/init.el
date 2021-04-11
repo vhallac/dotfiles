@@ -161,6 +161,10 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+(put 'capitalize-region 'disabled nil)
+
 (put 'dired-find-alternate-file 'disabled nil)
 
 (setq kill-do-not-save-duplicates t
