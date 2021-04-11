@@ -5,6 +5,7 @@
 (defvar my/timeclock-log-unbillable "Unpaid")
 (defvar my/timeclock-account-property "BILLABLE")
 (defvar my/timeclock-project-property "PROJECT")
+(defvar my/timeclock-tag-property "LOG_TAG")
 (defvar my/timeclock-description-property "ID")
 
 (defmacro my/timeclock-with-timeclock-file (&rest body)
@@ -27,10 +28,12 @@
 (defun my/timeclock-description ()
   (let* ((description-prop (org-entry-get nil my/timeclock-description-property t))
          (description (or description-prop (downcase (org-get-heading t t t t))))
-         (project (org-entry-get nil my/timeclock-project-property t)))
+         (project (org-entry-get nil my/timeclock-project-property t))
+         (tag (org-entry-get nil my/timeclock-tag-property t)))
     (when description
       (concat (when project (concat project ": "))
-              description))))
+              description
+              (when tag (concat " #" tag))))))
 
 (defun my/timeclock-clock-in ()
   (let ((account (my/timeclock-account))
