@@ -522,3 +522,7 @@ The argument KEYWORDS is a space separated list of terms to search for."
     (quit-window)))
 
 (bind-key "C-x 4 q" #'quit-other-window)
+
+(use-package doc-view
+  :custom
+  ((doc-view-resolution 300)))
