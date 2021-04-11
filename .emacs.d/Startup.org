@@ -1788,7 +1788,8 @@
                                   (subword-mode)
                                   (c-toggle-auto-newline 1)
                                   (setq c-cleanup-list 'set-from-style)
-                                  (c-set-style "java-google")))
+                                  (c-set-style "java-google")
+                                  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)))
     #+end_src
 
 

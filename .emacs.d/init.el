@@ -1580,7 +1580,8 @@ The command will invoke the specified subcommand in the project directory"
                               (subword-mode)
                               (c-toggle-auto-newline 1)
                               (setq c-cleanup-list 'set-from-style)
-                              (c-set-style "java-google"))))
+                              (c-set-style "java-google")
+                              (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))))
 
 (use-package flycheck :ensure t
   :bind (:map flycheck-mode-map ("C-c ! !" . org-time-stamp-inactive))
