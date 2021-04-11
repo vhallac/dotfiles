@@ -511,3 +511,12 @@ The argument KEYWORDS is a space separated list of terms to search for."
           (icalendar-import-buffer)
         (kill-buffer (current-buffer))))))
 ;;(bind-key ". i d" #'vh/save-calendar-to-diary notmuch-show-mode-map)
+
+(defun quit-other-window (arg)
+  "Quit a quitable page in other window"
+  (interactive "p")
+  (save-selected-window
+    (other-window arg)
+    (quit-window)))
+
+(bind-key "C-x 4 q" #'quit-other-window)
