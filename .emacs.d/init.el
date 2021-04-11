@@ -682,7 +682,6 @@ gnus-ignored-newsgroups. It defaults to \"^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\â€
                                                 (gnus-killed-mark (from -10) (subject -30)))))
   :config
   (setq gnus-topic-line-format "%i[ %0{%(%n (new: %A)%)%} ]\n"
-        mail-self-blind t                     ; Add me to Bcc:
         mail-user-agent 'gnus-user-agent      ; Allow Gcc:
 
         ;; Work-around for GMail's internal folders: When the IMAP folder contains
