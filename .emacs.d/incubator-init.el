@@ -96,15 +96,13 @@
                ("C-c . i" . lsp-java-add-import)
                ("C-c . C-i" . lsp-java-add-unimplemented-methods))
   :ensure t
-  :config
-  (setq lsp-java-java-path "/opt/java/java-14-openjdk/bin/java")
-  (setq lsp-java-import-gradle-java-home "/opt/java/java-14-openjdk")
-  (setq lsp-java-configuration-runtimes '[(:name "JavaSE-14"
-                                                 :path "/opt/java/java-14-openjdk"
+  :custom ((lsp-java-java-path "/opt/java/java-15-openjdk/bin/java")
+           (lsp-java-import-gradle-java-home "/opt/java/java-15-openjdk")
+           (lsp-java-configuration-runtimes '[(:name "JavaSE-15"
+                                                 :path "/opt/java/java-15-openjdk"
                                                  :default t)])
-  (setq lsp-java-vmargs (list
-                         "--enable-preview"))
-
+           ( lsp-java-vmargs '("--enable-preview")))
+  :config
                                         ;
   ;; (defun vh/lsp-java-hook ()
   ;;   (lsp))
