@@ -512,6 +512,8 @@ The argument KEYWORDS is a space separated list of terms to search for."
         (kill-buffer (current-buffer))))))
 ;;(bind-key ". i d" #'vh/save-calendar-to-diary notmuch-show-mode-map)
 
+(use-package dired-x)
+
 (defun quit-other-window (arg)
   "Quit a quitable page in other window"
   (interactive "p")
