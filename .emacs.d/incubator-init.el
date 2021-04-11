@@ -499,3 +499,15 @@ The argument KEYWORDS is a space separated list of terms to search for."
   (defun vh/clean-vc-buffers ()
     (dolist (b (vh/vc-rev-buffer-list))
       (kill-buffer b))))
+
+(use-package notmuch
+  :bind(:map notmuch-show-mode-map
+             (". i d" . vh/save-calendar-to-diary))
+  :config
+  (defun vh/save-calendar-to-diary ()
+    (interactive)
+    (with-current-buffer (car (notmuch-show-current-part-handle "text/calendar"))
+      (unwind-protect
+          (icalendar-import-buffer)
+        (kill-buffer (current-buffer))))))
+;;(bind-key ". i d" #'vh/save-calendar-to-diary notmuch-show-mode-map)
