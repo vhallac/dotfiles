@@ -1959,6 +1959,7 @@ immediately after current heading."
 
 (use-package ledger-mode :ensure t
   :commands ledger-mode
+  :custom ((ledger-add-transaction-prompt-for-text nil))
   :config
   (add-hook 'ledger-mode-hook (lambda ()
                                 (setq ledger-post-account-alignment-column 2
