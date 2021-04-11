@@ -459,8 +459,9 @@ into real text."
 
 (use-package dumb-jump :ensure t
   :bind (("M-g d" . xref-find-definitions)
-         ("M-g D" . xref-find-definitions-other-window)
-         ("M-g b" . xref-pop-marker-stack)))
+         ("M-g D" . xref-find-definitions-other-window)))
+
+(bind-key "M-g b" #'pop-to-mark-command)
 
 (use-package ace-jump-buffer :ensure t
   :bind (("C-c b b"   . ace-jump-buffer)

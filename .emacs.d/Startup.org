@@ -790,13 +790,18 @@
        :bind ("M-g i" . imenu))
    #+end_src
 
- Dumb-jump is an almost zero-config pacakge that finds the definition of keyword under cursor.
+   Dumb-jump is an almost zero-config pacakge that finds the definition of keyword under cursor.
+
+   #+begin_src emacs-lisp
+     (use-package dumb-jump :ensure t
+       :bind (("M-g d" . xref-find-definitions)
+              ("M-g D" . xref-find-definitions-other-window)))
+   #+end_src
+
+    And finally, nvigation using local and global merk rings.
 
     #+begin_src emacs-lisp
-      (use-package dumb-jump :ensure t
-        :bind (("M-g d" . xref-find-definitions)
-               ("M-g D" . xref-find-definitions-other-window)
-               ("M-g b" . xref-pop-marker-stack)))
+      (bind-key "M-g b" #'pop-to-mark-command)
     #+end_src
 
 ** ace-jump-buffer
