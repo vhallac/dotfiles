@@ -526,3 +526,27 @@ The argument KEYWORDS is a space separated list of terms to search for."
 (use-package doc-view
   :custom
   ((doc-view-resolution 300)))
+
+(defun pia/org-clock-in-heading (heading)
+  "Clock in to a heading in gtd.org"
+  (interactive)
+  (save-excursion
+    (org-open-file "~/org/gtd.org" nil nil heading)
+    (org-clock-in)))
+
+(defun pia/org-clock-in-team ()
+  "Clock in to team support"
+  (interactive)
+  (pia/org-clock-in-heading "*team support"))
+
+(defun pia/org-clock-in-unexpected ()
+  "Clock in to an unexpected interruption that needs to be relabeled"
+  (interactive)
+  (pia/org-clock-in-heading "*Unexpected: relabel"))
+
+(defun my/org-clock-in-interrupted ()
+  "Clock in to interrupted task"
+  (interactive)
+  (save-excursion
+    (org-goto-marker-or-bmk org-clock-interrupted-task)
+    (org-clock-in)))
