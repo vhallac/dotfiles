@@ -114,6 +114,17 @@
 (define-key *vh/user-map* (kbd "w") "exec xsel -b | xargs mpv")
 (define-key *vh/user-map* (kbd "l") "exec xsel -b | xargs mpv --vo=null")
 
+(defvar *vh/timer-map* (make-sparse-keymap)
+  "Keymap for time logging and timers")
+
+(define-key *vh/user-map* (kbd "t") *vh/timer-map*)
+
+(define-key *vh/timer-map* (kbd "t") "exec emacsclient -n -e '(pia/org-clock-in-team)'")
+(define-key *vh/timer-map* (kbd "u") "exec emacsclient -n -e '(pia/org-clock-in-unexpected)'")
+(define-key *vh/timer-map* (kbd "g") "exec emacsclient -c -n -e '(org-clock-goto)'")
+(define-key *vh/timer-map* (kbd "l") "exec emacsclient -n -e '(my/org-clock-in-interrupted)'")
+(define-key *vh/timer-map* (kbd "o") "exec emacsclient -n -e '(org-clock-out)'")
+
 (define-key *top-map* (kbd "XF86MonBrightnessUp") "exec light -A 5")
 (define-key *top-map* (kbd "XF86MonBrightnessDown") "exec light -U 5")
 (define-key *top-map* (kbd "XF86AudioMute") "exec pactl set-sink-mute 1 toggle")
