@@ -515,7 +515,7 @@ The argument KEYWORDS is a space separated list of terms to search for."
 (use-package dired-x)
 
 (defun quit-other-window (arg)
-  "Quit a quitable page in other window"
+  "Quit the buffer in other window"
   (interactive "p")
   (save-selected-window
     (other-window arg)
