@@ -2028,7 +2028,7 @@ argument, this function removes the junk tag (but doesn't add unread tag)."
 (use-package hackernews :ensure t)
 
 (use-package eww :ensure t
-  :custom ((eww-search-prefix "https://duckduckgo.com/?q=")
+  :custom ((eww-search-prefix "https://duckduckgo.com/html?q=")
            (browse-url-browser-function #'eww)))
 
 (use-package shr

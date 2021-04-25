@@ -2853,7 +2853,7 @@
 
    #+begin_src emacs-lisp
      (use-package eww :ensure t
-       :custom ((eww-search-prefix "https://duckduckgo.com/?q=")
+       :custom ((eww-search-prefix "https://duckduckgo.com/html?q=")
                 (browse-url-browser-function #'eww)))
 
      (use-package shr
