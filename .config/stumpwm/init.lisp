@@ -141,6 +141,7 @@
 (define-key *vh/session-map* (kbd "s-o") "exec loginctl poweroff")
 (define-key *vh/session-map* (kbd "s-r") "exec loginctl reboot")
 (define-key *vh/session-map* (kbd "s-s") "exec loginctl suspend")
+(define-key *vh/session-map* (kbd "s-q") "quit-confirm")
 
 (defvar *vh/user-map* (make-sparse-keymap)
   "Keymap for odds and ends")
