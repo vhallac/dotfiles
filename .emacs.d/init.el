@@ -1845,30 +1845,36 @@ immediately after current heading."
 
 (use-package org-capture
   :after org
-  :bind (("C-c c" .  org-capture))
-  :config
-  (custom-set-variables '(org-default-notes-file "~/org/refile.org")
-                        '(org-capture-templates '(("w" "Web" entry
-                                                   (file "~/org/inbox.org")
-                                                   "* %c :BOOKMARK:\n\n%i" :immediate-finish t
-                                                   :empty-lines 0)
-                                                  ("t" "TODO" entry
-                                                   (file+headline "~/org/inbox.org" "Incoming")
-                                                   "* TODO %?\n  :PROPERTIES:\n  :CREATED: %U\n  :LINK: %a\n  :END:\n %i"
-                                                   :clock-in t :clock-resume t
-                                                   :empty-lines-after 1)
-                                                  ("n" "note" entry
-                                                   (file "~/org/inbox.org")
-                                                   "* %? :NOTE:\n  %U\n  %a\n"
-                                                   :clock-in t :clock-resume t)
-                                                  ("j" "journal" entry
-                                                   (file+olp+datetree "~/org/journal.org" "Daily Notes")
-                                                   "* %?\nEntered on %U\n  %i\n  %a"
-                                                   :empty-lines-after 1)
-                                                  ("q" "Quick note" item
-                                                   (file+headline "~/org/review.org" "Quick notes"))
-                                                  ("c" "Quick note on clocked task" item
-                                                   (clock))))))
+  :custom ((org-default-notes-file "~/org/refile.org")
+           (org-capture-templates '(("w" "Web" entry
+                                     (file "~/org/inbox.org")
+                                     "* %c :BOOKMARK:\n\n%i" :immediate-finish t
+                                     :empty-lines 0)
+                                    ("t" "TODO" entry
+                                     (file+headline "~/org/inbox.org" "Incoming")
+                                     "* TODO %?\n  :PROPERTIES:\n  :CREATED: %U\n  :LINK: %a\n  :END:\n %i"
+                                     :empty-lines-after 1)
+                                    ("T" "TODO (clocked)" entry
+                                     (file+headline "~/org/inbox.org" "Incoming")
+                                     "* TODO %?\n  :PROPERTIES:\n  :CREATED: %U\n  :LINK: %a\n  :END:\n %i"
+                                     :clock-in t :clock-resume t
+                                     :empty-lines-after 1)
+                                    ("n" "note" entry
+                                     (file "~/org/inbox.org")
+                                     "* %? :NOTE:\n  %U\n  %a\n")
+                                    ("N" "Note (clocked)" entry
+                                     (file "~/org/inbox.org")
+                                     "* %? :NOTE:\n  %U\n  %a\n"
+                                     :clock-in t :clock-resume t)
+                                    ("j" "journal" entry
+                                     (file+olp+datetree "~/org/journal.org" "Daily Notes")
+                                     "* %?\nEntered on %U\n  %i\n  %a"
+                                     :empty-lines-after 1)
+                                    ("q" "Quick note" item
+                                     (file+headline "~/org/review.org" "Quick notes"))
+                                    ("c" "Quick note on clocked task" item
+                                     (clock)))))
+  :bind (("C-c c" .  org-capture)))
 
 (use-package org
   :config
