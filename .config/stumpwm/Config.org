@@ -349,8 +349,8 @@
    #+end_src
 ** Frame splitting keys
    #+begin_src common-lisp
-     (define-key *root-map* (kbd "s-s") "vsplit 2/3")
-     (define-key *root-map* (kbd "s-S") "hsplit 2/3")
+     (define-key *tile-group-root-map* (kbd "s-s") "vsplit 2/3")
+     (define-key *tile-group-root-map* (kbd "s-S") "hsplit 2/3")
    #+end_src
 * Fix GDK3 Mouse wheel
   I haven't really researched why, but according to [[https://github.com/stumpwm/stumpwm/wiki/FAQ][StumpWM FAQ]], the following

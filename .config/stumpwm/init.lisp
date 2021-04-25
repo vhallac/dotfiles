@@ -136,8 +136,8 @@
 (define-key *top-map* (kbd "s-:") "eval")
 (define-key *top-map* (kbd "s-;") "colon")
 
-(define-key *root-map* (kbd "s-s") "vsplit 2/3")
-(define-key *root-map* (kbd "s-S") "hsplit 2/3")
+(define-key *tile-group-root-map* (kbd "s-s") "vsplit 2/3")
+(define-key *tile-group-root-map* (kbd "s-S") "hsplit 2/3")
 
 (require 'sb-posix)
 
