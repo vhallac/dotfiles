@@ -418,3 +418,27 @@
   #+begin_src common-lisp
     (redirect-all-output "~/.cache/stumpwm/log")
   #+end_src
+
+* Bug fixes
+  There are some areas in stumpwm that get in my way. These are corrections to those areas.
+
+** group-add-window for float group is not correct
+
+   When moving a window between two float groups, ~to-group~ is selected automatically. This is incorrect behavior.
+
+   Also, a fullscreen window is no longer full screen after the move. The following fix handles both issues.
+
+   #+begin_src lisp
+     (flet ((add-float-window (group window raise)
+              (let ((fullscreen-p (window-fullscreen window)))
+                (change-class window 'float-window)
+                (float-window-align window)
+                (when fullscreen-p
+                  (activate-fullscreen window))
+                (when raise
+                  (group-focus-window group window)))))
+       (defmethod group-add-window ((group float-group) window &key raise &allow-other-keys)
+         (add-float-window group window raise))
+       (defmethod group-add-window (group (window float-window) &key raise &allow-other-keys)
+         (add-float-window group window raise)))
+   #+end_src
