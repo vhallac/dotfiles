@@ -433,6 +433,8 @@ into real text."
 
 (custom-set-variables '(compilation-scroll-output t))
 
+(if (< emacs-major-version 28)
+    (message "TODO: Check for emacs-28 yank-pop to see if this is obsolete yet"))
 (use-package browse-kill-ring :ensure t
   :config (browse-kill-ring-default-keybindings))
 
