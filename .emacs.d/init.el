@@ -174,8 +174,7 @@
 
 (setq-default tab-width 4
               fill-column 80
-              indent-tabs-mode nil
-              case-fold-search nil)
+              indent-tabs-mode nil)
 
 (setq sentence-end-double-space nil)
 

@@ -344,8 +344,7 @@
      #+begin_src emacs-lisp
        (setq-default tab-width 4
                      fill-column 80
-                     indent-tabs-mode nil
-                     case-fold-search nil)
+                     indent-tabs-mode nil)
      #+end_src
 
      Emacs sentence aware commands assume sentences end with double spaces by default. I do not use this convention, so it is a good
