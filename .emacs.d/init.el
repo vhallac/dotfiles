@@ -867,7 +867,7 @@ When I need to send an e-mail in HTML mode, I can easily edit in org-mode, then 
   (setq smtp-accounts '( (ssl "vedathallac@gmail.com" "gmail-1" "smtp.googlemail.com" 587)
                          (ssl "dys.wowace@gmail.com" "gmail-2" "smtp.googlemail.com" 587)
                          (ssl "vedat@android.ciyiz.biz" "gmail-android" "smtp.googlemail.com" 587)
-                         (ssl "vedat.hallac@pia-team.com" "gmail-pia" "smtp.googlemail.com" 587)
+                         (ssl "vedat.hallac@pia-team.com" "ms-pia" "smtp.office365.com" 587)
                          (ssl "vedat.hallac@pia-systems.com" "ms-piasys" "smtp.office365.com" 587)
                          (ssl "vedat@hallac.net" "hallac-net" "smtp.yandex.com" 587)
                          (ssl "vedath@7island.com" "gmail-qbit" "smtp.googlemail.com" 587)))
