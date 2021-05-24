@@ -840,10 +840,14 @@
 
     #+begin_src emacs-lisp
       (use-package dired :defer
-        :custom (dired-dwim-target t)
+        :custom ((dired-dwim-target t)
+                 (dired-listing-switches "-alt"))
         :hook  (dired-mode . (lambda ()
-                             (make-local-variable 'coding-system-for-read)
-                             (setq coding-system-for-read 'utf-8))))
+                               (make-local-variable 'coding-system-for-read)
+                               (setq coding-system-for-read 'utf-8)
+                               (gnus-dired-mode)))
+        :config
+        (require 'gnus-dired))
     #+end_src
 *** Project
     This is part of emacs 28. For now, I rely on [[Minimum versions of built-in packages]] to pick it up from ELPA.

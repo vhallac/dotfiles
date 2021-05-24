@@ -483,7 +483,8 @@ into real text."
                  '(:source "~/.emacs.d/.secrets/authinfo.gpg" :host t :protocol t))))
 
 (use-package dired :defer
-  :custom (dired-dwim-target t)
+  :custom ((dired-dwim-target t)
+           (dired-listing-switches "-alt"))
   :hook  (dired-mode . (lambda ()
                        (make-local-variable 'coding-system-for-read)
                        (setq coding-system-for-read 'utf-8))))
