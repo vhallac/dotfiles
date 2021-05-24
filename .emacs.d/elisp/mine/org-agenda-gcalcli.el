@@ -1,7 +1,6 @@
 (defconst vh--gcalcli-executable "/usr/bin/gcalcli")
 
-(defvar vh--calendar-config-paths '(("gcal.pers" . "/home/vedat/.cache/gcalcli.pers")
-                                    ("gcal.work" . "/home/vedat/.cache/gcalcli.work")))
+(defvar vh--calendar-config-paths '(("gcal.pers" . "/home/vedat/.cache/gcalcli.pers")))
 
 (defvar  vh--gcalcli-cache-invalidate-seconds (* 60  60))
 
