@@ -312,7 +312,9 @@
 
      (define-key *root-map* (kbd "s-g") "gother")
    #+end_src
-
+** Float Group Keybindings
+   #+begin_src common-lisp
+     (define-key *float-group-root-map* (kbd "s-t") "other")
    #+end_src
 ** Convenience keys
 

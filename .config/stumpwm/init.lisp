@@ -124,6 +124,8 @@
 
 (define-key *root-map* (kbd "s-g") "gother")
 
+(define-key *float-group-root-map* (kbd "s-t") "other")
+
 (define-key *top-map* (kbd "s-D") "exec rofi -show-icons -show drun")
 (define-key *top-map* (kbd "s-d") "exec rofi -show-icons -show run")
 (define-key *top-map* (kbd "s-W") "exec rofi -show-icons -show window")
