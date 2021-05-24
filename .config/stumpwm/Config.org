@@ -497,3 +497,45 @@
        (defmethod group-add-window (group (window float-window) &key raise &allow-other-keys)
          (add-float-window group window raise)))
    #+end_src
+
+* Utility functions
+  #+begin_src common-lisp
+    (defun next-head (&optional (screen (current-screen)))
+      "Find the next available display head.
+
+    If SCREEN is not provided, current screen is used."
+      (let ((heads (screen-heads screen)))
+        (or (nth (+ 1 (position (current-head) heads :test #'eql)) heads)
+            (car heads))))
+
+    (defun move-window-to-display-head (window to-head)
+      "Move window from its current head to another one in the same group.
+
+    TODO: Define for tiling groups"
+      (when (and (typep (current-group) 'float-group)
+                 (not (eql (window-head window) to-head)))
+        (let* ((cur-head-x (head-x (current-head)))
+               (cur-head-y (head-y (current-head)))
+               (next-head-x (head-x to-head))
+               (next-head-y (head-y to-head)))
+          (setf (window-x window) (+ next-head-x (- (window-x window) cur-head-x ))
+                (window-y window) (+ next-head-y (- (window-y window) cur-head-y)))
+          (float-window-move-resize window :x (window-x window) :y (window-y window)))))
+
+    (defun refresh-updated-window (window)
+      "Redraw the window after it is moved."
+      ;; TODO Find the proper method for moving the window around
+      ;; Two problems:
+      ;; 1. Window doesn't move
+      ;; 2. Fullscreen windows need to resize when head sizes are different
+      (when (typep (current-group) 'float-group)
+        (update-fullscreen (current-window) 2)
+        (update-fullscreen (current-window) 2)))
+
+    (defcommand hmove () ()
+      "Move window to next head."
+        (move-window-to-display-head (current-window) (next-head))
+        (refresh-updated-window (current-window)))
+
+    (define-key *root-map* (kbd "s-m") "hmove")
+  #+end_src
