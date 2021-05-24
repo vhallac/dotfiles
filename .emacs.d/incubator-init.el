@@ -550,3 +550,28 @@ The argument KEYWORDS is a space separated list of terms to search for."
   (save-excursion
     (org-goto-marker-or-bmk org-clock-interrupted-task)
     (org-clock-in)))
+
+(defun vh/support-gnus-age-scores (scores header now expire &optional trace)
+  (dolist (score scores)
+          (let ((entries (assoc header score)))
+            (while (cdr entries)		;First entry is the header index.
+	          (let* ((rest (cdr entries))
+	                 (kill (car rest))
+                     (delta (string-to-number (nth 0 kill)))
+	                 (type (nth 3 kill))
+	                 (date (nth 2 kill)))
+	            (cond
+	             ((eq type '<)
+	              (setf (nth 3 kill) 'after
+                        (nth 0 kill) (gnus-time-iso8601
+			                          (time-subtract (current-time)
+					                                 (* 86400 delta)))))
+	             ((eq type '>)
+	              (setf (nth 3 kill) 'before
+		                (nth 0 kill) (gnus-time-iso8601
+			                          (time-subtract (current-time)
+					                                 (* 86400 delta))))))
+                (setq entries rest))))))
+
+(eval-after-load 'gnus-score
+  (advice-add #'gnus-score-date :before 'vh/support-gnus-age-scores))
