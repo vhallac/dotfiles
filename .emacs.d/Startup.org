@@ -1433,7 +1433,7 @@
         (setq smtp-accounts '( (ssl "vedathallac@gmail.com" "gmail-1" "smtp.googlemail.com" 587)
                                (ssl "dys.wowace@gmail.com" "gmail-2" "smtp.googlemail.com" 587)
                                (ssl "vedat@android.ciyiz.biz" "gmail-android" "smtp.googlemail.com" 587)
-                               (ssl "vedat.hallac@pia-team.com" "ms-pia" "smtp.office365.com" 587)
+                               (ssl-xoauth2 "vedat.hallac@pia-team.com" "ms-pia" "smtp.office365.com" 587)
                                (ssl "vedat.hallac@pia-systems.com" "ms-piasys" "smtp.office365.com" 587)
                                (ssl "vedat@hallac.net" "hallac-net" "smtp.yandex.com" 587)
                                (ssl "vedath@7island.com" "gmail-qbit" "smtp.googlemail.com" 587)))
@@ -1480,7 +1480,7 @@
        (defun set-smtp (mech alias server port &optional user password)
          "Set related SMTP variables for supplied parameters."
          (set-smtp-common alias server port user password)
-         (setq smtpmail-auth-supported (list mech)
+         (setq smtpmail-auth-supported '(cram-md5 plain login)
                smtpmail-starttls-credentials nil))
 
        (defun set-smtp-ssl (alias server port &optional user password key cert)
@@ -1488,24 +1488,68 @@
          (set-smtp-common alias server port user password)
          (setq starttls-use-gnutls nil        ;use starttls-program
                starttls-extra-arguments nil
-               smtpmail-starttls-credentials (list (list server port key cert))))
+               smtpmail-starttls-credentials (list (list server port key cert))
+               smtpmail-auth-supported '(cram-md5 plain login)))
+
+       (defun set-smtp-xauth2-ssl (alias server port &optional user password key cert)
+         "Set related SMTP and SSL variables for supplied parameters."
+         (set-smtp-common alias server port user password)
+         (setq starttls-use-gnutls nil        ;use starttls-program
+               starttls-extra-arguments nil
+               smtpmail-starttls-credentials (list (list server port key cert))
+               smtpmail-auth-supported '(xoauth2)))
+
+       ;; From https://lists.gnu.org/archive/html/emacs-devel/2018-01/msg00156.html
+       ;; Modified to handle M$ XOAUTH2 authentication
+       (cl-defmethod smtpmail-try-auth-method (process (_mech (eql xoauth2)) user password)
+         ;; If the password is a token, search for it in authinfo, and use information
+         ;; to obtain an access token
+         (let ((tokeninfo (car (auth-source-search :host "localhost" :port "xoauth2" :user password :max 1))))
+           (when tokeninfo
+             (setq password (oauth2-get-refresh-token (plist-get tokeninfo :url)
+                                                      (plist-get tokeninfo :clientid)
+                                                      (plist-get tokeninfo :refreshtoken))))
+           (smtpmail-command-or-throw process "AUTH XOAUTH2" 334)
+           (smtpmail-command-or-throw process (concat
+                                               (base64-encode-string
+                                                (format "user=%s\001auth=Bearer %s\001\001"
+                                                        (nnimap-quote-specials user)
+                                                        (nnimap-quote-specials password)) t))
+                                      235)))
+
+       (defun oauth2-get-refresh-token (url client-id refresh-token)
+         (let ((token (oauth2-get-refresh-token-json url client-id refresh-token)))
+           (string-match "\"access_token\": *\"\\([^\"]*\\)\"" token)
+           (match-string 1 token)))
+
+       (defun oauth2-get-refresh-token-json (url client-id refresh-token)
+         (let* ((url-request-method "POST")
+                (url-request-extra-headers '(("Content-Type" . "application/x-www-form-urlencoded")))
+                (grant-type "refresh_token")
+                (url-request-data (format "grant_type=%s&client_id=%s&refresh_token=%s"
+                                          grant-type client-id refresh-token)))
+           (with-current-buffer
+               (url-retrieve-synchronously url)
+             (buffer-string))))
 
        (defun change-smtp ()
          "Change the SMTP server according to the current from line."
          (save-excursion
            (let ((case-fold-search t))
              (cl-loop with from = (save-restriction
-                                 (message-narrow-to-headers)
-                                 (message-fetch-field "from"))
-                   for (auth-mech address . auth-spec) in smtp-accounts
-                   when (string-match address from)
-                   do (cond
-                       ((memq auth-mech '(cram-md5 plain login))
-                        (cl-return (apply 'set-smtp 'auth-mech auth-spec)))
-                       ((eql auth-mech 'ssl)
-                        (cl-return (apply 'set-smtp-ssl auth-spec)))
-                       (t (error "Unrecognized SMTP auth. mechanism: `%s'" auth-mech)))
-                   finally (error "Cannot infer SMTP information")))))
+                                    (message-narrow-to-headers)
+                                    (message-fetch-field "from"))
+                      for (auth-mech address . auth-spec) in smtp-accounts
+                      when (string-match address from)
+                      do (cond
+                          ((memq auth-mech '(cram-md5 plain login))
+                           (cl-return (apply 'set-smtp 'auth-mech auth-spec)))
+                          ((eql auth-mech 'ssl)
+                           (cl-return (apply 'set-smtp-ssl auth-spec)))
+                          ((eql auth-mech 'ssl-xoauth2)
+                           (cl-return (apply 'set-smtp-xauth2-ssl auth-spec)))
+                          (t (error "Unrecognized SMTP auth. mechanism: `%s'" auth-mech)))
+                      finally (error "Cannot infer SMTP information")))))
 
        (defadvice smtpmail-via-smtp (around set-smtp-server-from-sender activate)
          "When sending smtp mail, replace credentials according to to From: field"
