@@ -493,8 +493,11 @@ into real text."
   :custom ((dired-dwim-target t)
            (dired-listing-switches "-alt"))
   :hook  (dired-mode . (lambda ()
-                       (make-local-variable 'coding-system-for-read)
-                       (setq coding-system-for-read 'utf-8))))
+                         (make-local-variable 'coding-system-for-read)
+                         (setq coding-system-for-read 'utf-8)
+                         (gnus-dired-mode)))
+  :config
+  (require 'gnus-dired))
 
 (use-package project :ensure t :pin manual)
 
