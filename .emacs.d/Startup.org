@@ -690,11 +690,11 @@
    #+end_src
 ** Buffers
 
-*** Auto close buffers
+*** Auto close buffers :DISABLED:
     I like to keep open buffers to a minimum. Midnight mode allows me to
     automatically close buffers after a timout period.
 
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package midnight
         :custom ((clean-buffer-list-delay-special 900) ;; kill buffers after 15 minutes
                  ;; kill everything, (leaves unsaved buffers alone) ...

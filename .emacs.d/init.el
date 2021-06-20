@@ -404,25 +404,6 @@ into real text."
     (unless (file-exists-p personal-dictionary)
       (shell-command (concat "touch " personal-dictionary)))))
 
-(use-package midnight
-  :custom ((clean-buffer-list-delay-special 900) ;; kill buffers after 15 minutes
-           ;; kill everything, (leaves unsaved buffers alone) ...
-           (clean-buffer-list-kill-regexps '("^.*$"))
-           ;; ... except these
-           (clean-buffer-list-kill-never-buffer-names '("*Messages*" "*cmd*" "*scratch*"
-                                                        "*Group*" "*eshell*"))
-           (clean-buffer-list-kill-never-regexps '("^\\*EMMS Playlist\\*.*$"
-                                                   "^\\*Article "
-                                                   "^\\*Summary "
-                                                   ".*\\.org")))
-  :config
-  ;; run clean-buffer-list every 2 hours
-  (defvar clean-buffer-list-timer (run-at-time t 7200 'clean-buffer-list)
-    "Stores clean-buffer-list timer if there is one.
-
-     You can disable clean-buffer-list by (cancel-timer clean-buffer-list-timer).")
-)
-
 (use-package undo-tree :ensure t
   :init
   (global-undo-tree-mode))
