@@ -306,6 +306,8 @@ vh/shell-launcher-keymap and vh/eshell-launcher-keymap maps."
 
 (vh/def-ssh theborg "/ssh:vedat@cassidy|ssh:vedat@192.168.50.10:" "b")
 
+(vh/def-ssh vf-solhub "/kubectl:testpod:" "v")
+
 (setq-default fill-column 132)
 (customize-set-variable 'display-fill-column-indicator-character ?¦)
 (global-display-fill-column-indicator-mode)
@@ -537,3 +539,5 @@ The argument KEYWORDS is a space separated list of terms to search for."
 
 (eval-after-load 'gnus-score
   (advice-add #'gnus-score-date :before 'vh/support-gnus-age-scores))
+
+(use-package kubernetes-tramp :ensure t)
