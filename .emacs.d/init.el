@@ -725,33 +725,12 @@ gnus-ignored-newsgroups. It defaults to \"^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\â€
            (mm-inline-large-images t)
            (mm-coding-system-priorities '(utf-8))))
 
-(defun vh/notmuch-show-delete-thread ()
-  (interactive "")
-  (let ((notmuch-archive-tags '("-inbox" "+deleted")))
-    (notmuch-show-archive-thread-then-exit)))
-
-(defun vh/notmuch-address-selection-function (prompt collection initial-input)
-  (let* ((from (or  (message-fetch-field "From" "")))
-         (mail-addr (car
-                     (delq nil (mapcar
-                                (lambda (x) (when  (string-match "@" x) x))
-                                (split-string from "[<>]")))))
-         (domain (when mail-addr
-                   (cadr (split-string mail-addr "@"))))
-         (exists (and (delq nil (mapcar
-                                 (lambda (x)  (string-match domain x))
-                                 collection))
-                      t)))
-    (notmuch-address-selection-function prompt collection
-                                        (or
-                                         (and exists domain)
-                                         initial-input))))
-
 (use-package notmuch :ensure t
-  :commands (vh/notmuch-show-delete-thread notmuch-mua-new-mail)
+  :commands (vh/notmuch-show-delete-thread notmuch-mua-new-mail vh/save-calendar-to-diary)
   :bind (("C-c n" . vh/hydra-notmuch-global/body)
          :map notmuch-show-mode-map
-         ("K" . vh/notmuch-show-delete-thread))
+         ("K" . vh/notmuch-show-delete-thread)
+         (". i d" . vh/save-calendar-to-diary))
   :after hydra
   :init
   (defhydra vh/hydra-notmuch-global (:color blue)
@@ -804,7 +783,36 @@ gnus-ignored-newsgroups. It defaults to \"^to\\.\\|^[0-9. 	]+\\( \\|$\\)\\|^[\â€
   (push '("lna" ("+acm" "-inbox") "SIAM") notmuch-tagging-keys)
   (push '("lnb" ("+boun" "-inbox") "BoÄŸ. Ãœni.") notmuch-tagging-keys)
 
-  (setq notmuch-address-selection-function #'vh/notmuch-address-selection-function))
+  (defun vh/notmuch-show-delete-thread ()
+    (interactive "")
+    (let ((notmuch-archive-tags '("-inbox" "+deleted")))
+      (notmuch-show-archive-thread-then-exit)))
+
+  (defun vh/notmuch-address-selection-function (prompt collection initial-input)
+    (let* ((from (or  (message-fetch-field "From" "")))
+           (mail-addr (car
+                       (delq nil (mapcar
+                                  (lambda (x) (when  (string-match "@" x) x))
+                                  (split-string from "[<>]")))))
+           (domain (when mail-addr
+                     (cadr (split-string mail-addr "@"))))
+           (exists (and (delq nil (mapcar
+                                   (lambda (x)  (string-match domain x))
+                                   collection))
+                        t)))
+      (notmuch-address-selection-function prompt collection
+                                          (or
+                                           (and exists domain)
+                                           initial-input))))
+
+  (setq notmuch-address-selection-function #'vh/notmuch-address-selection-function)
+
+  (defun vh/save-calendar-to-diary ()
+    (interactive)
+    (with-current-buffer (car (notmuch-show-current-part-handle "text/calendar"))
+      (unwind-protect
+          (icalendar-import-buffer)
+        (kill-buffer (current-buffer))))))
 
 (defun vh/message-edit-body-as-org ()
   "Edit the body of the message in org-mode.
