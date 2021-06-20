@@ -2003,7 +2003,8 @@ immediately after current heading."
 
 (use-package org-clock
   :after org
-  :bind (("C-c C-x C-j" . org-clock-goto))
+  :bind (("C-c C-x C-j" . org-clock-goto)
+         ("C-c C-x TAB" . org-clock-in))
   :config
   (require 'org-helper)
 
