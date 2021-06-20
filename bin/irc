@@ -1,2 +1,3 @@
 #!/bin/sh
-exec /usr/bin/uxterm -bg darkslategray -fg lightblue -fa Terminus -fs 13 -e /usr/bin/screen -D -RR -S irc -c ~/.screenrc-irc /usr/bin/weechat &
+#exec /usr/bin/uxterm -bg darkslategray -fg lightblue -fa Terminus -fs 13 -e /usr/bin/screen -D -RR -S irc -c ~/.screenrc-irc /usr/bin/weechat &
+exec /usr/bin/uxterm -fa Terminus -fs 10 -e /usr/bin/screen -D -RR -S irc -c ~/.screenrc-irc /usr/bin/weechat &
