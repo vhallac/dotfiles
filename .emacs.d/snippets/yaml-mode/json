@@ -1,0 +1,7 @@
+# key: json
+# name: json
+# --
+content:
+  application/json:
+    schema:
+      $1

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: $schema
+# key: $schema
+# --
+$ref: '#/components/schemas/$1'

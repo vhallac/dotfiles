@@ -1,0 +1,5 @@
+# key: deferror
+# name: deferror
+# --
+default:
+  $ref: 'types.yaml#/components/responses/DefaultError'

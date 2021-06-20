@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# name: oas
+# key: oas
+# expand-env: ((yas-indent-line 'fixed))
+# --
+openapi: 3.0.0
+tags:
+  - name: $1
+    x-displayName: ${1:$(capitalize (replace-regexp-in-string "\\\\([A-Z]\\\\)" " \\\\1" yas-text))}
+    description: |
+      ${2:description}
+info:
+  version: 1.0.0
+  title: $3
+  contact:
+    name: Wamo Core Project Support
+  description: |
+    ${4:description}
+  license:
+    name: MIT
+servers:
+  - url: 'https://coreapi.wamo.io/api/v1'
+paths:

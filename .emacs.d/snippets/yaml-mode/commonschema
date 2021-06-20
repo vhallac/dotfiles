@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: commonschema
+# key: commonschema
+# --
+$ref: 'types.yaml#/components/schemas/$1'
