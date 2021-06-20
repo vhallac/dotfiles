@@ -36,14 +36,39 @@
 (use-package graphviz-dot-mode
   :ensure t)
 
-(use-package ibuffer-vc
-  :ensure t
-  :init
-  (add-hook 'ibuffer-hook
-            (lambda ()
-              (ibuffer-vc-set-filter-groups-by-vc-root)
-              (unless (eq ibuffer-sorting-mode 'alphabetic)
-                (ibuffer-do-sort-by-alphabetic)))))
+(add-to-list 'ibuffer-saved-filters
+             '("erc" (or (mode . erc-mode)
+                         (name . "\*Channels of.*\*"))))
+
+(setq ibuffer-saved-filter-groups
+      '(("Custom"
+         ("Mail" (or (name . "\*\\(un\\)?sent mail\\( to.*\\)\*")
+                     (mode . notmuch-show-mode)
+                     (mode . notmuch-search-mode)
+                     (mode . notmuch-tree-mode)))
+         ("Org-local" (and (mode . org-mode)
+                           (directory . "/home/vedat/org")))
+         ("Org-mobile" (and (mode . org-mode)
+                            (directory . "/smalldata/org")))
+         ("PiA-src-solhub-core" (directory . "/work/PiA/solution-hub/dev/core"))
+         ("PiA-src-solhub-adapter" (directory . "/work/PiA/solution-hub/dev/adapter"))
+         ("PiA-src" (directory . "work/PiA"))
+         ("ERC" (saved . "erc"))
+         ("*VC*" (or (name . "^\*vc-git :")
+                     (name . "^\*changes to")))
+         ("Emacs" (and (directory . ".emacs.d")
+                       (or (saved . "programming")
+                           (mode . org-mode)
+                           (mode . dired)))))))
+
+;; (Use-package ibuffer-vc
+;;   :ensure t
+;;   :init
+;;   (add-hook 'ibuffer-hook
+;;             (lambda ()
+;;               (setq ibuffer-filter-groups (append ibuffer-filter-groups (ibuffer-vc-generate-filter-groups-by-vc-root)))
+;;               (unless (eq ibuffer-sorting-mode 'alphabetic)
+;;                 (ibuffer-do-sort-by-alphabetic)))))
 
 (use-package markdown-mode
   :ensure t
