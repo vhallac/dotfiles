@@ -499,13 +499,20 @@ into real text."
 (use-package project :ensure t :pin manual)
 
 (use-package erc
-  :commands erc
+  :commands (erc erc-tls)
   :custom ((erc-dcc-get-default-directory "~/erc_dcc")
            (erc-dcc-mode t)
            (erc-dcc-verbose t)
            (erc-modules '(autojoin button completion dcc fill irccontrols
                                    list match menu move-to-prompt netsplit networks
-                                   noncommands readonly ring stamp track))))
+                                   noncommands readonly ring stamp track))
+           (erc-server "irc.libera.chat")))
+
+(defun erc-libera-connect ()
+  (interactive)
+  ;; Pick up client certificate information from netrc
+  (let ((network-stream-use-client-certificates t))
+    (erc-tls :server "irc.libera.chat" :port 6697 :nick "vhallac")))
 
 (use-package minibuffer
   :custom ((completion-styles '(orderless partial-completion))
