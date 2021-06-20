@@ -383,24 +383,6 @@ This variant allows overriding project directory."
   :config
   (editorconfig-mode 1))
 
-(define-key global-map (kbd "C-z") (make-sparse-keymap))
-
-(use-package face-remap
-  :init
-  (defhydra hydra-zoom-all (global-map "C-z F")
-    "Expand Region"
-    ("-" text-scale-decrease "Zoom out")
-    ("+" text-scale-increase "Zoom in")
-    ("0" (text-scale-increase 0) "Reset" :exit t)
-    ("v" hydra-zoom-variable/body "Zoom only variable fonts"))
-
-  (defhydra hydra-zoom-variable (global-map "C-z f")
-    ("+" (face-remap-add-relative 'variable-pitch :height 1.25) "Zoom in variable-pitch")
-    ("-" (face-remap-add-relative 'variable-pitch :height 0.8) "Zoom out variable-pitch")
-    ("0" (face-remap-reset-base 'variable-pitch) "Reset variable-pitch (?)" :exit t)
-    ("a" hydra-zoom-all/body "Zoom all fonts")))
-
-
 ;; Let Gnus know Gmail search syntax
 (add-hook 'gnus-started-hook
           (lambda ()
