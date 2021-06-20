@@ -35,7 +35,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 echo "$text" | osd_cat -f "$font $fontsize" -c $color -p middle -A center -O 2 -d 2 -l 1 &
-echo "$text" | osd_cat -f "$font $fontsize" -c $color -p top -A center -O 2 -d 2 -i -2240 -l 1
+echo "$text" | osd_cat -f "$font $fontsize" -c $color -p top -A center -O 2 -d 2 -i 1920 -l 1
 
 
 
