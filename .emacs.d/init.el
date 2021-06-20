@@ -274,6 +274,15 @@
          ("C-h C-v" . #'find-variable)
          ("C-h C-k")))
 
+(defun quit-other-window (arg)
+  "Quit the buffer in other window"
+  (interactive "p")
+  (save-selected-window
+    (other-window arg)
+    (quit-window)))
+
+(bind-key "C-x 4 q" #'quit-other-window)
+
 (defun wg/kludge-gpg-agent ()
   (if (display-graphic-p)
       (setenv "DISPLAY" (terminal-name))

@@ -509,6 +509,19 @@
              ("C-h C-v" . #'find-variable)
              ("C-h C-k")))
   #+end_src
+
+  I used "C-x o q C-x o" a lot. This should speed things up a bit.
+
+  #+begin_src emacs-lisp
+    (defun quit-other-window (arg)
+      "Quit the buffer in other window"
+      (interactive "p")
+      (save-selected-window
+        (other-window arg)
+        (quit-window)))
+
+    (bind-key "C-x 4 q" #'quit-other-window)
+  #+end_src
 * GPG setup
 
 ** Agent connection
